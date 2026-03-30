@@ -199,9 +199,9 @@ body::before {
 .quest-progress-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .quest-progress-label { font-size: 0.75rem; font-family: 'Courier New', monospace; color: var(--text); white-space: nowrap; min-width: 3.5rem; text-align: right; }
 .quest-progress-pips { display: flex; gap: 4px; }
-.quest-pip { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--dim-color); transition: background 0.2s; }
+.quest-pip { width: 22px; height: 22px; border-radius: 4px; border: 2px solid var(--dim-color); transition: background 0.2s; }
 .quest-pip.filled { background: var(--dim-color); }
-.quest-pip.empty { background: transparent; }
+.quest-pip.empty { background: rgba(255,255,255,0.06); }
 
 /* ── QUEST SUMMARY BAR ── */
 .quest-summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; padding: 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }

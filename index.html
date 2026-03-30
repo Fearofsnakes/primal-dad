@@ -457,7 +457,7 @@ const QUEST_TEMPLATES = {
 };
 
 // ═══════════════════════════════════════════════════════════════
-//  ACTIVE QUESTS — Loaded from localStorage, synced back on change
+//  ACTIVE QUESTS — Synced to localStorage + Vercel KV
 // ═══════════════════════════════════════════════════════════════
 function getISOWeek() {
   const d = new Date();
@@ -477,7 +477,63 @@ function loadQuests() {
   return { week: currentWeek, picked_at: null, focused_dimensions: [], quests: [], completed: false };
 }
 
-function saveQuests(q) { localStorage.setItem('primal-dad-quests', JSON.stringify(q)); }
+// Save to localStorage immediately + async push to KV
+let syncTimeout = null;
+function saveQuests(q) {
+  q.updated_at = new Date().toISOString();
+  localStorage.setItem('primal-dad-quests', JSON.stringify(q));
+  // Debounce cloud sync to avoid spamming on rapid clicks
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => pushToCloud(q), 500);
+}
+
+async function pushToCloud(q) {
+  try {
+    await fetch('/api/quests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(q)
+    });
+    updateSyncIndicator('synced');
+  } catch(e) {
+    console.warn('Cloud sync failed, data safe in localStorage:', e);
+    updateSyncIndicator('offline');
+  }
+}
+
+async function pullFromCloud() {
+  try {
+    const res = await fetch('/api/quests');
+    if (!res.ok) throw new Error('API error');
+    const remote = await res.json();
+    if (!remote) return; // nothing saved yet
+    const local = loadQuests();
+    // Use whichever is newer
+    const remoteTime = remote.updated_at ? new Date(remote.updated_at).getTime() : 0;
+    const localTime = local.updated_at ? new Date(local.updated_at).getTime() : 0;
+    if (remoteTime > localTime && remote.week === getISOWeek()) {
+      ACTIVE_QUESTS = remote;
+      localStorage.setItem('primal-dad-quests', JSON.stringify(remote));
+      render();
+    }
+    updateSyncIndicator('synced');
+  } catch(e) {
+    console.warn('Cloud pull failed, using localStorage:', e);
+    updateSyncIndicator('offline');
+  }
+}
+
+function updateSyncIndicator(status) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  if (status === 'synced') {
+    el.textContent = 'synced';
+    el.style.color = '#44DD88';
+  } else {
+    el.textContent = 'offline';
+    el.style.color = '#FF8800';
+  }
+}
 
 let ACTIVE_QUESTS = loadQuests();
 
@@ -1083,46 +1139,20 @@ function render() {
     app.append(section);
   }
 
-  // Footer with sync controls
-  const footer = h('div', { class: 'footer', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.6rem' } });
-  const syncRow = h('div', { style: { display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'center' } });
-
-  const shareBtn = h('button', {
-    style: { background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text-dim)', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.7rem', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.1em' },
-    onclick: () => {
-      const data = btoa(JSON.stringify(ACTIVE_QUESTS));
-      const url = window.location.origin + window.location.pathname + '#q=' + data;
-      navigator.clipboard.writeText(url).then(() => {
-        shareBtn.textContent = 'COPIED!';
-        setTimeout(() => { shareBtn.textContent = 'SHARE PROGRESS'; }, 2000);
-      }).catch(() => {
-        prompt('Copy this URL to save your progress:', url);
-      });
-    }
-  }, 'SHARE PROGRESS');
-  syncRow.append(shareBtn);
-  footer.append(syncRow);
+  // Footer with sync status
+  const footer = h('div', { class: 'footer', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' } });
+  footer.append(h('div', { style: { fontSize: '0.65rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '0.4rem' } },
+    h('span', null, 'cloud:'),
+    h('span', { id: 'sync-status', style: { color: '#555' } }, '...')
+  ));
   footer.append(h('div', null, 'Primal Dad v1.0'));
   app.append(footer);
   window.scrollTo(0, scrollY);
 }
 
-// Restore quest state from URL hash if present
-(function restoreFromHash() {
-  const hash = window.location.hash;
-  if (hash.startsWith('#q=')) {
-    try {
-      const data = JSON.parse(atob(hash.slice(3)));
-      if (data && data.week) {
-        ACTIVE_QUESTS = data;
-        saveQuests(ACTIVE_QUESTS);
-        window.location.hash = '';
-      }
-    } catch(e) { console.warn('Failed to restore from URL:', e); }
-  }
-})();
-
+// Initial render with localStorage data, then pull from cloud
 render();
+pullFromCloud();
 </script>
 </body>
 </html>

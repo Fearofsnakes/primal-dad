@@ -477,8 +477,8 @@ const QUEST_TEMPLATES = {
 //  SUPABASE CONFIG — Fill these in from your Supabase project
 //  Settings → API → Project URL and anon/public key
 // ═══════════════════════════════════════════════════════════════
-const SUPABASE_URL = '%%SUPABASE_URL%%';
-const SUPABASE_ANON_KEY = '%%SUPABASE_ANON_KEY%%';
+const SUPABASE_URL = 'https://cdejomhzoouupfnmmkfi.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_bSPPpPjH_NNr7pkrCQFKOA_-IEJwQO-';
 
 const supabaseReady = SUPABASE_URL !== '%%SUPABASE_URL%%' && SUPABASE_ANON_KEY !== '%%SUPABASE_ANON_KEY%%';
 const sb = supabaseReady ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;

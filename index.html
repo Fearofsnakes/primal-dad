@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="manifest" href="/manifest.json">
+<title>PRIMAL DAD — Character Sheet</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0f;
+  --card: #12121a;
+  --card-hover: #181825;
+  --card-active: #1a1a2a;
+  --text: #e0e0e0;
+  --text-dim: #6a6a7a;
+  --text-bright: #ffffff;
+  --border: #1e1e2e;
+  --border-active: #2e2e4e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.008) 2px, rgba(255,255,255,0.008) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ── HEADER ── */
+.header { text-align: center; padding: 2.5rem 0 2rem; }
+.header::after { content: ''; display: block; width: 200px; height: 1px; background: linear-gradient(90deg, transparent, #444, transparent); margin: 1.5rem auto 0; }
+.title { font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-bright); text-shadow: 0 0 30px rgba(255,80,60,0.25), 0 0 60px rgba(255,80,60,0.1); line-height: 1.1; }
+.title span { display: block; font-size: 0.32em; letter-spacing: 0.35em; color: var(--text-dim); font-weight: 400; margin-top: 0.3em; text-shadow: none; }
+.level-badge { display: inline-flex; align-items: baseline; gap: 0.6rem; margin-top: 1.2rem; font-size: 1.1rem; color: var(--text); }
+.level-badge .lvl-num { font-size: 2.2rem; font-weight: 900; color: var(--text-bright); line-height: 1; }
+.level-badge .lvl-title { color: #aaa; font-style: italic; }
+.meta-row { display: flex; justify-content: center; align-items: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-dim); }
+.meta-row .xp-total { font-family: 'Courier New', monospace; color: #bbb; font-size: 0.95rem; }
+.meta-row .streak { color: #FF8800; font-weight: 600; }
+.meta-row .streak.inactive { color: var(--text-dim); }
+
+/* ── RADAR ── */
+.radar-section { display: flex; justify-content: center; padding: 1.5rem 0 2.5rem; }
+.radar-wrap { position: relative; width: min(480px, 90vw); height: min(480px, 90vw); }
+.radar-wrap svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px rgba(100,120,255,0.08)); }
+
+/* ── SECTION HEADINGS ── */
+.section-heading { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--text-dim); margin-bottom: 1rem; padding-left: 0.2rem; }
+
+/* ── DIMENSION CARDS ── */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+
+.dim-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  border-left: 3px solid var(--dim-color, #888);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.dim-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--dim-color, #888) -200%, transparent 60%); opacity: 0.04; pointer-events: none; }
+.dim-card:hover { background: var(--card-hover); }
+.dim-card.expanded { background: var(--card-active); border-color: var(--border-active); }
+
+.card-summary { padding: 1.2rem 1.4rem; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+.dim-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text-dim); }
+.dim-label .code { color: var(--dim-color, #888); font-weight: 700; margin-right: 0.4em; }
+.dim-level { font-size: 1.5rem; font-weight: 800; color: var(--text-bright); line-height: 1; }
+.dim-title { font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-top: 0.15em; }
+.card-top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+.trend { font-size: 1.1rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; line-height: 1; }
+.trend.up { color: #44DD88; }
+.trend.down { color: #FF4444; }
+.trend.flat { color: var(--text-dim); }
+.expand-hint { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; transition: opacity 0.2s; }
+.dim-card.expanded .expand-hint { opacity: 0; }
+
+.progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.xp-info { display: flex; justify-content: space-between; margin-top: 0.4rem; font-size: 0.72rem; color: var(--text-dim); font-family: 'Courier New', monospace; }
+
+/* ── EXPANDED DETAIL PANEL ── */
+.card-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  border-top: 1px solid transparent;
+}
+.dim-card.expanded .card-detail {
+  max-height: 1200px;
+  border-top: 1px solid var(--border);
+}
+.detail-inner { padding: 1rem 1.4rem 1.4rem; }
+
+/* XP Actions table */
+.detail-section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--dim-color); margin-bottom: 0.6rem; font-weight: 700; }
+.detail-section-title:not(:first-child) { margin-top: 1.2rem; }
+
+.xp-actions-table { width: 100%; border-collapse: collapse; }
+.xp-actions-table td { padding: 0.35rem 0; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.xp-actions-table td:first-child { color: var(--text); }
+.xp-actions-table td:last-child { text-align: right; font-family: 'Courier New', monospace; color: var(--dim-color); font-weight: 600; font-size: 0.78rem; white-space: nowrap; }
+.xp-cap { display: inline-block; margin-top: 0.4rem; font-size: 0.72rem; color: var(--text-dim); font-style: italic; }
+
+/* Weekly quests */
+.quest-list { list-style: none; padding: 0; }
+.quest-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.quest-item:last-child { border-bottom: none; }
+.quest-check { width: 16px; height: 16px; border: 1.5px solid var(--dim-color); border-radius: 3px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--dim-color); cursor: pointer; transition: background 0.2s; }
+.quest-check.done { background: var(--dim-color); color: var(--bg); }
+.quest-text { font-size: 0.82rem; color: var(--text); }
+.quest-xp { font-size: 0.7rem; font-family: 'Courier New', monospace; color: var(--dim-color); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+.quest-note { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; font-style: italic; }
+
+/* Level path */
+.level-path { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; margin-top: 0.2rem; }
+.lp-node { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.06); }
+.lp-node.current { border-color: var(--dim-color); box-shadow: 0 0 8px var(--dim-color); color: var(--dim-color); }
+.lp-node.reached { background: var(--dim-color); color: var(--bg); border-color: var(--dim-color); }
+.lp-node.future { color: var(--text-dim); background: rgba(255,255,255,0.02); }
+.lp-arrow { color: var(--text-dim); font-size: 0.6rem; }
+
+/* ── WEEKLY PROGRESS SECTION ── */
+.weekly-section { border-top: 1px solid var(--border); padding-top: 2rem; margin-bottom: 3rem; }
+.weekly-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.8rem; }
+.weekly-dim { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; border-left: 3px solid var(--dim-color); }
+.weekly-dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.weekly-dim-name { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); }
+.weekly-dim-name .code { color: var(--dim-color); font-weight: 700; }
+.weekly-dim-xp { font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 600; }
+.weekly-bar-track { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+.weekly-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+.weekly-actions { margin-top: 0.5rem; }
+.weekly-action { font-size: 0.75rem; color: var(--text-dim); padding: 0.15rem 0; }
+.weekly-action .wa-xp { color: var(--dim-color); font-family: 'Courier New', monospace; }
+.weekly-empty { font-size: 0.75rem; color: var(--text-dim); font-style: italic; }
+
+/* ── TIMELINE ── */
+.timeline-section { border-top: 1px solid var(--border); padding-top: 2rem; }
+.sparklines-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.spark-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; }
+.spark-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 0.4rem; }
+.spark-label .code { font-weight: 700; }
+.spark-card svg { display: block; width: 100%; height: 40px; }
+
+/* ── QUEST BOARD ── */
+.quest-board { border-top: 1px solid var(--border); padding-top: 2rem; margin-bottom: 3rem; }
+.quest-board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+.quest-board-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--text-dim); }
+.quest-board-week { font-size: 0.75rem; color: var(--text-dim); font-family: 'Courier New', monospace; }
+.quest-board-empty { text-align: center; padding: 2rem; color: var(--text-dim); font-style: italic; font-size: 0.85rem; }
+.quest-board-empty .qbe-hint { font-size: 0.75rem; margin-top: 0.5rem; color: #555; }
+
+.quest-dim-group { margin-bottom: 1.5rem; }
+.quest-dim-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--dim-color); font-weight: 700; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+.quest-dim-label .qdl-focus { font-size: 0.6rem; color: var(--text-dim); font-weight: 400; letter-spacing: 0.1em; background: rgba(255,255,255,0.04); padding: 0.15rem 0.5rem; border-radius: 3px; }
+
+.quest-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  border-left: 3px solid var(--dim-color, #888);
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  position: relative;
+  overflow: hidden;
+}
+.quest-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--dim-color, #888) -200%, transparent 60%); opacity: 0.03; pointer-events: none; }
+.quest-card.quest-complete { border-left-color: #44DD88; opacity: 0.7; }
+.quest-card.quest-complete::after { content: 'COMPLETE'; position: absolute; top: 0.6rem; right: 0.8rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; color: #44DD88; }
+
+.quest-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+.quest-card-text { font-size: 0.88rem; color: var(--text-bright); font-weight: 500; flex: 1; }
+.quest-card-xp { font-size: 0.78rem; font-family: 'Courier New', monospace; color: var(--dim-color); font-weight: 600; white-space: nowrap; margin-left: 1rem; }
+.quest-card-note { font-size: 0.72rem; color: var(--text-dim); font-style: italic; margin-bottom: 0.6rem; }
+
+.quest-progress { display: flex; align-items: center; gap: 0.8rem; }
+.quest-progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+.quest-progress-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.quest-progress-label { font-size: 0.75rem; font-family: 'Courier New', monospace; color: var(--text); white-space: nowrap; min-width: 3.5rem; text-align: right; }
+.quest-progress-pips { display: flex; gap: 4px; }
+.quest-pip { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--dim-color); transition: background 0.2s; }
+.quest-pip.filled { background: var(--dim-color); }
+.quest-pip.empty { background: transparent; }
+
+/* ── QUEST SUMMARY BAR ── */
+.quest-summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; padding: 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+.quest-summary-stat { flex: 1; min-width: 120px; text-align: center; }
+.quest-summary-num { font-size: 1.6rem; font-weight: 800; color: var(--text-bright); line-height: 1; }
+.quest-summary-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); margin-top: 0.3rem; }
+
+/* ── QUEST PICKER MODAL ── */
+.picker-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000;
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+.picker-modal {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+  max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;
+  padding: 2rem; position: relative;
+}
+.picker-close { position: absolute; top: 1rem; right: 1.2rem; background: none; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer; }
+.picker-close:hover { color: var(--text-bright); }
+.picker-title { font-size: 1.2rem; font-weight: 800; color: var(--text-bright); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+.picker-subtitle { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1.5rem; }
+
+.picker-step { display: none; }
+.picker-step.active { display: block; }
+
+/* Step 1: dimension selection */
+.picker-dims { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; margin-bottom: 1.5rem; }
+.picker-dim {
+  background: var(--card); border: 2px solid var(--border); border-radius: 8px;
+  padding: 0.8rem 1rem; cursor: pointer; transition: all 0.2s; position: relative;
+}
+.picker-dim:hover { border-color: var(--border-active); }
+.picker-dim.selected { border-color: var(--dim-color); background: var(--card-active); }
+.picker-dim-code { font-size: 0.7rem; font-weight: 700; color: var(--dim-color); letter-spacing: 0.1em; }
+.picker-dim-name { font-size: 0.85rem; color: var(--text); margin-top: 0.15rem; }
+.picker-dim-level { font-size: 0.7rem; color: var(--text-dim); font-family: 'Courier New', monospace; margin-top: 0.1rem; }
+.picker-dim-check { position: absolute; top: 0.5rem; right: 0.6rem; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.picker-dim.selected .picker-dim-check { background: var(--dim-color); border-color: var(--dim-color); color: var(--bg); }
+
+.picker-count { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem; }
+.picker-count span { color: var(--text-bright); font-weight: 700; }
+
+/* Step 2: quest customization */
+.picker-quest-group { margin-bottom: 1.5rem; }
+.picker-quest-dim-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.6rem; }
+.picker-quest-row {
+  display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem;
+  background: var(--card); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.4rem;
+  border-left: 3px solid var(--dim-color);
+}
+.picker-quest-toggle { width: 18px; height: 18px; border-radius: 3px; border: 1.5px solid var(--dim-color); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; transition: background 0.15s; }
+.picker-quest-toggle.on { background: var(--dim-color); color: var(--bg); }
+.picker-quest-info { flex: 1; min-width: 0; }
+.picker-quest-name { font-size: 0.82rem; color: var(--text); }
+.picker-quest-meta { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.1rem; }
+.picker-quest-target { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+.picker-quest-target button {
+  width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+}
+.picker-quest-target button:hover { background: var(--card-hover); }
+.picker-quest-target .target-num { font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-bright); font-weight: 700; min-width: 1.2rem; text-align: center; }
+
+.picker-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.6rem;
+  border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.15s; border: none;
+}
+.picker-btn-primary { background: #FF4444; color: #fff; }
+.picker-btn-primary:hover { background: #FF5555; }
+.picker-btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.picker-btn-secondary:hover { background: var(--card-hover); }
+.picker-btn-danger { background: transparent; color: #FF4444; border: 1px solid #FF4444; }
+.picker-btn-danger:hover { background: rgba(255,68,68,0.1); }
+.picker-actions { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.picker-xp-total { font-size: 0.85rem; color: var(--text-dim); margin-top: 1rem; font-family: 'Courier New', monospace; }
+.picker-xp-total span { color: var(--text-bright); font-weight: 700; }
+
+.footer { text-align: center; padding-top: 3rem; font-size: 0.7rem; color: #333; letter-spacing: 0.1em; text-transform: uppercase; }
+
+@media (max-width: 680px) {
+  .container { padding: 1rem 1rem 3rem; }
+  .cards-grid, .weekly-grid { grid-template-columns: 1fr; }
+  .meta-row { gap: 1rem; }
+  .radar-wrap { width: 92vw; height: 92vw; }
+  .picker-modal { padding: 1.2rem; }
+  .picker-dims { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  STATS — Claude updates this object during weekly check-ins
+// ═══════════════════════════════════════════════════════════════
+const STATS = {
+  "last_updated": "2026-03-29",
+  "current_week": "2026-W13",
+  "overall_level": 1,
+  "overall_title": "Sleep-Deprived Recruit",
+  "total_xp": 540,
+  "streak": 0,
+  "multiplier": 1.0,
+  "weeks_tracked": 0,
+  "dimensions": {
+    "STR": {"name": "Strength", "total_xp": 120, "level": 2, "title": "Apprentice", "xp_to_next": 130, "pct_to_next": 0.13, "color": "#FF4444", "trend": 0, "week_xp": 0},
+    "VO2": {"name": "Cardio", "total_xp": 100, "level": 2, "title": "Apprentice", "xp_to_next": 150, "pct_to_next": 0.0, "color": "#4488FF", "trend": 0, "week_xp": 0},
+    "FGT": {"name": "Fighting", "total_xp": 60, "level": 1, "title": "Novice", "xp_to_next": 40, "pct_to_next": 0.6, "color": "#FF8800", "trend": 0, "week_xp": 0},
+    "FLX": {"name": "Flexibility", "total_xp": 0, "level": 1, "title": "Novice", "xp_to_next": 100, "pct_to_next": 0.0, "color": "#44DD88", "trend": 0, "week_xp": 0},
+    "MND": {"name": "Mind", "total_xp": 50, "level": 1, "title": "Novice", "xp_to_next": 50, "pct_to_next": 0.5, "color": "#AA66FF", "trend": 0, "week_xp": 0},
+    "FAM": {"name": "Family", "total_xp": 100, "level": 2, "title": "Apprentice", "xp_to_next": 150, "pct_to_next": 0.0, "color": "#FFCC00", "trend": 0, "week_xp": 0},
+    "WRK": {"name": "Work", "total_xp": 110, "level": 2, "title": "Apprentice", "xp_to_next": 140, "pct_to_next": 0.07, "color": "#00CCDD", "trend": 0, "week_xp": 0}
+  },
+  "week_actions": {},
+  "timeline": []
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  XP ACTIONS — What earns points in each dimension
+// ═══════════════════════════════════════════════════════════════
+const XP_ACTIONS = {
+  STR: {
+    cap: 60,
+    actions: [
+      { name: "Squat session (any weight)", xp: 15 },
+      { name: "Upper body session (dumbbells/pulley)", xp: 15 },
+      { name: "Full body compound session", xp: 20 },
+      { name: "Progressive overload (new PR or added weight)", xp: 10, bonus: true },
+      { name: "Elastic/band accessory work", xp: 5 }
+    ]
+  },
+  VO2: {
+    cap: 60,
+    actions: [
+      { name: "Stationary bike session (20+ min)", xp: 15 },
+      { name: "Jump rope session (10+ min)", xp: 15 },
+      { name: "Zone 2 sustained session (30+ min)", xp: 20 },
+      { name: "Resting HR improved vs. last week", xp: 10, bonus: true },
+      { name: "Other cardio (walk with baby, stairs)", xp: 5 }
+    ]
+  },
+  FGT: {
+    cap: 70,
+    actions: [
+      { name: "Heavy bag session (15+ min)", xp: 20 },
+      { name: "Shadow boxing / technique drill", xp: 10 },
+      { name: "BJJ class (after June 2)", xp: 25 },
+      { name: "BJJ open mat / sparring", xp: 20 },
+      { name: "Watched instructional / studied technique", xp: 5 }
+    ]
+  },
+  FLX: {
+    cap: 50,
+    actions: [
+      { name: "Dedicated stretch session (15+ min)", xp: 15 },
+      { name: "Morning mobility routine (5-10 min)", xp: 8 },
+      { name: "Yoga or flow session", xp: 20 },
+      { name: "Post-workout stretching (5+ min)", xp: 5 },
+      { name: "Hip opener / BJJ-specific mobility", xp: 10 }
+    ]
+  },
+  MND: {
+    cap: 55,
+    actions: [
+      { name: "Read 30+ minutes (book, not phone)", xp: 15 },
+      { name: "Screen-free evening (no phone after 8pm)", xp: 10 },
+      { name: "Journaling / reflection session", xp: 10 },
+      { name: "No cannabis/alcohol for the week", xp: 15 },
+      { name: "Meditation or breathwork", xp: 10 },
+      { name: "Learned something new (course, deep article)", xp: 10 }
+    ]
+  },
+  FAM: {
+    cap: 55,
+    actions: [
+      { name: "Fully present day (phone away, engaged)", xp: 15 },
+      { name: "Solo baby care block (gave partner a break)", xp: 15 },
+      { name: "Date / quality time with partner", xp: 20 },
+      { name: "Family outing or activity", xp: 10 },
+      { name: "Household task without being asked", xp: 5 }
+    ]
+  },
+  WRK: {
+    cap: 55,
+    actions: [
+      { name: "Deep work block (2+ hrs focused)", xp: 15 },
+      { name: "Shipped something tangible", xp: 20 },
+      { name: "Strategic thinking / planning session", xp: 10 },
+      { name: "Moved a venture forward meaningfully", xp: 15 },
+      { name: "Stayed within work boundaries", xp: 10 }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  QUEST TEMPLATES — Auto-generated suggestions per dimension
+//  Each has sensible defaults; target counts are adjustable
+// ═══════════════════════════════════════════════════════════════
+const QUEST_TEMPLATES = {
+  STR: [
+    { id: 'str-squat', text: 'Squat sessions', xp_per: 15, default_target: 2, note: 'Any weight. Form over ego.' },
+    { id: 'str-upper', text: 'Upper body sessions (DB/pulley)', xp_per: 15, default_target: 2, note: 'Press, rows, curls. Hit the basics.' },
+    { id: 'str-compound', text: 'Full body compound session', xp_per: 20, default_target: 1, note: 'Squat + press + row in one session.' },
+    { id: 'str-overload', text: 'Progressive overload (new PR)', xp_per: 10, default_target: 1, note: 'Add weight or reps vs. last time.' },
+    { id: 'str-elastic', text: 'Elastic/band accessory work', xp_per: 5, default_target: 2, note: 'Face pulls, pull-aparts, banded walks.' }
+  ],
+  VO2: [
+    { id: 'vo2-bike', text: 'Stationary bike (20+ min)', xp_per: 15, default_target: 2, note: 'Zone 2 pace. Conversation effort.' },
+    { id: 'vo2-rope', text: 'Jump rope sessions (10+ min)', xp_per: 15, default_target: 2, note: '30s on / 30s rest rounds.' },
+    { id: 'vo2-zone2', text: 'Zone 2 sustained (30+ min)', xp_per: 20, default_target: 1, note: 'HR under 140. Long and easy.' },
+    { id: 'vo2-other', text: 'Other cardio (walk, stairs)', xp_per: 5, default_target: 3, note: 'Walks with baby count. Stay moving.' }
+  ],
+  FGT: [
+    { id: 'fgt-bag', text: 'Heavy bag sessions (15+ min)', xp_per: 20, default_target: 2, note: '4 rounds, 3 min each. Wrap up.' },
+    { id: 'fgt-shadow', text: 'Shadow boxing / technique drill', xp_per: 10, default_target: 2, note: 'Jab-cross-hook. Slow and clean.' },
+    { id: 'fgt-bjj', text: 'BJJ class', xp_per: 25, default_target: 2, note: 'Available after June 2, 2026.' },
+    { id: 'fgt-bjj-spar', text: 'BJJ open mat / sparring', xp_per: 20, default_target: 1, note: 'Roll light. Learn positions.' },
+    { id: 'fgt-study', text: 'Study technique (video/article)', xp_per: 5, default_target: 1, note: 'Watch instructionals. Take mental notes.' }
+  ],
+  FLX: [
+    { id: 'flx-stretch', text: 'Dedicated stretch session (15+ min)', xp_per: 15, default_target: 3, note: 'Full routine. Cat-cow through prayer hands.' },
+    { id: 'flx-morning', text: 'Morning mobility routine', xp_per: 8, default_target: 4, note: 'Hip circles, neck rolls. Before coffee.' },
+    { id: 'flx-yoga', text: 'Yoga or flow session', xp_per: 20, default_target: 1, note: 'YouTube is fine. 20+ min.' },
+    { id: 'flx-post', text: 'Post-workout stretching (5+ min)', xp_per: 5, default_target: 3, note: 'Hamstrings, hip flexors, shoulders.' },
+    { id: 'flx-hip', text: 'Hip opener / BJJ mobility', xp_per: 10, default_target: 2, note: '90/90, pigeon, frog. Open those hips.' }
+  ],
+  MND: [
+    { id: 'mnd-read', text: 'Read 30+ min (book, not phone)', xp_per: 15, default_target: 3, note: 'Physical book. No Kindle doomscrolling.' },
+    { id: 'mnd-screen', text: 'Screen-free evening (off after 8pm)', xp_per: 10, default_target: 3, note: 'Phone in another room. Be bored.' },
+    { id: 'mnd-journal', text: 'Journaling / reflection session', xp_per: 10, default_target: 2, note: 'Brain dump. No structure needed.' },
+    { id: 'mnd-clean', text: 'No cannabis/alcohol for the week', xp_per: 15, default_target: 1, note: 'All or nothing. One week at a time.' },
+    { id: 'mnd-meditate', text: 'Meditation or breathwork', xp_per: 10, default_target: 2, note: '10 min minimum. Box breathing works.' },
+    { id: 'mnd-learn', text: 'Learn something new (course/article)', xp_per: 10, default_target: 1, note: 'Deep article or course module. Not Twitter.' }
+  ],
+  FAM: [
+    { id: 'fam-present', text: 'Fully present day (phone away)', xp_per: 15, default_target: 2, note: 'Phone in drawer. Eyes on family.' },
+    { id: 'fam-solo', text: 'Solo baby care block (2+ hrs)', xp_per: 15, default_target: 2, note: 'Give partner a real break.' },
+    { id: 'fam-date', text: 'Quality time with partner', xp_per: 20, default_target: 1, note: 'Couch counts if phones are away.' },
+    { id: 'fam-outing', text: 'Family outing or activity', xp_per: 10, default_target: 1, note: 'Walk, park, grocery run together.' },
+    { id: 'fam-house', text: 'Household task without being asked', xp_per: 5, default_target: 3, note: 'Dishes, laundry, meal prep. Just do it.' }
+  ],
+  WRK: [
+    { id: 'wrk-deep', text: 'Deep work block (2+ hrs)', xp_per: 15, default_target: 2, note: 'Phone off. One task. Ship mode.' },
+    { id: 'wrk-ship', text: 'Ship something tangible', xp_per: 20, default_target: 1, note: 'Feature, post, campaign. Done > perfect.' },
+    { id: 'wrk-strat', text: 'Strategic planning session', xp_per: 10, default_target: 1, note: 'Roadmap review. What matters next?' },
+    { id: 'wrk-venture', text: 'Move a venture forward', xp_per: 15, default_target: 1, note: 'VN, PX2M, GuideFlow. Tangible progress.' },
+    { id: 'wrk-bounds', text: 'Stay within work boundaries', xp_per: 10, default_target: 1, note: 'On leave = family > shipping.' }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  ACTIVE QUESTS — Loaded from localStorage, synced back on change
+// ═══════════════════════════════════════════════════════════════
+function getISOWeek() {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+  const week1 = new Date(d.getFullYear(), 0, 4);
+  const weekNum = 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+  return `${d.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+}
+
+function loadQuests() {
+  const currentWeek = getISOWeek();
+  try {
+    const saved = JSON.parse(localStorage.getItem('primal-dad-quests'));
+    if (saved && saved.week === currentWeek) return saved;
+  } catch(e) {}
+  return { week: currentWeek, picked_at: null, focused_dimensions: [], quests: [], completed: false };
+}
+
+function saveQuests(q) { localStorage.setItem('primal-dad-quests', JSON.stringify(q)); }
+
+let ACTIVE_QUESTS = loadQuests();
+
+// ═══════════════════════════════════════════════════════════════
+const LEVEL_THRESHOLDS = [0, 100, 250, 450, 750, 1150, 1650, 2300, 3100, 4100];
+const LEVEL_TITLES = ['Novice','Apprentice','Journeyman','Adept','Expert','Master','Grandmaster','Legend','Mythic','Primal'];
+const DIM_ORDER = ['STR', 'VO2', 'FGT', 'FLX', 'MND', 'FAM', 'WRK'];
+const MAX_LEVEL = 10;
+
+let expandedDim = null;
+
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  if (attrs) Object.entries(attrs).forEach(([k, v]) => {
+    if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v);
+  });
+  children.flat(Infinity).forEach(c => { if (c != null) el.append(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return el;
+}
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  if (attrs) Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+  return el;
+}
+
+// ── Radar chart ──
+function buildRadar() {
+  const size = 480, cx = size/2, cy = size/2, maxR = size * 0.38;
+  const dims = DIM_ORDER.map(k => ({ key: k, ...STATS.dimensions[k] }));
+  const n = dims.length;
+  const svg = svgEl('svg', { viewBox: `0 0 ${size} ${size}`, preserveAspectRatio: 'xMidYMid meet' });
+
+  const defs = svgEl('defs');
+  const glow = svgEl('filter', { id: 'glow' });
+  glow.append(svgEl('feGaussianBlur', { stdDeviation: '3', result: 'blur' }));
+  const merge = svgEl('feMerge');
+  merge.append(svgEl('feMergeNode', { in: 'blur' }), svgEl('feMergeNode', { in: 'SourceGraphic' }));
+  glow.append(merge); defs.append(glow); svg.append(defs);
+
+  const polar = (angle, r) => { const a = angle - Math.PI/2; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; };
+  const angleFor = i => (2*Math.PI*i)/n;
+
+  [2,4,6,8,10].forEach(lvl => {
+    const r = (lvl/MAX_LEVEL)*maxR, pts = [];
+    for (let i=0; i<n; i++) pts.push(polar(angleFor(i), r));
+    svg.append(svgEl('polygon', { points: pts.map(p=>p.join(',')).join(' '), fill:'none', stroke: lvl===10?'rgba(255,255,255,0.08)':'rgba(255,255,255,0.04)', 'stroke-width': lvl===10?'1.5':'1' }));
+  });
+
+  for (let i=0; i<n; i++) { const [x,y]=polar(angleFor(i),maxR); svg.append(svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,stroke:'rgba(255,255,255,0.06)','stroke-width':'1'})); }
+
+  const dp = dims.map((d,i) => polar(angleFor(i), (Math.max(d.level,0.4)/MAX_LEVEL)*maxR));
+  svg.append(svgEl('polygon',{points:dp.map(p=>p.join(',')).join(' '),fill:'rgba(120,140,255,0.06)',stroke:'rgba(160,180,255,0.4)','stroke-width':'2',filter:'url(#glow)'}));
+  svg.append(svgEl('polygon',{points:dp.map(p=>p.join(',')).join(' '),fill:'rgba(120,140,255,0.1)',stroke:'rgba(180,200,255,0.6)','stroke-width':'2','stroke-linejoin':'round'}));
+
+  const focused = ACTIVE_QUESTS.focused_dimensions || [];
+  dims.forEach((d,i) => {
+    const isFocused = focused.includes(d.key);
+    const r=(Math.max(d.level,0.4)/MAX_LEVEL)*maxR, [px,py]=polar(angleFor(i),r);
+    // Focused dimensions get a larger, pulsing dot
+    svg.append(svgEl('circle',{cx:px,cy:py,r: isFocused ? '6' : '4',fill:d.color,filter:'url(#glow)'}));
+    svg.append(svgEl('circle',{cx:px,cy:py,r: isFocused ? '10' : '7',fill:'none',stroke:d.color,'stroke-width': isFocused ? '1.5' : '1',opacity: isFocused ? '0.5' : '0.3'}));
+    if (isFocused) { svg.append(svgEl('circle',{cx:px,cy:py,r:'14',fill:'none',stroke:d.color,'stroke-width':'0.5',opacity:'0.2'})); }
+    const [lx,ly]=polar(angleFor(i),maxR+28);
+    const label=svgEl('text',{x:lx,y:ly,fill:d.color,'font-size': isFocused ? '13' : '11','font-weight':'700','text-anchor':'middle','dominant-baseline':'middle','font-family':"'Segoe UI',system-ui,sans-serif",'letter-spacing':'0.08em'});
+    label.textContent=d.key; svg.append(label);
+    const lv=svgEl('text',{x:lx,y:ly+14,fill: isFocused ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.3)','font-size':'10','font-weight': isFocused ? '600' : '400','text-anchor':'middle','dominant-baseline':'middle','font-family':"'Courier New',monospace"});
+    lv.textContent= isFocused ? `LV ${d.level} \u25C6` : `LV ${d.level}`; svg.append(lv);
+  });
+  return svg;
+}
+
+// ── Dimension detail panel ──
+function buildDetailPanel(key) {
+  const dim = STATS.dimensions[key];
+  const actions = XP_ACTIONS[key];
+  const dimQuests = ACTIVE_QUESTS.quests.filter(q => q.dimension === key);
+
+  const panel = h('div', { class: 'detail-inner' });
+
+  // Active quests for this dimension
+  if (dimQuests.length > 0) {
+    panel.append(h('div', { class: 'detail-section-title' }, 'Active Quests'));
+    dimQuests.forEach(q => {
+      const pct = Math.round((q.progress / q.target) * 100);
+      const done = q.progress >= q.target;
+      const questEl = h('div', { style: { marginBottom: '0.8rem', opacity: done ? '0.6' : '1' } },
+        h('div', { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem' } },
+          h('span', { style: { fontSize: '0.82rem', color: done ? '#44DD88' : 'var(--text)' } }, (done ? '\u2713 ' : '') + q.text),
+          h('span', { style: { fontSize: '0.72rem', fontFamily: "'Courier New', monospace", color: dim.color } }, `+${q.total_xp} XP`)
+        ),
+        h('div', { class: 'quest-progress' },
+          h('div', { class: 'quest-progress-bar' },
+            h('div', { class: 'quest-progress-fill', style: { width: `${pct}%`, background: done ? '#44DD88' : dim.color, boxShadow: `0 0 6px ${done ? '#44DD88' : dim.color}` } })
+          ),
+          h('span', { class: 'quest-progress-label' }, `${q.progress}/${q.target}`)
+        ),
+        q.note ? h('div', { style: { fontSize: '0.72rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '0.25rem' } }, q.note) : null
+      );
+      panel.append(questEl);
+    });
+  }
+
+  // XP Actions table
+  panel.append(h('div', { class: 'detail-section-title' }, 'What Earns XP'));
+  const table = h('table', { class: 'xp-actions-table' });
+  actions.actions.forEach(a => {
+    const row = h('tr', null,
+      h('td', null, a.name + (a.bonus ? ' *' : '')),
+      h('td', null, `+${a.xp} XP`)
+    );
+    table.append(row);
+  });
+  panel.append(table);
+  panel.append(h('span', { class: 'xp-cap' }, `Weekly cap: ${actions.cap} XP${STATS.multiplier > 1 ? ` (${actions.cap} x ${STATS.multiplier} = ${Math.round(actions.cap * STATS.multiplier)} with streak)` : ''}`));
+
+  // Level path
+  panel.append(h('div', { class: 'detail-section-title' }, 'Level Path'));
+  const path = h('div', { class: 'level-path' });
+  for (let i = 1; i <= 10; i++) {
+    const cls = i < dim.level ? 'reached' : i === dim.level ? 'current' : 'future';
+    path.append(h('div', { class: `lp-node ${cls}`, style: { '--dim-color': dim.color } }, `${i}`));
+    if (i < 10) path.append(h('span', { class: 'lp-arrow' }, '\u25B8'));
+  }
+  const xpNeeded = LEVEL_THRESHOLDS[dim.level] ? LEVEL_THRESHOLDS[dim.level] - dim.total_xp : 0;
+  if (dim.level < 10) {
+    path.append(h('div', { style: { fontSize: '0.72rem', color: 'var(--text-dim)', marginLeft: '0.8rem', fontFamily: "'Courier New', monospace" } },
+      `${xpNeeded > 0 ? xpNeeded : 0} XP to ${LEVEL_TITLES[dim.level]}`
+    ));
+  }
+  panel.append(path);
+
+  return panel;
+}
+
+// ── Quest Board ──
+function toggleQuestProgress(questId) {
+  const q = ACTIVE_QUESTS.quests.find(x => x.id === questId);
+  if (!q) return;
+  if (q.progress < q.target) q.progress++;
+  else q.progress = 0; // cycle back to 0
+  saveQuests(ACTIVE_QUESTS);
+  render();
+}
+
+function buildQuestBoard() {
+  const section = h('div', { class: 'quest-board' });
+  const headerLeft = h('div', { style: { display: 'flex', alignItems: 'center', gap: '1rem' } },
+    h('div', { class: 'quest-board-title' }, 'Quest Board')
+  );
+
+  const headerRight = h('div', { style: { display: 'flex', alignItems: 'center', gap: '0.8rem' } },
+    h('div', { class: 'quest-board-week' }, ACTIVE_QUESTS.week)
+  );
+
+  if (ACTIVE_QUESTS.picked_at && ACTIVE_QUESTS.quests.length > 0) {
+    const editBtn = h('button', { class: 'picker-btn picker-btn-secondary', style: { padding: '0.3rem 0.8rem', fontSize: '0.7rem' }, onclick: e => { e.stopPropagation(); openPicker(); } }, 'Edit Quests');
+    headerRight.prepend(editBtn);
+  }
+
+  const header = h('div', { class: 'quest-board-header' }, headerLeft, headerRight);
+  section.append(header);
+
+  if (!ACTIVE_QUESTS.picked_at || ACTIVE_QUESTS.quests.length === 0) {
+    const emptyDiv = h('div', { class: 'quest-board-empty' },
+      'No quests active this week.'
+    );
+    const pickBtn = h('button', { class: 'picker-btn picker-btn-primary', style: { marginTop: '1rem' }, onclick: () => openPicker() }, 'Pick Quests');
+    emptyDiv.append(pickBtn);
+    section.append(emptyDiv);
+    return section;
+  }
+
+  // Group quests by dimension
+  const grouped = {};
+  ACTIVE_QUESTS.focused_dimensions.forEach(dim => { grouped[dim] = []; });
+  ACTIVE_QUESTS.quests.forEach(q => {
+    if (!grouped[q.dimension]) grouped[q.dimension] = [];
+    grouped[q.dimension].push(q);
+  });
+
+  // Summary stats
+  const totalQuests = ACTIVE_QUESTS.quests.length;
+  const completedQuests = ACTIVE_QUESTS.quests.filter(q => q.progress >= q.target).length;
+  const totalPossibleXp = ACTIVE_QUESTS.quests.reduce((s, q) => s + q.total_xp, 0);
+  const earnedXp = ACTIVE_QUESTS.quests.reduce((s, q) => s + Math.min(q.progress, q.target) * q.xp_per, 0);
+
+  const summary = h('div', { class: 'quest-summary' },
+    h('div', { class: 'quest-summary-stat' },
+      h('div', { class: 'quest-summary-num' }, `${completedQuests}/${totalQuests}`),
+      h('div', { class: 'quest-summary-label' }, 'Quests Done')
+    ),
+    h('div', { class: 'quest-summary-stat' },
+      h('div', { class: 'quest-summary-num', style: { color: ACTIVE_QUESTS.focused_dimensions.length > 0 ? STATS.dimensions[ACTIVE_QUESTS.focused_dimensions[0]].color : '#fff' } }, `${earnedXp}`),
+      h('div', { class: 'quest-summary-label' }, `of ${totalPossibleXp} XP`)
+    ),
+    h('div', { class: 'quest-summary-stat' },
+      h('div', { class: 'quest-summary-num' }, `${ACTIVE_QUESTS.focused_dimensions.length}`),
+      h('div', { class: 'quest-summary-label' }, 'Focus Areas')
+    )
+  );
+  section.append(summary);
+
+  // Quest cards grouped by dimension — pips are clickable
+  Object.entries(grouped).forEach(([dimKey, quests]) => {
+    if (quests.length === 0) return;
+    const dim = STATS.dimensions[dimKey];
+    const group = h('div', { class: 'quest-dim-group', style: { '--dim-color': dim.color } });
+    group.append(h('div', { class: 'quest-dim-label' },
+      `${dimKey} \u2014 ${dim.name}`,
+      h('span', { class: 'qdl-focus' }, 'FOCUS')
+    ));
+
+    quests.forEach(q => {
+      const done = q.progress >= q.target;
+      const card = h('div', { class: `quest-card${done ? ' quest-complete' : ''}`, style: { '--dim-color': dim.color } });
+
+      card.append(h('div', { class: 'quest-card-top' },
+        h('div', { class: 'quest-card-text' }, q.text),
+        h('div', { class: 'quest-card-xp' }, `+${q.total_xp} XP`)
+      ));
+
+      if (q.note) card.append(h('div', { class: 'quest-card-note' }, q.note));
+
+      // Clickable pips for progress tracking
+      const progressDiv = h('div', { class: 'quest-progress' });
+      if (q.target <= 7) {
+        const pips = h('div', { class: 'quest-progress-pips' });
+        for (let i = 0; i < q.target; i++) {
+          const pipIdx = i;
+          const pip = h('div', {
+            class: `quest-pip ${i < q.progress ? 'filled' : 'empty'}`,
+            style: { '--dim-color': dim.color, borderColor: dim.color, background: i < q.progress ? dim.color : 'transparent', cursor: 'pointer' },
+            onclick: e => {
+              e.stopPropagation();
+              // Click pip N: if progress > N, set to N; if progress <= N, set to N+1
+              if (q.progress > pipIdx + 1) q.progress = pipIdx + 1;
+              else if (q.progress === pipIdx + 1) q.progress = pipIdx;
+              else q.progress = pipIdx + 1;
+              saveQuests(ACTIVE_QUESTS);
+              render();
+            }
+          });
+          pips.append(pip);
+        }
+        progressDiv.append(pips);
+        progressDiv.append(h('span', { class: 'quest-progress-label' }, `${q.progress}/${q.target}`));
+      } else {
+        progressDiv.append(h('div', { class: 'quest-progress-bar', style: { cursor: 'pointer' }, onclick: e => { e.stopPropagation(); toggleQuestProgress(q.id); } },
+          h('div', { class: 'quest-progress-fill', style: { width: `${Math.round((q.progress/q.target)*100)}%`, background: done ? '#44DD88' : dim.color, boxShadow: `0 0 6px ${done ? '#44DD88' : dim.color}` } })
+        ));
+        progressDiv.append(h('span', { class: 'quest-progress-label' }, `${q.progress}/${q.target}`));
+      }
+      card.append(progressDiv);
+      group.append(card);
+    });
+    section.append(group);
+  });
+
+  return section;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  QUEST PICKER — 2-step modal: pick dimensions, then customize quests
+// ═══════════════════════════════════════════════════════════════
+let pickerState = { step: 1, selectedDims: [], questSelections: {} };
+
+function openPicker() {
+  // Pre-fill from existing quests if editing
+  if (ACTIVE_QUESTS.picked_at && ACTIVE_QUESTS.quests.length > 0) {
+    pickerState.selectedDims = [...ACTIVE_QUESTS.focused_dimensions];
+    pickerState.questSelections = {};
+    ACTIVE_QUESTS.focused_dimensions.forEach(dim => {
+      pickerState.questSelections[dim] = {};
+      const dimQuests = ACTIVE_QUESTS.quests.filter(q => q.dimension === dim);
+      QUEST_TEMPLATES[dim].forEach(t => {
+        const existing = dimQuests.find(q => q.id === t.id);
+        pickerState.questSelections[dim][t.id] = existing
+          ? { on: true, target: existing.target }
+          : { on: false, target: t.default_target };
+      });
+    });
+    pickerState.step = 2;
+  } else {
+    // Sort dimensions by weakness (lowest XP first) and pre-select top 3
+    const sorted = DIM_ORDER.slice().sort((a,b) => STATS.dimensions[a].total_xp - STATS.dimensions[b].total_xp);
+    pickerState.selectedDims = sorted.slice(0, 3);
+    pickerState.questSelections = {};
+    pickerState.step = 1;
+  }
+  renderPicker();
+}
+
+function closePicker() {
+  const overlay = document.querySelector('.picker-overlay');
+  if (overlay) overlay.remove();
+}
+
+function renderPicker() {
+  let overlay = document.querySelector('.picker-overlay');
+  if (!overlay) {
+    overlay = h('div', { class: 'picker-overlay', onclick: e => { if (e.target === overlay) closePicker(); } });
+    document.body.append(overlay);
+  }
+  overlay.innerHTML = '';
+
+  const modal = h('div', { class: 'picker-modal' });
+  modal.append(h('button', { class: 'picker-close', onclick: closePicker }, '\u00D7'));
+
+  if (pickerState.step === 1) {
+    modal.append(h('div', { class: 'picker-title' }, 'Pick Your Focus'));
+    modal.append(h('div', { class: 'picker-subtitle' }, 'Choose 2\u20134 dimensions to level up this week'));
+
+    const count = h('div', { class: 'picker-count' }, h('span', null, `${pickerState.selectedDims.length}`), ' of 2\u20134 selected');
+    modal.append(count);
+
+    const grid = h('div', { class: 'picker-dims' });
+    // Sort by weakness
+    const sorted = DIM_ORDER.slice().sort((a,b) => STATS.dimensions[a].total_xp - STATS.dimensions[b].total_xp);
+    sorted.forEach(key => {
+      const dim = STATS.dimensions[key];
+      const selected = pickerState.selectedDims.includes(key);
+      const card = h('div', {
+        class: `picker-dim${selected ? ' selected' : ''}`,
+        style: { '--dim-color': dim.color },
+        onclick: () => {
+          if (selected) pickerState.selectedDims = pickerState.selectedDims.filter(k => k !== key);
+          else if (pickerState.selectedDims.length < 4) pickerState.selectedDims.push(key);
+          renderPicker();
+        }
+      },
+        h('div', { class: 'picker-dim-check' }, selected ? '\u2713' : ''),
+        h('div', { class: 'picker-dim-code', style: { color: dim.color } }, key),
+        h('div', { class: 'picker-dim-name' }, dim.name),
+        h('div', { class: 'picker-dim-level' }, `Lv${dim.level} \u2022 ${dim.total_xp} XP`)
+      );
+      grid.append(card);
+    });
+    modal.append(grid);
+
+    const actions = h('div', { class: 'picker-actions' });
+    const nextBtn = h('button', {
+      class: 'picker-btn picker-btn-primary',
+      onclick: () => {
+        if (pickerState.selectedDims.length < 2) return;
+        // Initialize quest selections for new dims
+        pickerState.selectedDims.forEach(dim => {
+          if (!pickerState.questSelections[dim]) {
+            pickerState.questSelections[dim] = {};
+            QUEST_TEMPLATES[dim].forEach((t, i) => {
+              pickerState.questSelections[dim][t.id] = { on: i < 3, target: t.default_target };
+            });
+          }
+        });
+        pickerState.step = 2;
+        renderPicker();
+      }
+    }, `Next \u2192`);
+    if (pickerState.selectedDims.length < 2) nextBtn.style.opacity = '0.4';
+    actions.append(nextBtn);
+    modal.append(actions);
+
+  } else {
+    modal.append(h('div', { class: 'picker-title' }, 'Customize Quests'));
+    modal.append(h('div', { class: 'picker-subtitle' }, 'Toggle quests on/off and adjust targets'));
+
+    let totalXp = 0;
+    pickerState.selectedDims.forEach(dimKey => {
+      const dim = STATS.dimensions[dimKey];
+      const templates = QUEST_TEMPLATES[dimKey];
+      const group = h('div', { class: 'picker-quest-group', style: { '--dim-color': dim.color } });
+      group.append(h('div', { class: 'picker-quest-dim-label', style: { color: dim.color } }, `${dimKey} \u2014 ${dim.name}`));
+
+      templates.forEach(t => {
+        const sel = pickerState.questSelections[dimKey][t.id];
+        if (sel.on) totalXp += t.xp_per * sel.target;
+
+        const row = h('div', { class: 'picker-quest-row', style: { '--dim-color': dim.color, opacity: sel.on ? '1' : '0.45' } });
+
+        const toggle = h('div', {
+          class: `picker-quest-toggle${sel.on ? ' on' : ''}`,
+          style: { borderColor: dim.color, background: sel.on ? dim.color : 'transparent', color: sel.on ? 'var(--bg)' : 'transparent' },
+          onclick: e => { e.stopPropagation(); sel.on = !sel.on; renderPicker(); }
+        }, sel.on ? '\u2713' : '');
+
+        const info = h('div', { class: 'picker-quest-info' },
+          h('div', { class: 'picker-quest-name' }, t.text),
+          h('div', { class: 'picker-quest-meta' }, `${t.xp_per} XP each \u2022 ${t.xp_per * sel.target} XP total \u2022 ${t.note}`)
+        );
+
+        const target = h('div', { class: 'picker-quest-target' },
+          h('button', { onclick: e => { e.stopPropagation(); if (sel.target > 1) { sel.target--; renderPicker(); } } }, '\u2212'),
+          h('span', { class: 'target-num' }, `${sel.target}`),
+          h('button', { onclick: e => { e.stopPropagation(); if (sel.target < 7) { sel.target++; renderPicker(); } } }, '+')
+        );
+
+        row.append(toggle, info, target);
+        group.append(row);
+      });
+      modal.append(group);
+    });
+
+    modal.append(h('div', { class: 'picker-xp-total' }, 'Potential XP: ', h('span', null, `${totalXp}`)));
+
+    const actions = h('div', { class: 'picker-actions' });
+    actions.append(h('button', { class: 'picker-btn picker-btn-secondary', onclick: () => { pickerState.step = 1; renderPicker(); } }, '\u2190 Back'));
+    actions.append(h('button', { class: 'picker-btn picker-btn-primary', onclick: () => {
+      // Build active quests from selections
+      const quests = [];
+      pickerState.selectedDims.forEach(dimKey => {
+        QUEST_TEMPLATES[dimKey].forEach(t => {
+          const sel = pickerState.questSelections[dimKey][t.id];
+          if (sel.on) {
+            // Preserve existing progress if editing
+            const existing = ACTIVE_QUESTS.quests.find(q => q.id === t.id);
+            quests.push({
+              id: t.id, dimension: dimKey, text: t.text,
+              target: sel.target, progress: existing ? Math.min(existing.progress, sel.target) : 0,
+              xp_per: t.xp_per, total_xp: t.xp_per * sel.target, note: t.note
+            });
+          }
+        });
+      });
+      ACTIVE_QUESTS.week = getISOWeek();
+      ACTIVE_QUESTS.picked_at = new Date().toISOString().slice(0, 10);
+      ACTIVE_QUESTS.focused_dimensions = [...pickerState.selectedDims];
+      ACTIVE_QUESTS.quests = quests;
+      ACTIVE_QUESTS.completed = false;
+      saveQuests(ACTIVE_QUESTS);
+      closePicker();
+      render();
+    } }, 'Confirm Quests'));
+
+    if (ACTIVE_QUESTS.picked_at) {
+      actions.append(h('button', { class: 'picker-btn picker-btn-danger', onclick: () => {
+        ACTIVE_QUESTS.picked_at = null;
+        ACTIVE_QUESTS.focused_dimensions = [];
+        ACTIVE_QUESTS.quests = [];
+        saveQuests(ACTIVE_QUESTS);
+        closePicker();
+        render();
+      } }, 'Clear All'));
+    }
+    modal.append(actions);
+  }
+
+  overlay.append(modal);
+}
+
+// ── Dimension card ──
+function buildCard(key, dim) {
+  const isExpanded = expandedDim === key;
+  const trendClass = dim.trend > 0 ? 'up' : dim.trend < 0 ? 'down' : 'flat';
+  const trendSymbol = dim.trend > 0 ? '\u2191' : dim.trend < 0 ? '\u2193' : '\u2192';
+  const pct = Math.round(dim.pct_to_next * 100);
+
+  const isFocused = (ACTIVE_QUESTS.focused_dimensions || []).includes(key);
+  const card = h('div', { class: `dim-card${isExpanded ? ' expanded' : ''}`, style: { '--dim-color': dim.color } });
+  card.addEventListener('click', () => { expandedDim = expandedDim === key ? null : key; render(); });
+
+  const labelChildren = [h('span', { class: 'code' }, key), ` \u2014 ${dim.name}`];
+  if (isFocused) labelChildren.push(h('span', { style: { fontSize: '0.55rem', background: dim.color, color: 'var(--bg)', padding: '0.1rem 0.4rem', borderRadius: '3px', marginLeft: '0.5rem', fontWeight: '700', letterSpacing: '0.1em', verticalAlign: 'middle' } }, 'FOCUS'));
+
+  const summary = h('div', { class: 'card-summary' },
+    h('div', { class: 'card-top' },
+      h('div', null,
+        h('div', { class: 'dim-label' }, ...labelChildren),
+        h('div', { class: 'dim-level' }, `${dim.level}`),
+        h('div', { class: 'dim-title' }, dim.title)
+      ),
+      h('div', { class: 'card-top-right' },
+        h('div', { class: `trend ${trendClass}` }, trendSymbol),
+        h('div', { class: 'expand-hint' }, isExpanded ? '' : 'click to expand')
+      )
+    ),
+    h('div', { class: 'progress-track' },
+      h('div', { class: 'progress-fill', style: { width: `${pct}%`, background: dim.color, boxShadow: `0 0 8px ${dim.color}` } })
+    ),
+    h('div', { class: 'xp-info' },
+      h('span', null, `${pct}% to next`),
+      h('span', null, `${dim.total_xp} XP total`)
+    )
+  );
+  card.append(summary);
+
+  const detail = h('div', { class: 'card-detail' });
+  if (isExpanded) detail.append(buildDetailPanel(key));
+  card.append(detail);
+
+  return card;
+}
+
+// ── Weekly progress section ──
+function buildWeeklyProgress() {
+  const section = h('div', { class: 'weekly-section' });
+  section.append(h('div', { class: 'section-heading' }, `Weekly Progress \u2014 ${STATS.current_week}`));
+
+  const grid = h('div', { class: 'weekly-grid' });
+  DIM_ORDER.forEach(key => {
+    const dim = STATS.dimensions[key];
+    const actions = XP_ACTIONS[key];
+    const weekXp = dim.week_xp || 0;
+    const pct = Math.min(100, Math.round((weekXp / actions.cap) * 100));
+    const weekActs = STATS.week_actions[key] || [];
+    const quests = XP_ACTIONS[key].actions;
+
+    const card = h('div', { class: 'weekly-dim', style: { '--dim-color': dim.color } });
+    card.append(h('div', { class: 'weekly-dim-header' },
+      h('span', { class: 'weekly-dim-name' }, h('span', { class: 'code' }, key), ` ${dim.name}`),
+      h('span', { class: 'weekly-dim-xp', style: { color: dim.color } }, `${weekXp} / ${actions.cap}`)
+    ));
+    card.append(h('div', { class: 'weekly-bar-track' },
+      h('div', { class: 'weekly-bar-fill', style: { width: `${pct}%`, background: dim.color } })
+    ));
+
+    const actionsDiv = h('div', { class: 'weekly-actions' });
+    if (weekActs.length > 0) {
+      weekActs.forEach(qi => {
+        if (quests[qi]) {
+          actionsDiv.append(h('div', { class: 'weekly-action' },
+            `\u2713 ${quests[qi].text} `, h('span', { class: 'wa-xp' }, `+${quests[qi].xp}`)
+          ));
+        }
+      });
+    } else {
+      actionsDiv.append(h('div', { class: 'weekly-empty' }, 'No actions logged yet'));
+    }
+    card.append(actionsDiv);
+    grid.append(card);
+  });
+
+  section.append(grid);
+  return section;
+}
+
+// ── Sparkline ──
+function buildSparkline(key, dim, timelineData) {
+  const values = timelineData.map(w => w[key] || 0);
+  if (values.length === 0) return null;
+  const max = Math.max(...values, 1);
+  const w = 240, ht = 40, pad = 2;
+  const svg = svgEl('svg', { viewBox: `0 0 ${w} ${ht}`, preserveAspectRatio: 'none' });
+  const step = values.length > 1 ? (w-pad*2)/(values.length-1) : 0;
+  const pts = values.map((v,i) => `${pad+i*step},${ht-pad-((v/max)*(ht-pad*2))}`);
+  if (pts.length > 1) {
+    svg.append(svgEl('polygon',{points:`${pad},${ht-pad} ${pts.join(' ')} ${pad+(values.length-1)*step},${ht-pad}`,fill:dim.color,opacity:'0.1'}));
+    svg.append(svgEl('polyline',{points:pts.join(' '),fill:'none',stroke:dim.color,'stroke-width':'1.5','stroke-linejoin':'round','stroke-linecap':'round'}));
+  }
+  values.forEach((v,i) => { svg.append(svgEl('circle',{cx:pad+i*step,cy:ht-pad-((v/max)*(ht-pad*2)),r:'2',fill:dim.color})); });
+  const card = h('div',{class:'spark-card'},h('div',{class:'spark-label'},h('span',{class:'code',style:{color:dim.color}},key),` ${dim.name}`));
+  card.append(svg);
+  return card;
+}
+
+// ── Render ──
+function render() {
+  const app = document.getElementById('app');
+  const scrollY = window.scrollY;
+  app.innerHTML = '';
+
+  // Header
+  const streakActive = STATS.streak > 0;
+  const streakText = streakActive ? `\uD83D\uDD25 ${STATS.streak} week${STATS.streak!==1?'s':''} \u2014 ${STATS.multiplier}x` : 'No streak yet';
+  app.append(h('div', { class: 'header' },
+    h('div', { class: 'title' }, 'PRIMAL DAD', h('span', null, 'Character Sheet')),
+    h('div', { class: 'level-badge' },
+      h('span', { class: 'lvl-num' }, `${STATS.overall_level}`),
+      h('span', null, 'LVL'),
+      h('span', { class: 'lvl-title' }, `\u2014 ${STATS.overall_title}`)
+    ),
+    h('div', { class: 'meta-row' },
+      h('span', { class: 'xp-total' }, `${STATS.total_xp.toLocaleString()} XP`),
+      h('span', { class: streakActive ? 'streak' : 'streak inactive' }, streakText),
+      h('span', null, `Updated ${STATS.last_updated}`)
+    )
+  ));
+
+  // Radar
+  const radarSection = h('div', { class: 'radar-section' }, h('div', { class: 'radar-wrap' }));
+  radarSection.querySelector('.radar-wrap').append(buildRadar());
+  app.append(radarSection);
+
+  // Quest Board
+  app.append(buildQuestBoard());
+
+  // Dimension cards
+  app.append(h('div', { class: 'section-heading' }, 'Dimensions \u2014 Click to expand'));
+  const grid = h('div', { class: 'cards-grid' });
+  DIM_ORDER.forEach(k => grid.append(buildCard(k, STATS.dimensions[k])));
+  app.append(grid);
+
+  // Timeline
+  if (STATS.timeline && STATS.timeline.length > 0) {
+    const last12 = STATS.timeline.slice(-12);
+    const section = h('div', { class: 'timeline-section' },
+      h('div', { class: 'section-heading' }, `XP Per Week \u2014 Last ${last12.length} Weeks`)
+    );
+    const sparks = h('div', { class: 'sparklines-grid' });
+    DIM_ORDER.forEach(k => { const c = buildSparkline(k, STATS.dimensions[k], last12); if (c) sparks.append(c); });
+    section.append(sparks);
+    app.append(section);
+  }
+
+  // Footer with sync controls
+  const footer = h('div', { class: 'footer', style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.6rem' } });
+  const syncRow = h('div', { style: { display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'center' } });
+
+  const shareBtn = h('button', {
+    style: { background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text-dim)', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.7rem', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.1em' },
+    onclick: () => {
+      const data = btoa(JSON.stringify(ACTIVE_QUESTS));
+      const url = window.location.origin + window.location.pathname + '#q=' + data;
+      navigator.clipboard.writeText(url).then(() => {
+        shareBtn.textContent = 'COPIED!';
+        setTimeout(() => { shareBtn.textContent = 'SHARE PROGRESS'; }, 2000);
+      }).catch(() => {
+        prompt('Copy this URL to save your progress:', url);
+      });
+    }
+  }, 'SHARE PROGRESS');
+  syncRow.append(shareBtn);
+  footer.append(syncRow);
+  footer.append(h('div', null, 'Primal Dad v1.0'));
+  app.append(footer);
+  window.scrollTo(0, scrollY);
+}
+
+// Restore quest state from URL hash if present
+(function restoreFromHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#q=')) {
+    try {
+      const data = JSON.parse(atob(hash.slice(3)));
+      if (data && data.week) {
+        ACTIVE_QUESTS = data;
+        saveQuests(ACTIVE_QUESTS);
+        window.location.hash = '';
+      }
+    } catch(e) { console.warn('Failed to restore from URL:', e); }
+  }
+})();
+
+render();
+</script>
+</body>
+</html>

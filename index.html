@@ -531,6 +531,7 @@ function lsGet(k, d) {
   try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; }
 }
 function lsSet(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+function attrJSON(s) { return JSON.stringify(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 
 function isoWeek(d = new Date()) {
   const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -648,7 +649,7 @@ function renderSession() {
       </div>
       <div class="session-options">
         ${PROGRAM.sessions.conditioning.options.map(o => `
-          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${JSON.stringify(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
+          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${attrJSON(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
         `).join("")}
       </div>
     `;
@@ -666,7 +667,7 @@ function renderSession() {
       </div>
       <div class="session-options">
         ${sess.options.map(o => `
-          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${JSON.stringify(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
+          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${attrJSON(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
         `).join("")}
       </div>
     `;
@@ -680,7 +681,6 @@ function renderSession() {
       const exKey = ex.ex;
       const logged = sessionLog[exKey];
       if (!logged) allLogged = false;
-      const exJson = JSON.stringify(exKey);
       return `
         <div class="ex-row">
           <div class="ex-info">
@@ -688,7 +688,7 @@ function renderSession() {
             <div class="ex-spec">${ex.sets} × ${ex.low === ex.high ? ex.low : `${ex.low}-${ex.high}`}${ex.perSide ? " each" : ""}</div>
             ${logged ? `<div class="ex-summary">${logged.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${logged.overload ? " 🏆" : ""}</div>` : ""}
           </div>
-          <button class="ex-log-btn ${logged ? "logged" : ""}" onclick="openLiftModal(${JSON.stringify(sid)}, ${exJson}, ${ex.sets}, ${ex.low}, ${ex.high})">${logged ? "✓ Edit" : "Log"}</button>
+          <button class="ex-log-btn ${logged ? "logged" : ""}" onclick="openLiftModal(${attrJSON(sid)}, ${attrJSON(exKey)}, ${ex.sets}, ${ex.low}, ${ex.high})">${logged ? "✓ Edit" : "Log"}</button>
         </div>
       `;
     }).join("")}</div>`;

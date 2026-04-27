@@ -1,0 +1,19 @@
+{
+  "targets": {
+    "calories": 2200,
+    "protein_g": 166,
+    "fat_g": 65,
+    "carbs_g": 230
+  },
+  "tolerance": {
+    "calories_pct": 5,
+    "calories_abs": 200
+  },
+  "rules": {
+    "flex_meals_per_week_max": 1,
+    "cardio_day_kcal_bonus": 250
+  },
+  "days": {},
+  "weekly_summaries": {},
+  "schema_note": "days[YYYY-MM-DD] = { calories, protein_g, fat_g, carbs_g, flex_meal, notes }. weekly_summaries[YYYY-WXX] = { avg_calories, avg_protein_g, days_protein_hit, days_within_kcal_range, flex_meals, tracked_days, adjustment_recommendation }"
+}

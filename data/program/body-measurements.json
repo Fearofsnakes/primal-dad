@@ -1,0 +1,13 @@
+{
+  "instructions": "Morning, fasted, post-bathroom, same conditions every time. Bi-weekly.",
+  "schema_note": "Weights in lbs; circumferences in cm (or in — be consistent across checkpoints).",
+  "checkpoints": [
+    { "week": 0,  "iso_week": "2026-W18", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": "Baseline — fill before Day 1" },
+    { "week": 2,  "iso_week": "2026-W19", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": null },
+    { "week": 4,  "iso_week": "2026-W21", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": null },
+    { "week": 6,  "iso_week": "2026-W23", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": "Mid-program milestone" },
+    { "week": 8,  "iso_week": "2026-W25", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": null },
+    { "week": 10, "iso_week": "2026-W27", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": null },
+    { "week": 12, "iso_week": "2026-W29", "date": null, "weight_lbs": null, "waist_cm": null, "chest_cm": null, "hips_cm": null, "left_arm_flexed_cm": null, "right_arm_flexed_cm": null, "left_thigh_mid_cm": null, "right_thigh_mid_cm": null, "notes": "End of program — schedule new InBody scan" }
+  ]
+}

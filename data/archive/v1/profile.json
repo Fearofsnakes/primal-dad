@@ -1,0 +1,21 @@
+{
+  "name": "Gabriel Bujold",
+  "alias": "Primal Dad",
+  "created": "2026-03-29",
+  "streak": 0,
+  "bjj_start_date": "2026-06-02",
+  "paternity_leave_start": null,
+  "equipment": [
+    "squat_rack",
+    "adjustable_dumbbells",
+    "pulley_system",
+    "barbell_200lb",
+    "boxing_gloves",
+    "heavy_bag",
+    "stationary_bike",
+    "jumping_rope",
+    "resistance_elastics"
+  ],
+  "watch": "garmin",
+  "dimensions": ["STR", "VO2", "FGT", "FLX", "MND", "FAM", "WRK"]
+}

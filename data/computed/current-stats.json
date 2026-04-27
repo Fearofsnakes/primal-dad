@@ -1,0 +1,58 @@
+{
+  "last_updated": "2026-04-27",
+  "current_week": "2026-W18",
+  "program_week": 1,
+  "program_day": "monday",
+  "overall_level": 1,
+  "overall_title": "Sleep-Deprived Recruit",
+  "total_xp": 0,
+  "streak": 0,
+  "multiplier": 1.0,
+  "weeks_tracked": 0,
+  "dimensions": {
+    "STR": {
+      "name": "Strength",
+      "total_xp": 0,
+      "level": 1,
+      "title": "Novice",
+      "xp_to_next": 100,
+      "pct_to_next": 0,
+      "color": "#FF4444",
+      "trend": 0,
+      "weekly_cap": 80
+    },
+    "CON": {
+      "name": "Conditioning",
+      "total_xp": 0,
+      "level": 1,
+      "title": "Novice",
+      "xp_to_next": 100,
+      "pct_to_next": 0,
+      "color": "#4488FF",
+      "trend": 0,
+      "weekly_cap": 70
+    },
+    "FLX": {
+      "name": "Flexibility",
+      "total_xp": 0,
+      "level": 1,
+      "title": "Novice",
+      "xp_to_next": 100,
+      "pct_to_next": 0,
+      "color": "#44DD88",
+      "trend": 0,
+      "weekly_cap": 60
+    },
+    "NUT": {
+      "name": "Nutrition",
+      "total_xp": 0,
+      "level": 1,
+      "title": "Novice",
+      "xp_to_next": 100,
+      "pct_to_next": 0,
+      "color": "#FFCC00",
+      "trend": 0,
+      "weekly_cap": 70
+    }
+  }
+}

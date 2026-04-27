@@ -1,0 +1,142 @@
+{
+  "type": "onboarding",
+  "date": "2026-03-29",
+  "physical_profile": {
+    "height": "5'8\" (173 cm)",
+    "weight_lb": 166,
+    "body_fat_estimate_pct": "22-25%",
+    "body_type": "ectomorph",
+    "supplements": ["creatine"],
+    "nutrition_notes": "Used to track food (summer 2025). Wants to cut fat while keeping muscle. Can hit calorie targets."
+  },
+  "dimensions": {
+    "STR": {
+      "assigned_level": 2,
+      "assigned_xp": 120,
+      "rationale": "Years of training but inconsistent recently (few weeks off). Solid working weights for body size. Bench 135x6-8, 155x4. Squat 185x6-8. DB press 52.5lb. Rows ~25lb/side. Deadlift ~200-205 (uncertain if continuing). Typically 2-3x/week when consistent.",
+      "current_lifts": {
+        "bench_press": {"working": "135 lb x 6-8 reps", "max_recent": "155 lb x 4 reps"},
+        "squat": {"working": "185 lb x 6-8 reps"},
+        "deadlift": {"working": "200-205 lb (been a while, risk/reward concern)"},
+        "db_press": {"working": "52.5 lb adjustable dumbbells"},
+        "rows": {"working": "~25 lb each side"}
+      },
+      "frequency": "2-3x/week when consistent, currently off for a few weeks",
+      "notes": "Has squat rack, adjustable dumbbells (up to 52.5), pulley system, ~200lb on bar, resistance elastics"
+    },
+    "VO2": {
+      "assigned_level": 2,
+      "assigned_xp": 100,
+      "rationale": "Resting HR is actually good (54 bpm 7-day avg), but VO2 max is below average (36) and no structured cardio. Daily dog walks provide base activity.",
+      "garmin_data": {
+        "vo2_max_current": 36,
+        "vo2_max_start_dec2025": 34,
+        "vo2_max_peak": "37-38 (didn't last)",
+        "vo2_max_goal": 40,
+        "resting_hr_7day_avg": 54,
+        "resting_hr_overall_avg": 59,
+        "resting_hr_highest_5min": 88
+      },
+      "activity": {
+        "daily_steps": "6,000-8,000",
+        "daily_walk": "2.5-3 km with dog",
+        "structured_cardio": "none currently",
+        "jump_rope": "5-10 min as bag work warm-up (when training)"
+      },
+      "equipment": ["stationary_bike", "jumping_rope", "walking_pad"],
+      "notes": "Watch acquired December 2025. VO2 max trending up slowly but needs structured sessions to push to 40."
+    },
+    "FGT": {
+      "assigned_level": 1,
+      "assigned_xp": 60,
+      "rationale": "Beginner BJJ (~10 classes total), last session early March (got hurt). Bag work 1x/week when training. Gets completely gassed rolling. Plans BJJ return May/June.",
+      "bjj": {
+        "total_classes": "~10",
+        "last_session": "early March 2026",
+        "rolling_capacity": "5 rounds of 5 min, completely drained by end (puked once)",
+        "planned_return": "May-June 2026"
+      },
+      "striking": {
+        "bag_work_frequency": "1x/week when training",
+        "bag_work_format": "5-10 min jump rope warm-up + 4-6 rounds",
+        "goal_frequency": "2x/week",
+        "purpose": "cardio + striking skills"
+      },
+      "notes": "Hurt in early March, been ~1 month off. Has boxing gloves + heavy bag at home."
+    },
+    "FLX": {
+      "assigned_level": 1,
+      "assigned_xp": 0,
+      "rationale": "Self-described as very stiff. Desk job. Rarely stretches. Bought flexibility program but hasn't started it.",
+      "current_state": "Very stiff, can't touch toes comfortably",
+      "stretching_frequency": "Rarely/never",
+      "program_purchased": {
+        "name": "Minimalist flexibility routine",
+        "duration": "~15 minutes",
+        "exercises": [
+          "Cat-cow + side neck stretch",
+          "Hip flexors + butterfly stretch",
+          "Cobra stretch + spine stretch",
+          "Charley pulses + door frame chest stretch",
+          "Elephant walk + single-leg hamstring stretch",
+          "Soleus stretch + calf stretch",
+          "Wrist cranker + prayer hand stretch"
+        ],
+        "status": "Not started"
+      },
+      "notes": "Lowest dimension. Critical for BJJ preparation and longevity. The 15-min routine is the low-hanging fruit."
+    },
+    "MND": {
+      "assigned_level": 1,
+      "assigned_xp": 50,
+      "rationale": "Massive progress on weed (quit daily use Dec 15, only 3 relapses since). But screen time still high (3-4 hrs/day trending down), zero books in 2026, no journaling/meditation.",
+      "substances": {
+        "cannabis": {
+          "quit_date": "2025-12-15",
+          "prior_usage": "daily for years",
+          "relapses_since_quit": [
+            {"month": "January 2026", "duration": "~3 days"},
+            {"month": "~September (likely meant Feb/Mar)", "duration": "~3 days"},
+            {"month": "March 2026", "duration": "~3 days"}
+          ]
+        },
+        "alcohol": "none"
+      },
+      "screen_time": {
+        "recent_week_avg_hrs": 3.2,
+        "recent_week_range": "1.8 - 4.2 hrs/day",
+        "previous_weeks": "higher, 5-7 hrs some days",
+        "trend": "declining"
+      },
+      "reading": {
+        "books_2026": 0,
+        "historical_avg": "~8 books/year (2019-2025)"
+      },
+      "journaling": false,
+      "meditation": false,
+      "notes": "Weed progress is the big win. Screen time trending down. Need to restart reading habit."
+    },
+    "FAM": {
+      "assigned_level": 2,
+      "assigned_xp": 100,
+      "rationale": "Self-rated as decent. Present most of the time, shares baby duties, some quality partner time. On parental leave which helps.",
+      "self_rating": "decent",
+      "context": "On parental leave, baby arriving late March/early April 2026",
+      "partner": "Lau",
+      "notes": "Parental leave is an opportunity to build strong FAM habits from day one."
+    },
+    "WRK": {
+      "assigned_level": 2,
+      "assigned_xp": 110,
+      "rationale": "Strong capability but currently on leave. Systems-oriented, leverages Claude Code well. Goal during leave is autopilot systems, not output.",
+      "current_state": "Parental leave - work is not priority",
+      "work_style": "Can accomplish a lot in short bursts with right systems. Discipline over motivation.",
+      "claude_code_leverage": "High - uses it as primary tool for building systems",
+      "ventures": ["Verified Node", "Press X to Market", "GuideFlow"],
+      "notes": "During leave: WRK XP should come from 'stayed within boundaries' not shipping."
+    }
+  },
+  "total_starting_xp": 540,
+  "overall_starting_level": 1,
+  "reflection": "Onboarding baseline assessment. Strongest areas: STR and VO2 have foundation. Weakest: FLX (zero stretching), MND (no reading this year). Big wins to build on: weed cessation, declining screen time, existing equipment setup."
+}

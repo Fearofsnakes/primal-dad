@@ -1,0 +1,49 @@
+{
+  "name": "Gabriel Bujold",
+  "alias": "Primal Dad",
+  "created": "2026-04-27",
+  "age": 32,
+  "height_cm": 172,
+  "height_in": "5'8\"",
+  "weight_lbs_start": null,
+  "training_age": "intermediate",
+  "goal": "recomposition",
+  "program": "recomp-12wk",
+  "program_start": "2026-04-27",
+  "program_start_iso_week": "2026-W18",
+  "program_mid_iso_week": "2026-W23",
+  "program_end_iso_week": "2026-W29",
+  "bjj_start_date": "2026-06-02",
+  "paternity_leave_start": null,
+  "watch": "garmin",
+  "dimensions": ["STR", "CON", "FLX", "NUT"],
+  "equipment": [
+    "barbell",
+    "plates_200lb",
+    "squat_rack",
+    "adjustable_bench",
+    "pull_up_bar",
+    "adjustable_dumbbells",
+    "tricep_pulley",
+    "boxing_gloves",
+    "heavy_bag",
+    "stationary_bike",
+    "jumping_rope",
+    "resistance_elastics"
+  ],
+  "baseline_inbody_2023_01_08": {
+    "weight_lbs": 152.8,
+    "skeletal_muscle_mass_lbs": 69.0,
+    "body_fat_mass_lbs": 31.5,
+    "body_fat_pct": 20.6,
+    "lean_mass_lbs": 121.3,
+    "bmi": 23.2,
+    "bmr_kcal": 1559
+  },
+  "nutrition_targets": {
+    "calories": 2200,
+    "protein_g": 166,
+    "fat_g": 65,
+    "carbs_g": 230
+  }
+}

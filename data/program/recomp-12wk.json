@@ -1,0 +1,130 @@
+{
+  "name": "12-Week Recomposition",
+  "version": "1.0",
+  "duration_weeks": 12,
+  "split": "upper_lower_4day",
+  "session_target_min": 32,
+  "rest_seconds": 70,
+  "rest_range": "60-75s",
+  "progression_rule": "Hit top of rep range × 3 sets → +5 lbs next session (+2.5 lbs accessories)",
+  "plateau_rule": "No progress 2+ weeks → deload 10%, rebuild",
+  "schedule": {
+    "monday": "upper_a",
+    "tuesday": "lower_a",
+    "wednesday": "conditioning",
+    "thursday": "upper_b",
+    "friday": "lower_b",
+    "saturday": "optional",
+    "sunday": "rest"
+  },
+  "sessions": {
+    "upper_a": {
+      "name": "Upper A — Push",
+      "dimension": "STR",
+      "supersets": [
+        {
+          "id": "A",
+          "a": { "exercise": "Barbell Bench Press", "sets": 3, "reps_low": 8, "reps_high": 10 },
+          "b": { "exercise": "Face Pull (band/DB rear delt)", "sets": 3, "reps_low": 8, "reps_high": 10 }
+        },
+        {
+          "id": "B",
+          "a": { "exercise": "Incline DB Press", "sets": 3, "reps_low": 10, "reps_high": 12 },
+          "b": { "exercise": "Barbell Row", "sets": 3, "reps_low": 10, "reps_high": 12 }
+        },
+        {
+          "id": "C",
+          "a": { "exercise": "Lateral Raise (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Tricep Pushdown (pulley)", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        }
+      ]
+    },
+    "lower_a": {
+      "name": "Lower A — Quads",
+      "dimension": "STR",
+      "supersets": [
+        {
+          "id": "A",
+          "a": { "exercise": "Back Squat (barbell)", "sets": 3, "reps_low": 8, "reps_high": 10 },
+          "b": { "exercise": "Leg Curl (DB or lying)", "sets": 3, "reps_low": 8, "reps_high": 10 }
+        },
+        {
+          "id": "B",
+          "a": { "exercise": "Bulgarian Split Squat (DB)", "sets": 3, "reps_low": 10, "reps_high": 10, "per_side": true },
+          "b": { "exercise": "Romanian Deadlift (barbell)", "sets": 3, "reps_low": 10, "reps_high": 10 }
+        },
+        {
+          "id": "C",
+          "a": { "exercise": "Goblet Squat / Leg Extension alt", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Calf Raise", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        }
+      ]
+    },
+    "upper_b": {
+      "name": "Upper B — Pull",
+      "dimension": "STR",
+      "supersets": [
+        {
+          "id": "A",
+          "a": { "exercise": "Pull-Up (weighted if needed)", "sets": 3, "reps_low": 8, "reps_high": 10 },
+          "b": { "exercise": "DB Shoulder Press", "sets": 3, "reps_low": 8, "reps_high": 10 }
+        },
+        {
+          "id": "B",
+          "a": { "exercise": "Barbell Row", "sets": 3, "reps_low": 10, "reps_high": 12 },
+          "b": { "exercise": "DB Incline Press", "sets": 3, "reps_low": 10, "reps_high": 12 }
+        },
+        {
+          "id": "C",
+          "a": { "exercise": "Hammer Curl (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Overhead Tricep Extension (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        }
+      ]
+    },
+    "lower_b": {
+      "name": "Lower B — Hinge / Glutes",
+      "dimension": "STR",
+      "supersets": [
+        {
+          "id": "A",
+          "a": { "exercise": "Romanian Deadlift (barbell)", "sets": 3, "reps_low": 8, "reps_high": 10 },
+          "b": { "exercise": "Hip Thrust (barbell/DB)", "sets": 3, "reps_low": 8, "reps_high": 10 }
+        },
+        {
+          "id": "B",
+          "a": { "exercise": "Hip Thrust or Glute Bridge", "sets": 3, "reps_low": 10, "reps_high": 12 },
+          "b": { "exercise": "Walking Lunge (DB)", "sets": 3, "reps_low": 10, "reps_high": 12 }
+        },
+        {
+          "id": "C",
+          "a": { "exercise": "Lying Leg Curl (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Calf Raise", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        }
+      ]
+    },
+    "conditioning": {
+      "name": "Conditioning — Boxing or Run",
+      "dimension": "CON",
+      "duration_min": "30-45",
+      "intensity": "moderate",
+      "options": [
+        "Heavy bag (boxing)",
+        "Run / outdoor",
+        "Stationary bike (Zone 2)",
+        "Jump rope intervals"
+      ]
+    }
+  },
+  "milestones": {
+    "week_6": {
+      "iso_week": "2026-W23",
+      "type": "mid_program_review",
+      "deliverables": ["body_measurements", "lift_trend_chart", "nutrition_adherence_scorecard", "calorie_adjustment_call"]
+    },
+    "week_12": {
+      "iso_week": "2026-W29",
+      "type": "program_summary",
+      "deliverables": ["full_lift_recap", "body_comp_inbody_prompt", "next_program_path_pick"]
+    }
+  }
+}

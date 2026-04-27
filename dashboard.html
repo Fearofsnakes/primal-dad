@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0a12" />
+<title>Primal Dad — Recomp Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a12;
+    --bg-2: #12121e;
+    --bg-3: #1a1a2a;
+    --border: #25253a;
+    --text: #e8e8f0;
+    --text-dim: #8a8aa0;
+    --text-faint: #5a5a70;
+    --STR: #FF4444;
+    --CON: #4488FF;
+    --FLX: #44DD88;
+    --NUT: #FFCC00;
+    --gold: #FFCC00;
+    --good: #44DD88;
+    --warn: #FF8800;
+    --danger: #FF4444;
+    --r: 12px;
+  }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100dvh; padding-bottom: 120px; }
+  a { color: inherit; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 16px; }
+  @media (min-width: 900px) { .wrap { padding: 24px; } }
+
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    background: linear-gradient(180deg, rgba(10,10,18,0.98), rgba(10,10,18,0.92));
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .top-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--STR), var(--NUT)); display: grid; place-items: center; font-weight: 800; font-size: 18px; color: #fff; box-shadow: 0 0 24px rgba(255,68,68,0.25); }
+  .brand-name { font-weight: 700; letter-spacing: 0.4px; }
+  .brand-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .top-meta { text-align: right; font-size: 11px; color: var(--text-dim); }
+  .top-meta .week { font-size: 13px; color: var(--text); font-weight: 600; }
+
+  .hero { background: linear-gradient(135deg, var(--bg-2), var(--bg-3)); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-top: 16px; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: -40% -40% auto auto; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,204,0,0.18), transparent 60%); }
+  .hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; position: relative; }
+  .level-block .label { font-size: 11px; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; }
+  .level-block .num { font-size: 56px; font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--gold), #ffe084); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .level-block .title { font-size: 15px; color: var(--text); margin-top: 4px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; position: relative; }
+  .stat { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .stat .k { font-size: 10px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; }
+  .stat .v { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .stat .v small { font-size: 11px; color: var(--text-dim); font-weight: 500; }
+
+  .program-card { margin-top: 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+  .pcard-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .pcard-head h3 { font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); font-weight: 600; }
+  .pcard-head .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: rgba(68,221,136,0.12); color: var(--good); border: 1px solid rgba(68,221,136,0.3); }
+  .week-bar { position: relative; height: 36px; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .week-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--STR), var(--NUT)); transition: width 0.6s; }
+  .week-bar-cells { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(12, 1fr); }
+  .week-bar-cells span { border-right: 1px solid rgba(255,255,255,0.05); display: grid; place-items: center; font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 600; position: relative; z-index: 2; }
+  .week-bar-cells span.done { color: rgba(255,255,255,0.95); }
+  .week-bar-cells span.current { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6); }
+  .week-bar-cells span.milestone::after { content: ""; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+  .week-key { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-top: 8px; }
+
+  h2 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-weight: 600; margin: 28px 0 12px; }
+
+  .dims { display: grid; gap: 12px; }
+  .dim { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; position: relative; overflow: hidden; }
+  .dim-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .dim-name { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .dim-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 10px currentColor; }
+  .dim-lvl { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+  .dim-bar { position: relative; height: 8px; background: rgba(0,0,0,0.4); border-radius: 999px; overflow: hidden; }
+  .dim-bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; transition: width 0.6s; }
+  .dim-foot { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .dim-foot .week-cap { color: var(--text-faint); }
+
+  .session-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+  .session-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .session-title { font-size: 18px; font-weight: 700; }
+  .session-sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+  .session-status { font-size: 11px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
+  .session-status.todo { background: rgba(68,136,255,0.1); color: var(--CON); border-color: rgba(68,136,255,0.3); }
+  .session-status.done { background: rgba(68,221,136,0.12); color: var(--good); border-color: rgba(68,221,136,0.3); }
+  .session-status.rest { background: rgba(138,138,160,0.1); color: var(--text-dim); }
+
+  .superset { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .ss-tag { display: inline-block; font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.06); border-radius: 4px; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 8px; }
+  .ex-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.04); }
+  .ex-row:first-of-type { border-top: none; }
+  .ex-info { flex: 1; min-width: 0; }
+  .ex-name { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .ex-spec { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .ex-log-btn { background: rgba(68,136,255,0.12); border: 1px solid rgba(68,136,255,0.3); color: var(--CON); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; min-height: 32px; }
+  .ex-log-btn.logged { background: rgba(68,221,136,0.12); border-color: rgba(68,221,136,0.3); color: var(--good); }
+  .ex-summary { font-size: 11px; color: var(--text); background: rgba(68,221,136,0.08); border-left: 2px solid var(--good); padding: 4px 8px; margin-top: 6px; border-radius: 0 4px 4px 0; }
+
+  .session-options { display: grid; gap: 10px; margin-top: 8px; }
+  .session-options .opt { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; }
+  .opt-name { font-size: 14px; }
+  .opt button { background: rgba(68,136,255,0.12); border: 1px solid rgba(68,136,255,0.3); color: var(--CON); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; min-height: 32px; }
+
+  .quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+  .quick { padding: 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; text-align: left; min-height: 60px; }
+  .quick:hover { border-color: rgba(255,255,255,0.15); }
+  .quick .qi { font-size: 22px; }
+  .quick .qt { font-weight: 600; font-size: 13px; margin-top: 6px; }
+  .quick .qs { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  .achv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .achv { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; opacity: 0.55; transition: opacity 0.2s, transform 0.2s; }
+  .achv.unlocked { opacity: 1; border-color: rgba(255,204,0,0.4); background: linear-gradient(135deg, var(--bg-2), rgba(255,204,0,0.08)); box-shadow: 0 0 0 1px rgba(255,204,0,0.15) inset; }
+  .achv .ai { font-size: 22px; }
+  .achv .an { font-size: 12px; font-weight: 600; margin-top: 4px; line-height: 1.2; }
+  .achv .ad { font-size: 10px; color: var(--text-dim); margin-top: 4px; line-height: 1.3; }
+  .achv-tier { font-size: 10px; color: var(--text-faint); letter-spacing: 1px; text-transform: uppercase; margin: 14px 0 6px; }
+
+  .quest-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 10px; }
+  .quest-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .quest-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.06); letter-spacing: 1px; }
+  .quest-desc { font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .quest-meta { font-size: 11px; color: var(--text-dim); margin-top: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .pips { display: flex; gap: 6px; margin-top: 10px; }
+  .pip { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; transition: all 0.15s; display: grid; place-items: center; font-size: 12px; }
+  .pip.done { background: var(--good); border-color: var(--good); color: #001a08; }
+  .quest-empty { text-align: center; padding: 24px 12px; color: var(--text-dim); font-size: 13px; border: 1px dashed var(--border); border-radius: var(--r); }
+  .quest-empty button { margin-top: 12px; background: rgba(68,221,136,0.12); border: 1px solid rgba(68,221,136,0.3); color: var(--good); padding: 8px 16px; border-radius: 6px; font-weight: 600; }
+
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 540px) { .meta-grid { grid-template-columns: 1fr; } }
+  .meta-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+  .meta-card h3 { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+  .meta-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
+  .meta-row + .meta-row { border-top: 1px solid rgba(255,255,255,0.04); }
+  .meta-row .v { font-weight: 600; }
+  .meta-row .v.dim { color: var(--text-dim); font-weight: 400; }
+  .meta-card button { margin-top: 10px; width: 100%; background: rgba(255,204,0,0.12); border: 1px solid rgba(255,204,0,0.3); color: var(--gold); padding: 8px; border-radius: 6px; font-weight: 600; }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; }
+  .modal-bg.open { display: flex; }
+  @media (min-width: 600px) { .modal-bg { align-items: center; } }
+  .modal { background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 20px; width: 100%; max-width: 560px; max-height: 90dvh; overflow-y: auto; }
+  @media (min-width: 600px) { .modal { border-radius: 16px; } }
+  .modal h2 { margin: 0 0 16px; color: var(--text); font-size: 18px; letter-spacing: 0; text-transform: none; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .modal-actions button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; min-height: 44px; }
+  .modal-actions .primary { background: var(--good); color: #001a08; }
+  .modal-actions .secondary { background: var(--bg-3); border: 1px solid var(--border); color: var(--text); }
+
+  .set-row { display: grid; grid-template-columns: 40px 1fr 1fr; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.04); }
+  .set-row:first-of-type { border-top: none; }
+  .set-label { font-weight: 600; color: var(--text-dim); font-size: 13px; }
+  .set-row input { width: 100%; padding: 10px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 14px; font-family: inherit; }
+  .set-row input:focus { outline: none; border-color: var(--CON); }
+  .set-row label { font-size: 10px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+  .last-week-note { font-size: 11px; color: var(--text-dim); margin-bottom: 10px; padding: 8px; background: rgba(68,136,255,0.06); border-left: 2px solid var(--CON); border-radius: 0 4px 4px 0; }
+  .ovld-flag { font-size: 11px; padding: 6px 10px; background: rgba(255,204,0,0.1); border: 1px solid rgba(255,204,0,0.3); color: var(--gold); border-radius: 6px; margin-top: 10px; }
+
+  .dim-pick { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+  .dim-pick button { background: var(--bg-3); border: 2px solid var(--border); border-radius: 8px; padding: 14px 10px; text-align: left; min-height: 70px; }
+  .dim-pick button.selected { background: rgba(68,221,136,0.1); border-color: var(--good); }
+  .dim-pick .pname { font-weight: 700; font-size: 14px; }
+  .dim-pick .plvl { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .quest-template { padding: 12px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+  .qt-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .qt-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .qt-toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); position: relative; cursor: pointer; flex-shrink: 0; }
+  .qt-toggle::after { content: ""; position: absolute; left: 2px; top: 1px; width: 18px; height: 18px; border-radius: 50%; background: var(--text-dim); transition: 0.2s; }
+  .qt-toggle.on { background: rgba(68,221,136,0.2); border-color: var(--good); }
+  .qt-toggle.on::after { left: 22px; background: var(--good); }
+  .qt-target { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; color: var(--text-dim); }
+  .qt-target button { width: 28px; height: 28px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); font-size: 16px; font-weight: 700; }
+  .qt-target .count { font-weight: 700; color: var(--text); min-width: 16px; text-align: center; }
+
+  nav.bottom { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,18,0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); padding: 8px max(8px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom)); z-index: 40; }
+  .nav-row { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .nav-btn { padding: 8px 4px; text-align: center; border-radius: 8px; min-height: 56px; }
+  .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.05); }
+  .nav-icon { font-size: 18px; line-height: 1; }
+  .nav-label { font-size: 10px; color: var(--text-dim); margin-top: 4px; letter-spacing: 0.5px; }
+
+  .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg-3); border: 1px solid var(--border); padding: 12px 18px; border-radius: 10px; font-size: 13px; z-index: 200; opacity: 0; transition: 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: var(--good); }
+  .toast.warn { border-color: var(--warn); }
+
+  .sync-banner { background: rgba(255,136,0,0.08); border: 1px solid rgba(255,136,0,0.25); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--warn); margin-top: 16px; display: flex; gap: 8px; align-items: center; }
+  .sync-banner .si { font-size: 16px; }
+  .sync-banner code { background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="brand-mark">P</div>
+      <div>
+        <div class="brand-name">PRIMAL DAD</div>
+        <div class="brand-sub" id="brandSub">Recomp · Week — / 12</div>
+      </div>
+    </div>
+    <div class="top-meta">
+      <div class="week" id="topWeek">—</div>
+      <div id="topDate">—</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" id="hero">
+    <div class="hero-row">
+      <div class="level-block">
+        <div class="label">Overall Level</div>
+        <div class="num" id="overallLevel">1</div>
+        <div class="title" id="overallTitle">Sleep-Deprived Recruit</div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="k">Total XP</div><div class="v" id="statXP">0</div></div>
+      <div class="stat"><div class="k">Streak</div><div class="v" id="statStreak">0 <small>wks</small></div></div>
+      <div class="stat"><div class="k">Multiplier</div><div class="v" id="statMult">1.0×</div></div>
+    </div>
+  </section>
+
+  <div class="program-card">
+    <div class="pcard-head">
+      <h3>12-Week Recomp</h3>
+      <span class="badge" id="programBadge">Week 1</span>
+    </div>
+    <div class="week-bar">
+      <div class="week-bar-fill" id="weekFill" style="width: 0%"></div>
+      <div class="week-bar-cells" id="weekCells"></div>
+    </div>
+    <div class="week-key">
+      <span>Start · 04-27</span>
+      <span style="color: var(--gold);">★ W6 · 06-01 (BJJ)</span>
+      <span>End · 07-19</span>
+    </div>
+  </div>
+
+  <h2 id="anchor-dims">Dimensions</h2>
+  <div class="dims" id="dimsContainer"></div>
+
+  <h2 id="anchor-session">Today</h2>
+  <div class="session-card" id="sessionContainer"></div>
+
+  <h2>Quick Log</h2>
+  <div class="quick-grid">
+    <button class="quick" onclick="quickLog('mobility')">
+      <div class="qi">🧘</div>
+      <div class="qt">Mobility 15-min</div>
+      <div class="qs">+10 FLX</div>
+    </button>
+    <button class="quick" onclick="quickLog('stretch')">
+      <div class="qi">🪷</div>
+      <div class="qt">Stretch session</div>
+      <div class="qs">+15 FLX</div>
+    </button>
+    <button class="quick" onclick="quickLog('cardio')">
+      <div class="qi">🚴</div>
+      <div class="qt">Cardio 30+ min</div>
+      <div class="qs">+20 CON</div>
+    </button>
+    <button class="quick" onclick="quickLog('boxing')">
+      <div class="qi">🥊</div>
+      <div class="qt">Heavy bag</div>
+      <div class="qs">+20 CON</div>
+    </button>
+  </div>
+
+  <h2 id="anchor-quests">Weekly Quests</h2>
+  <div id="questsContainer"></div>
+
+  <h2>Tracking</h2>
+  <div class="meta-grid">
+    <div class="meta-card">
+      <h3>Body Comp</h3>
+      <div class="meta-row"><span>Weight</span><span class="v" id="bodyWeight">—</span></div>
+      <div class="meta-row"><span>Last measured</span><span class="v dim" id="bodyDate">—</span></div>
+      <div class="meta-row"><span>Next checkpoint</span><span class="v" id="bodyNext">—</span></div>
+      <button onclick="openMeasurementModal()">Log measurements</button>
+    </div>
+    <div class="meta-card">
+      <h3>Nutrition Today</h3>
+      <div class="meta-row"><span>Calories</span><span class="v" id="nutKcal">— / 2,200</span></div>
+      <div class="meta-row"><span>Protein</span><span class="v" id="nutProt">— / 166g</span></div>
+      <div class="meta-row"><span>Last 7d avg</span><span class="v dim" id="nutWeek">—</span></div>
+      <button onclick="openNutritionModal()">Log today's macros</button>
+    </div>
+  </div>
+
+  <h2 id="anchor-achv">Achievements</h2>
+  <div id="achvContainer"></div>
+
+  <div class="sync-banner">
+    <span class="si">⚠</span>
+    <span>Edits made here are saved to <code>localStorage</code>. Run <strong>weekly check-in</strong> in Claude Code to sync to JSON files.</span>
+  </div>
+
+</main>
+
+<nav class="bottom">
+  <div class="nav-row">
+    <button class="nav-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><div class="nav-icon">⚡</div><div class="nav-label">Stats</div></button>
+    <button class="nav-btn" onclick="document.getElementById('anchor-session').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">🏋️</div><div class="nav-label">Today</div></button>
+    <button class="nav-btn" onclick="document.getElementById('anchor-quests').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">⚔️</div><div class="nav-label">Quests</div></button>
+    <button class="nav-btn" onclick="document.getElementById('anchor-achv').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">🏆</div><div class="nav-label">Achv</div></button>
+    <button class="nav-btn" onclick="openQuestPicker()"><div class="nav-icon">＋</div><div class="nav-label">Pick</div></button>
+  </div>
+</nav>
+
+<div class="modal-bg" id="liftModal">
+  <div class="modal">
+    <h2 id="liftModalTitle">Log Exercise</h2>
+    <div id="liftLastWeek" class="last-week-note" style="display:none;"></div>
+    <div id="liftSets"></div>
+    <div id="ovldFlag" class="ovld-flag" style="display:none;">🏆 Hit top of rep range × 3 sets — bump weight next session.</div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('liftModal')">Cancel</button>
+      <button class="primary" onclick="saveLift()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="nutModal">
+  <div class="modal">
+    <h2>Log Today's Macros</h2>
+    <div style="display:grid;gap:12px;">
+      <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Calories (target 2,200)</label><input type="number" id="nutInputKcal" placeholder="2200" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
+      <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Protein (target 166g)</label><input type="number" id="nutInputProt" placeholder="166" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
+      <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Fat (g, floor 65)</label><input type="number" id="nutInputFat" placeholder="65" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
+      <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Carbs (g, target 230)</label><input type="number" id="nutInputCarbs" placeholder="230" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px;"><input type="checkbox" id="nutFlex"> Flex meal today</label>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('nutModal')">Cancel</button>
+      <button class="primary" onclick="saveNutrition()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="measModal">
+  <div class="modal">
+    <h2>Log Body Measurements</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Morning, fasted, post-bathroom. Bi-weekly. Use cm or in — be consistent.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="measFields"></div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('measModal')">Cancel</button>
+      <button class="primary" onclick="saveMeasurements()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="questModal">
+  <div class="modal">
+    <h2 id="questStepTitle">Pick 2–4 Dimensions</h2>
+    <div id="questStep1">
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Sorted by weakness. Tap to select.</div>
+      <div class="dim-pick" id="dimPick"></div>
+    </div>
+    <div id="questStep2" style="display:none;">
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Toggle quests on/off and set targets.</div>
+      <div id="questTemplates"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" id="questBack" onclick="questBack()">Cancel</button>
+      <button class="primary" id="questNext" onclick="questNext()">Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   PRIMAL DAD — DASHBOARD STATE
+   Edits in this dashboard write to localStorage.
+   Claude Code reads localStorage on weekly check-in and
+   syncs to data/computed/*.json + data/program/*.json.
+   ============================================================ */
+
+const STATS = {
+  current_week: "2026-W18",
+  program_week: 1,
+  overall_level: 1,
+  overall_title: "Sleep-Deprived Recruit",
+  total_xp: 0,
+  streak: 0,
+  multiplier: 1.0,
+  dimensions: {
+    STR: { name: "Strength",    total_xp: 0, level: 1, title: "Novice", xp_to_next: 100, pct_to_next: 0, color: "#FF4444", weekly_cap: 80 },
+    CON: { name: "Conditioning",total_xp: 0, level: 1, title: "Novice", xp_to_next: 100, pct_to_next: 0, color: "#4488FF", weekly_cap: 70 },
+    FLX: { name: "Flexibility", total_xp: 0, level: 1, title: "Novice", xp_to_next: 100, pct_to_next: 0, color: "#44DD88", weekly_cap: 60 },
+    NUT: { name: "Nutrition",   total_xp: 0, level: 1, title: "Novice", xp_to_next: 100, pct_to_next: 0, color: "#FFCC00", weekly_cap: 70 }
+  }
+};
+
+const PROFILE = {
+  weight_lbs: null,
+  bjj_start: "2026-06-02",
+  program_start: "2026-04-27",
+  program_end: "2026-07-19"
+};
+
+const PROGRAM = {
+  schedule: { 1:"upper_a", 2:"lower_a", 3:"conditioning", 4:"upper_b", 5:"lower_b", 6:"optional", 0:"rest" },
+  sessions: {
+    upper_a: { name: "Upper A — Push", dim: "STR", supersets: [
+      { id: "A", a: { ex: "Barbell Bench Press", sets: 3, low: 8, high: 10 }, b: { ex: "Face Pull (band/DB rear delt)", sets: 3, low: 8, high: 10 } },
+      { id: "B", a: { ex: "Incline DB Press", sets: 3, low: 10, high: 12 }, b: { ex: "Barbell Row", sets: 3, low: 10, high: 12 } },
+      { id: "C", a: { ex: "Lateral Raise (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Tricep Pushdown (pulley)", sets: 3, low: 12, high: 15 } }
+    ]},
+    lower_a: { name: "Lower A — Quads", dim: "STR", supersets: [
+      { id: "A", a: { ex: "Back Squat (barbell)", sets: 3, low: 8, high: 10 }, b: { ex: "Leg Curl (DB or lying)", sets: 3, low: 8, high: 10 } },
+      { id: "B", a: { ex: "Bulgarian Split Squat (DB)", sets: 3, low: 10, high: 10, perSide: true }, b: { ex: "Romanian Deadlift (barbell)", sets: 3, low: 10, high: 10 } },
+      { id: "C", a: { ex: "Goblet Squat / Leg Extension alt", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } }
+    ]},
+    upper_b: { name: "Upper B — Pull", dim: "STR", supersets: [
+      { id: "A", a: { ex: "Pull-Up (weighted if needed)", sets: 3, low: 8, high: 10 }, b: { ex: "DB Shoulder Press", sets: 3, low: 8, high: 10 } },
+      { id: "B", a: { ex: "Barbell Row", sets: 3, low: 10, high: 12 }, b: { ex: "DB Incline Press", sets: 3, low: 10, high: 12 } },
+      { id: "C", a: { ex: "Hammer Curl (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Overhead Tricep Extension (DB)", sets: 3, low: 12, high: 15 } }
+    ]},
+    lower_b: { name: "Lower B — Hinge / Glutes", dim: "STR", supersets: [
+      { id: "A", a: { ex: "Romanian Deadlift (barbell)", sets: 3, low: 8, high: 10 }, b: { ex: "Hip Thrust (barbell/DB)", sets: 3, low: 8, high: 10 } },
+      { id: "B", a: { ex: "Hip Thrust or Glute Bridge", sets: 3, low: 10, high: 12 }, b: { ex: "Walking Lunge (DB)", sets: 3, low: 10, high: 12 } },
+      { id: "C", a: { ex: "Lying Leg Curl (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } }
+    ]},
+    conditioning: { name: "Conditioning — Boxing/Run/Bike/Rope", dim: "CON", duration: "30–45 min", options: [
+      { name: "Heavy bag (boxing) — 15+ min", xp: 20 },
+      { name: "Run / outdoor — 30+ min", xp: 20 },
+      { name: "Stationary bike — Zone 2 45+ min", xp: 25 },
+      { name: "Jump rope — 10+ min", xp: 15 }
+    ]}
+  }
+};
+
+const QUEST_TEMPLATES = {
+  STR: [
+    { id: "str_lifts_4", desc: "Hit all 4 programmed lift sessions this week", target: 4, xp_per: 25, note: "The non-negotiable" },
+    { id: "str_overload", desc: "Hit progressive overload on at least 2 lifts", target: 2, xp_per: 10, note: "Bump weight or reps" },
+    { id: "str_pr", desc: "Set a new top-set PR on any compound", target: 1, xp_per: 25, note: "Bench / Squat / RDL / Pull-up" }
+  ],
+  CON: [
+    { id: "con_cardio_2", desc: "2 cardio/conditioning sessions", target: 2, xp_per: 20, note: "Mix bike, rope, run, bag" },
+    { id: "con_zone2", desc: "Hit one Zone 2 session 45+ min", target: 1, xp_per: 25, note: "Conversation pace" },
+    { id: "con_boxing", desc: "Heavy bag work 2× this week", target: 2, xp_per: 20, note: "Even 15 min counts" },
+    { id: "con_sleep", desc: "Sleep 7+ hr avg (Garmin)", target: 1, xp_per: 15, note: "Newborn caveat" }
+  ],
+  FLX: [
+    { id: "flx_daily", desc: "15-min mobility, 5+ days", target: 5, xp_per: 10, note: "Pick the tightest area" },
+    { id: "flx_stretch_2", desc: "Dedicated 15+ min stretch sessions", target: 2, xp_per: 15, note: "Hips and shoulders" },
+    { id: "flx_yoga", desc: "1 yoga / flow session", target: 1, xp_per: 20, note: "20–30 min is plenty" }
+  ],
+  NUT: [
+    { id: "nut_protein_5", desc: "Hit protein target 5+ days", target: 5, xp_per: 5, note: "166g — track everything" },
+    { id: "nut_kcal_week", desc: "Week avg within ±5% of 2,200 kcal", target: 1, xp_per: 25, note: "Avg matters, not perfection" },
+    { id: "nut_track_7", desc: "Track all meals 7/7 days", target: 7, xp_per: 5, note: "Awareness is half the battle" },
+    { id: "nut_flex_1max", desc: "Stay within 1 flex meal", target: 1, xp_per: 10, note: "1 meal, not 1 day" }
+  ]
+};
+
+const ACHIEVEMENTS = [
+  { id: "day_1_done",         name: "Day 1 Done",            desc: "Complete your first programmed session.",                       tier: "foundation",  dim: "STR", icon: "🎯" },
+  { id: "first_week_logged",  name: "First Week Logged",     desc: "Complete Week 1 — all 4 lifts + 1 cardio.",                     tier: "foundation",  dim: "STR", icon: "📅" },
+  { id: "body_comp_baseline", name: "Body Comp Baseline",    desc: "Log all Week 0 measurements before Day 1.",                     tier: "foundation",  dim: "NUT", icon: "📏" },
+  { id: "first_plate_bench",  name: "First Plate Bench",     desc: "Bench Press 135 lbs × 5.",                                      tier: "strength",    dim: "STR", icon: "🏋️" },
+  { id: "bodyweight_bench",   name: "Bodyweight Bench",      desc: "Bench bodyweight × 5.",                                         tier: "strength",    dim: "STR", icon: "💪" },
+  { id: "squat_100kg",        name: "100 kg Squat",          desc: "Back Squat 220 lbs × 5.",                                       tier: "strength",    dim: "STR", icon: "🦿" },
+  { id: "rdl_1_5x_bw",        name: "1.5× BW RDL",           desc: "Romanian Deadlift 1.5× bodyweight × 5.",                        tier: "strength",    dim: "STR", icon: "🪨" },
+  { id: "pullup_pro_8",       name: "Pull-Up Pro",           desc: "8 strict bodyweight pull-ups in one set.",                      tier: "strength",    dim: "STR", icon: "🆙" },
+  { id: "first_bulgarian",    name: "First Bulgarian",       desc: "Bulgarian Split Squat 30 lbs × 10 each leg.",                   tier: "strength",    dim: "STR", icon: "🇧🇬" },
+  { id: "mobility_streak_7",  name: "Mobility Streak 7",     desc: "7 consecutive days of mobility.",                               tier: "consistency", dim: "FLX", icon: "🧘" },
+  { id: "mobility_streak_14", name: "Mobility Streak 14",    desc: "14 consecutive days.",                                          tier: "consistency", dim: "FLX", icon: "🧘" },
+  { id: "mobility_streak_30", name: "Mobility Streak 30",    desc: "30 consecutive days.",                                          tier: "consistency", dim: "FLX", icon: "🪷" },
+  { id: "consistency_block_4",name: "Consistency Block",     desc: "4 weeks straight, no missed lifts.",                            tier: "consistency", dim: "STR", icon: "🔥" },
+  { id: "macro_marksman_7",   name: "Macro Marksman 7/7",    desc: "Hit protein every day for one week.",                           tier: "nutrition",   dim: "NUT", icon: "🎯" },
+  { id: "macro_marksman_30",  name: "Macro Marksman 30",     desc: "30 of 30 days hitting protein.",                                tier: "nutrition",   dim: "NUT", icon: "🥩" },
+  { id: "calorie_compass",    name: "Calorie Compass",       desc: "Full week within ±5% calorie target.",                          tier: "nutrition",   dim: "NUT", icon: "🧭" },
+  { id: "no_flex_week",       name: "Disciplined Week",      desc: "0 flex meals for the week.",                                    tier: "nutrition",   dim: "NUT", icon: "🛡️" },
+  { id: "boxing_builder_8",   name: "Boxing Builder",        desc: "Log 8 heavy bag sessions.",                                     tier: "conditioning",dim: "CON", icon: "🥊" },
+  { id: "zone_2_long",        name: "Zone 2 Long",           desc: "Sustained Zone 2 60+ minutes.",                                 tier: "conditioning",dim: "CON", icon: "💙" },
+  { id: "rhr_drop_5",         name: "Heart of Iron",         desc: "Resting HR drops 5+ bpm.",                                      tier: "conditioning",dim: "CON", icon: "❤️" },
+  { id: "bjj_day_1",          name: "BJJ Day 1",             desc: "First BJJ class (June 2, 2026).",                               tier: "conditioning",dim: "CON", icon: "🥋" },
+  { id: "recomp_mid_week_6",  name: "Recomp Mid",            desc: "Complete the first 6 weeks.",                                   tier: "milestone",   dim: "STR", icon: "🛤️" },
+  { id: "recomp_champion",    name: "Recomp Champion",       desc: "Finish all 12 weeks.",                                          tier: "milestone",   dim: "STR", icon: "🏆" },
+  { id: "sub_20_bf",          name: "Sub-20% BF",            desc: "InBody scan shows BF under 20%.",                               tier: "milestone",   dim: "NUT", icon: "📉" }
+];
+
+const TIER_LABEL = {
+  foundation: "Foundation",
+  strength: "Strength PRs",
+  consistency: "Consistency",
+  nutrition: "Nutrition",
+  conditioning: "Conditioning",
+  milestone: "Milestones"
+};
+
+const MEASUREMENT_FIELDS = [
+  { id: "weight_lbs",          label: "Weight (lbs)" },
+  { id: "waist_cm",            label: "Waist (cm/in)" },
+  { id: "chest_cm",            label: "Chest (cm/in)" },
+  { id: "hips_cm",             label: "Hips (cm/in)" },
+  { id: "left_arm_flexed_cm",  label: "L arm flexed" },
+  { id: "right_arm_flexed_cm", label: "R arm flexed" },
+  { id: "left_thigh_mid_cm",   label: "L thigh mid" },
+  { id: "right_thigh_mid_cm",  label: "R thigh mid" }
+];
+
+const LS_KEYS = {
+  quests: "primal-dad-quests",
+  liftLog: "primal-dad-lift-log",
+  nutLog: "primal-dad-nut-log",
+  bodyLog: "primal-dad-body-log",
+  achv: "primal-dad-achievements",
+  weekXP: "primal-dad-week-xp"
+};
+
+function lsGet(k, d) {
+  try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; }
+}
+function lsSet(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+function isoWeek(d = new Date()) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNum = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+}
+function todayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+
+function programWeek() {
+  const start = new Date(PROFILE.program_start);
+  const today = new Date();
+  const diff = Math.floor((today - start) / (7 * 86400000));
+  return Math.max(1, Math.min(12, diff + 1));
+}
+
+function todaysSessionId() {
+  const day = new Date().getDay();
+  return PROGRAM.schedule[day] || "rest";
+}
+
+function toast(msg, type) {
+  type = type || "success";
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  setTimeout(() => { t.className = "toast"; }, 2200);
+}
+
+function renderHeader() {
+  const today = new Date();
+  const week = isoWeek(today);
+  const pw = programWeek();
+  document.getElementById("topWeek").textContent = week;
+  document.getElementById("topDate").textContent = today.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+  document.getElementById("brandSub").textContent = `Recomp · Week ${pw} / 12`;
+  document.getElementById("programBadge").textContent = `Week ${pw}`;
+
+  document.getElementById("overallLevel").textContent = STATS.overall_level;
+  document.getElementById("overallTitle").textContent = STATS.overall_title;
+  document.getElementById("statXP").textContent = STATS.total_xp.toLocaleString();
+  document.getElementById("statStreak").innerHTML = STATS.streak + ' <small>wks</small>';
+  document.getElementById("statMult").textContent = STATS.multiplier.toFixed(1) + "×";
+}
+
+function renderProgramBar() {
+  const cells = document.getElementById("weekCells");
+  const fill = document.getElementById("weekFill");
+  const pw = programWeek();
+  cells.innerHTML = "";
+  for (let i = 1; i <= 12; i++) {
+    const span = document.createElement("span");
+    span.textContent = i;
+    if (i < pw) span.classList.add("done");
+    if (i === pw) span.classList.add("current");
+    if (i === 6 || i === 12) span.classList.add("milestone");
+    cells.appendChild(span);
+  }
+  fill.style.width = ((pw - 1) / 12) * 100 + "%";
+}
+
+function renderDimensions() {
+  const c = document.getElementById("dimsContainer");
+  c.innerHTML = "";
+  const weekXP = lsGet(LS_KEYS.weekXP, {});
+  const currentWeekKey = isoWeek();
+  const wxp = weekXP[currentWeekKey] || {};
+  for (const code of ["STR","CON","FLX","NUT"]) {
+    const d = STATS.dimensions[code];
+    const earned = wxp[code] || 0;
+    const pct = Math.round(d.pct_to_next * 100);
+    const card = document.createElement("div");
+    card.className = "dim";
+    card.style.borderLeft = `3px solid ${d.color}`;
+    card.innerHTML = `
+      <div class="dim-head">
+        <div class="dim-name"><span class="dim-dot" style="background:${d.color};color:${d.color}"></span>${d.name} <span style="color:var(--text-faint);font-size:11px;letter-spacing:1px;">${code}</span></div>
+        <div class="dim-lvl">L${d.level} · ${d.title}</div>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:${pct}%;background:${d.color};box-shadow:0 0 8px ${d.color};"></div></div>
+      <div class="dim-foot">
+        <span>${d.total_xp} XP · ${d.xp_to_next} to next</span>
+        <span class="week-cap">${earned} / ${d.weekly_cap} this week</span>
+      </div>
+    `;
+    c.appendChild(card);
+  }
+}
+
+function renderSession() {
+  const c = document.getElementById("sessionContainer");
+  const sid = todaysSessionId();
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const todayKey = todayISO();
+  const sessionLog = liftLog[todayKey] || {};
+
+  if (sid === "rest") {
+    c.innerHTML = `
+      <div class="session-head">
+        <div><div class="session-title">Rest Day</div><div class="session-sub">Sunday — recovery + check-in</div></div>
+        <div class="session-status rest">REST</div>
+      </div>
+      <div style="padding:8px 0;color:var(--text-dim);font-size:13px;">Nothing programmed. Run "weekly check-in" or use Quick Log.</div>
+    `;
+    return;
+  }
+
+  if (sid === "optional") {
+    c.innerHTML = `
+      <div class="session-head">
+        <div><div class="session-title">Optional Day</div><div class="session-sub">Saturday — boxing, run, or rest</div></div>
+        <div class="session-status todo">PICK</div>
+      </div>
+      <div class="session-options">
+        ${PROGRAM.sessions.conditioning.options.map(o => `
+          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${JSON.stringify(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
+        `).join("")}
+      </div>
+    `;
+    return;
+  }
+
+  const sess = PROGRAM.sessions[sid];
+  if (!sess) { c.innerHTML = `<div>No session.</div>`; return; }
+
+  if (sid === "conditioning") {
+    c.innerHTML = `
+      <div class="session-head">
+        <div><div class="session-title">${sess.name}</div><div class="session-sub">${sess.duration} · CON dim</div></div>
+        <div class="session-status ${sessionLog._cardio_logged ? "done" : "todo"}">${sessionLog._cardio_logged ? "DONE" : "TODO"}</div>
+      </div>
+      <div class="session-options">
+        ${sess.options.map(o => `
+          <div class="opt"><span class="opt-name">${o.name}</span><button onclick="logCardio(${JSON.stringify(o.name)}, ${o.xp})">Log +${o.xp}</button></div>
+        `).join("")}
+      </div>
+    `;
+    return;
+  }
+
+  let allLogged = true;
+  const ssHtml = sess.supersets.map(ss => {
+    return `<div class="superset"><span class="ss-tag">SUPERSET ${ss.id}</span>${["a","b"].map(slot => {
+      const ex = ss[slot];
+      const exKey = ex.ex;
+      const logged = sessionLog[exKey];
+      if (!logged) allLogged = false;
+      const exJson = JSON.stringify(exKey);
+      return `
+        <div class="ex-row">
+          <div class="ex-info">
+            <div class="ex-name">${ex.ex}</div>
+            <div class="ex-spec">${ex.sets} × ${ex.low === ex.high ? ex.low : `${ex.low}-${ex.high}`}${ex.perSide ? " each" : ""}</div>
+            ${logged ? `<div class="ex-summary">${logged.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${logged.overload ? " 🏆" : ""}</div>` : ""}
+          </div>
+          <button class="ex-log-btn ${logged ? "logged" : ""}" onclick="openLiftModal(${JSON.stringify(sid)}, ${exJson}, ${ex.sets}, ${ex.low}, ${ex.high})">${logged ? "✓ Edit" : "Log"}</button>
+        </div>
+      `;
+    }).join("")}</div>`;
+  }).join("");
+
+  c.innerHTML = `
+    <div class="session-head">
+      <div><div class="session-title">${sess.name}</div><div class="session-sub">${sess.dim} dim · 30–35 min target</div></div>
+      <div class="session-status ${allLogged ? "done" : "todo"}">${allLogged ? "DONE" : "TODO"}</div>
+    </div>
+    ${ssHtml}
+  `;
+}
+
+let liftCtx = null;
+function openLiftModal(sessionId, exName, sets, low, high) {
+  liftCtx = { sessionId, exName, sets, low, high };
+  document.getElementById("liftModalTitle").textContent = exName;
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  let lastEntry = null, lastDate = null;
+  for (const date of Object.keys(liftLog).sort().reverse()) {
+    if (date === todayISO()) continue;
+    if (liftLog[date][exName]) { lastEntry = liftLog[date][exName]; lastDate = date; break; }
+  }
+  const note = document.getElementById("liftLastWeek");
+  if (lastEntry) {
+    note.style.display = "block";
+    note.innerHTML = `Last (${lastDate}): ${lastEntry.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}`;
+  } else {
+    note.style.display = "none";
+  }
+  const todayKey = todayISO();
+  const existing = (liftLog[todayKey] || {})[exName];
+  const setsHtml = [];
+  for (let i = 0; i < sets; i++) {
+    const ex = (existing && existing.sets && existing.sets[i]) || { weight: "", reps: "" };
+    setsHtml.push(`
+      <div class="set-row">
+        <div class="set-label">Set ${i+1}</div>
+        <div><label>Weight (lbs)</label><input id="liftW${i}" type="number" inputmode="decimal" step="0.5" value="${ex.weight}"></div>
+        <div><label>Reps (target ${low}${low!==high?`–${high}`:""})</label><input id="liftR${i}" type="number" inputmode="numeric" value="${ex.reps}"></div>
+      </div>
+    `);
+  }
+  document.getElementById("liftSets").innerHTML = setsHtml.join("");
+  document.getElementById("ovldFlag").style.display = "none";
+  openModal("liftModal");
+}
+
+function saveLift() {
+  if (!liftCtx) return;
+  const { sessionId, exName, sets, low, high } = liftCtx;
+  const setsArr = [];
+  for (let i = 0; i < sets; i++) {
+    const w = parseFloat(document.getElementById(`liftW${i}`).value);
+    const r = parseInt(document.getElementById(`liftR${i}`).value, 10);
+    if (isNaN(w) || isNaN(r)) { toast("Fill all sets", "warn"); return; }
+    setsArr.push({ weight: w, reps: r });
+  }
+  const allTop = setsArr.every(s => s.reps >= high);
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const todayKey = todayISO();
+  liftLog[todayKey] = liftLog[todayKey] || { _session_id: sessionId };
+  const wasLogged = !!liftLog[todayKey][exName];
+  liftLog[todayKey][exName] = { sets: setsArr, overload: allTop, logged_at: new Date().toISOString() };
+  lsSet(LS_KEYS.liftLog, liftLog);
+
+  if (!wasLogged) {
+    const weekXP = lsGet(LS_KEYS.weekXP, {});
+    const wk = isoWeek();
+    weekXP[wk] = weekXP[wk] || {};
+    weekXP[wk].STR = (weekXP[wk].STR || 0) + (allTop ? 35 : 25) / 6;
+    lsSet(LS_KEYS.weekXP, weekXP);
+  }
+
+  if (allTop) {
+    document.getElementById("ovldFlag").style.display = "block";
+    setTimeout(() => { closeModal("liftModal"); renderSession(); renderDimensions(); toast("Logged · 🏆 progressive overload"); }, 1100);
+  } else {
+    closeModal("liftModal");
+    renderSession();
+    renderDimensions();
+    toast("Logged");
+  }
+}
+
+function quickLog(type) {
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const todayKey = todayISO();
+  liftLog[todayKey] = liftLog[todayKey] || {};
+  const map = {
+    mobility: { dim: "FLX", xp: 10, label: "15-min mobility" },
+    stretch:  { dim: "FLX", xp: 15, label: "Stretch session" },
+    cardio:   { dim: "CON", xp: 20, label: "Cardio session" },
+    boxing:   { dim: "CON", xp: 20, label: "Heavy bag" }
+  };
+  const m = map[type];
+  if (!m) return;
+  liftLog[todayKey][`_quick_${type}_${Date.now()}`] = { dim: m.dim, xp: m.xp, label: m.label, logged_at: new Date().toISOString() };
+  lsSet(LS_KEYS.liftLog, liftLog);
+  const weekXP = lsGet(LS_KEYS.weekXP, {});
+  const wk = isoWeek();
+  weekXP[wk] = weekXP[wk] || {};
+  weekXP[wk][m.dim] = (weekXP[wk][m.dim] || 0) + m.xp;
+  lsSet(LS_KEYS.weekXP, weekXP);
+  toast(`+${m.xp} ${m.dim} · ${m.label}`);
+  renderDimensions();
+}
+
+function logCardio(name, xp) {
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const todayKey = todayISO();
+  liftLog[todayKey] = liftLog[todayKey] || {};
+  liftLog[todayKey][`_cardio_${Date.now()}`] = { dim: "CON", xp, label: name, logged_at: new Date().toISOString() };
+  liftLog[todayKey]._cardio_logged = true;
+  lsSet(LS_KEYS.liftLog, liftLog);
+  const weekXP = lsGet(LS_KEYS.weekXP, {});
+  const wk = isoWeek();
+  weekXP[wk] = weekXP[wk] || {};
+  weekXP[wk].CON = (weekXP[wk].CON || 0) + xp;
+  lsSet(LS_KEYS.weekXP, weekXP);
+  toast(`+${xp} CON · ${name}`);
+  renderSession();
+  renderDimensions();
+}
+
+function openNutritionModal() {
+  const log = lsGet(LS_KEYS.nutLog, {});
+  const todayKey = todayISO();
+  const t = log[todayKey] || {};
+  document.getElementById("nutInputKcal").value = t.calories || "";
+  document.getElementById("nutInputProt").value = t.protein_g || "";
+  document.getElementById("nutInputFat").value = t.fat_g || "";
+  document.getElementById("nutInputCarbs").value = t.carbs_g || "";
+  document.getElementById("nutFlex").checked = !!t.flex_meal;
+  openModal("nutModal");
+}
+
+function saveNutrition() {
+  const log = lsGet(LS_KEYS.nutLog, {});
+  const todayKey = todayISO();
+  log[todayKey] = {
+    calories: parseFloat(document.getElementById("nutInputKcal").value) || null,
+    protein_g: parseFloat(document.getElementById("nutInputProt").value) || null,
+    fat_g: parseFloat(document.getElementById("nutInputFat").value) || null,
+    carbs_g: parseFloat(document.getElementById("nutInputCarbs").value) || null,
+    flex_meal: document.getElementById("nutFlex").checked,
+    logged_at: new Date().toISOString()
+  };
+  lsSet(LS_KEYS.nutLog, log);
+  closeModal("nutModal");
+  renderNutrition();
+  toast("Macros logged");
+}
+
+function renderNutrition() {
+  const log = lsGet(LS_KEYS.nutLog, {});
+  const todayKey = todayISO();
+  const today = log[todayKey];
+  document.getElementById("nutKcal").textContent = today && today.calories ? `${today.calories} / 2,200` : "— / 2,200";
+  document.getElementById("nutProt").textContent = today && today.protein_g ? `${today.protein_g}g / 166g` : "— / 166g";
+  const now = new Date();
+  const days = Object.entries(log).filter(([d]) => {
+    const date = new Date(d);
+    return (now - date) < 7 * 86400000 && (now - date) >= 0;
+  });
+  if (days.length) {
+    const totalKcal = days.reduce((s, [,v]) => s + (v.calories || 0), 0);
+    const tracked = days.filter(([,v]) => v.calories).length;
+    const avgKcal = tracked ? Math.round(totalKcal / tracked) : 0;
+    const protHit = days.filter(([,v]) => (v.protein_g || 0) >= 150).length;
+    document.getElementById("nutWeek").textContent = `${avgKcal} kcal · ${protHit}/${days.length} prot`;
+  } else {
+    document.getElementById("nutWeek").textContent = "—";
+  }
+}
+
+function openMeasurementModal() {
+  const log = lsGet(LS_KEYS.bodyLog, []);
+  const last = log[log.length - 1] || {};
+  const fields = MEASUREMENT_FIELDS.map(f => `
+    <div><label style="font-size:10px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;">${f.label}</label>
+    <input id="meas_${f.id}" type="number" inputmode="decimal" step="0.1" value="${last[f.id] != null ? last[f.id] : ""}" style="width:100%;padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;margin-top:4px;"></div>
+  `).join("");
+  document.getElementById("measFields").innerHTML = fields;
+  openModal("measModal");
+}
+
+function saveMeasurements() {
+  const log = lsGet(LS_KEYS.bodyLog, []);
+  const entry = { date: todayISO(), iso_week: isoWeek(), program_week: programWeek() };
+  let any = false;
+  for (const f of MEASUREMENT_FIELDS) {
+    const v = parseFloat(document.getElementById(`meas_${f.id}`).value);
+    if (!isNaN(v)) { entry[f.id] = v; any = true; }
+  }
+  if (!any) { toast("Enter at least one value", "warn"); return; }
+  log.push(entry);
+  lsSet(LS_KEYS.bodyLog, log);
+  closeModal("measModal");
+  renderBody();
+  toast("Measurements logged");
+}
+
+function renderBody() {
+  const log = lsGet(LS_KEYS.bodyLog, []);
+  const last = log[log.length - 1];
+  document.getElementById("bodyWeight").textContent = last && last.weight_lbs ? `${last.weight_lbs} lbs` : "—";
+  document.getElementById("bodyDate").textContent = last ? last.date : "Not yet";
+  const pw = programWeek();
+  const checkpoints = [0, 2, 4, 6, 8, 10, 12];
+  const lastWeek = last ? last.program_week : -1;
+  const next = checkpoints.find(w => w > lastWeek && w >= pw - 1);
+  document.getElementById("bodyNext").textContent = next != null ? `Week ${next}` : "Done";
+}
+
+let questState = { step: 1, picked: [], built: {} };
+
+function openQuestPicker() {
+  const wk = isoWeek();
+  const existing = lsGet(LS_KEYS.quests, null);
+  if (existing && existing.week === wk && existing.quests && existing.quests.length) {
+    if (!confirm("You already have quests for this week. Re-pick?")) return;
+  }
+  questState = { step: 1, picked: [], built: {} };
+  const dims = ["STR","CON","FLX","NUT"].sort((a,b) => STATS.dimensions[a].total_xp - STATS.dimensions[b].total_xp);
+  const c = document.getElementById("dimPick");
+  c.innerHTML = dims.map(code => {
+    const d = STATS.dimensions[code];
+    return `<button data-code="${code}" onclick="toggleDimPick('${code}',this)"><div class="pname">${d.name}</div><div class="plvl">L${d.level} · ${code}</div></button>`;
+  }).join("");
+  document.getElementById("questStep1").style.display = "block";
+  document.getElementById("questStep2").style.display = "none";
+  document.getElementById("questStepTitle").textContent = "Pick 2–4 Dimensions";
+  document.getElementById("questNext").textContent = "Next";
+  document.getElementById("questBack").textContent = "Cancel";
+  openModal("questModal");
+}
+
+function toggleDimPick(code, btn) {
+  if (questState.picked.includes(code)) {
+    questState.picked = questState.picked.filter(c => c !== code);
+    btn.classList.remove("selected");
+  } else if (questState.picked.length < 4) {
+    questState.picked.push(code);
+    btn.classList.add("selected");
+  } else {
+    toast("Max 4 dimensions", "warn");
+  }
+}
+
+function questNext() {
+  if (questState.step === 1) {
+    if (questState.picked.length < 2) { toast("Pick at least 2", "warn"); return; }
+    questState.built = {};
+    for (const code of questState.picked) {
+      questState.built[code] = QUEST_TEMPLATES[code].map(q => ({ ...q, on: true, target: q.target }));
+    }
+    renderQuestStep2();
+    document.getElementById("questStep1").style.display = "none";
+    document.getElementById("questStep2").style.display = "block";
+    document.getElementById("questStepTitle").textContent = "Customize Quests";
+    document.getElementById("questNext").textContent = "Confirm";
+    document.getElementById("questBack").textContent = "Back";
+    questState.step = 2;
+  } else {
+    confirmQuests();
+  }
+}
+
+function questBack() {
+  if (questState.step === 2) {
+    document.getElementById("questStep1").style.display = "block";
+    document.getElementById("questStep2").style.display = "none";
+    document.getElementById("questStepTitle").textContent = "Pick 2–4 Dimensions";
+    document.getElementById("questNext").textContent = "Next";
+    document.getElementById("questBack").textContent = "Cancel";
+    questState.step = 1;
+  } else {
+    closeModal("questModal");
+  }
+}
+
+function renderQuestStep2() {
+  const c = document.getElementById("questTemplates");
+  c.innerHTML = questState.picked.map(code => {
+    const d = STATS.dimensions[code];
+    const qs = questState.built[code];
+    return `
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:${d.color};margin-bottom:8px;font-weight:700;">${d.name}</div>
+        ${qs.map((q,i) => `
+          <div class="quest-template">
+            <div class="qt-row">
+              <div class="qt-name">${q.desc}</div>
+              <div class="qt-toggle ${q.on ? "on" : ""}" onclick="toggleQuestOn('${code}',${i})"></div>
+            </div>
+            <div class="qt-target" ${!q.on ? 'style="opacity:0.4;pointer-events:none;"' : ""}>
+              Target:
+              <button onclick="adjustQuest('${code}',${i},-1)">−</button>
+              <span class="count" id="qcnt_${code}_${i}">${q.target}</span>
+              <button onclick="adjustQuest('${code}',${i},1)">+</button>
+              <span style="margin-left:auto;color:var(--text-faint);">${q.xp_per} XP each</span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }).join("");
+}
+
+function toggleQuestOn(code, i) {
+  questState.built[code][i].on = !questState.built[code][i].on;
+  renderQuestStep2();
+}
+function adjustQuest(code, i, delta) {
+  const q = questState.built[code][i];
+  q.target = Math.max(1, Math.min(7, q.target + delta));
+  document.getElementById(`qcnt_${code}_${i}`).textContent = q.target;
+}
+
+function confirmQuests() {
+  const wk = isoWeek();
+  const quests = [];
+  for (const code of questState.picked) {
+    for (const q of questState.built[code]) {
+      if (!q.on) continue;
+      quests.push({
+        id: `${wk}_${q.id}`,
+        dim: code,
+        desc: q.desc,
+        target: q.target,
+        progress: 0,
+        xp_per: q.xp_per,
+        total_xp: q.target * q.xp_per,
+        note: q.note
+      });
+    }
+  }
+  const data = { week: wk, program_week: programWeek(), picked_at: new Date().toISOString(), focused_dimensions: questState.picked, quests, completed: false };
+  lsSet(LS_KEYS.quests, data);
+  closeModal("questModal");
+  renderQuests();
+  toast(`${quests.length} quests locked in`);
+}
+
+function renderQuests() {
+  const c = document.getElementById("questsContainer");
+  const wk = isoWeek();
+  const data = lsGet(LS_KEYS.quests, null);
+  if (!data || data.week !== wk || !data.quests || !data.quests.length) {
+    c.innerHTML = `<div class="quest-empty">No quests for ${wk}.<br><button onclick="openQuestPicker()">Pick quests</button></div>`;
+    return;
+  }
+  c.innerHTML = data.quests.map(q => {
+    const d = STATS.dimensions[q.dim];
+    return `
+      <div class="quest-card" style="border-left:3px solid ${d.color};">
+        <div class="quest-head">
+          <div class="quest-tag" style="color:${d.color};border:1px solid ${d.color}55;">${q.dim}</div>
+          <div style="font-size:11px;color:var(--text-dim);">${q.progress}/${q.target}</div>
+        </div>
+        <div class="quest-desc">${q.desc}</div>
+        <div class="quest-meta"><span>${q.xp_per} XP each</span><span>${q.total_xp} total</span>${q.note ? `<span style="color:var(--text-faint);">${q.note}</span>` : ""}</div>
+        <div class="pips">
+          ${Array.from({length: q.target}, (_,i) => `<button class="pip ${i < q.progress ? "done" : ""}" onclick="tickQuest('${q.id}',${i})">${i < q.progress ? "✓" : ""}</button>`).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function tickQuest(id, i) {
+  const data = lsGet(LS_KEYS.quests, null);
+  if (!data) return;
+  const q = data.quests.find(x => x.id === id);
+  if (!q) return;
+  q.progress = (i < q.progress) ? i : (i + 1);
+  data.completed = data.quests.every(x => x.progress >= x.target);
+  lsSet(LS_KEYS.quests, data);
+  renderQuests();
+}
+
+function renderAchievements() {
+  const c = document.getElementById("achvContainer");
+  const unlocked = lsGet(LS_KEYS.achv, {});
+  const tiers = {};
+  for (const a of ACHIEVEMENTS) {
+    tiers[a.tier] = tiers[a.tier] || [];
+    tiers[a.tier].push(a);
+  }
+  const order = ["foundation","strength","consistency","nutrition","conditioning","milestone"];
+  c.innerHTML = order.map(tier => {
+    if (!tiers[tier]) return "";
+    return `
+      <div class="achv-tier">${TIER_LABEL[tier]}</div>
+      <div class="achv-grid">
+        ${tiers[tier].map(a => {
+          const isUnlocked = !!unlocked[a.id];
+          return `<div class="achv ${isUnlocked ? "unlocked" : ""}" title="${a.desc}">
+            <div class="ai">${a.icon}</div>
+            <div class="an">${a.name}</div>
+            <div class="ad">${a.desc}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    `;
+  }).join("");
+}
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", e => { if (e.target === m) m.classList.remove("open"); }));
+
+function render() {
+  renderHeader();
+  renderProgramBar();
+  renderDimensions();
+  renderSession();
+  renderQuests();
+  renderAchievements();
+  renderBody();
+  renderNutrition();
+}
+
+document.addEventListener("DOMContentLoaded", render);
+</script>
+
+</body>
+</html>

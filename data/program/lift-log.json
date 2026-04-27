@@ -1,0 +1,19 @@
+{
+  "program_start": "2026-04-27",
+  "current_week": 1,
+  "weeks": {
+    "1":  { "iso_week": "2026-W18", "sessions": {} },
+    "2":  { "iso_week": "2026-W19", "sessions": {} },
+    "3":  { "iso_week": "2026-W20", "sessions": {} },
+    "4":  { "iso_week": "2026-W21", "sessions": {} },
+    "5":  { "iso_week": "2026-W22", "sessions": {} },
+    "6":  { "iso_week": "2026-W23", "sessions": {} },
+    "7":  { "iso_week": "2026-W24", "sessions": {} },
+    "8":  { "iso_week": "2026-W25", "sessions": {} },
+    "9":  { "iso_week": "2026-W26", "sessions": {} },
+    "10": { "iso_week": "2026-W27", "sessions": {} },
+    "11": { "iso_week": "2026-W28", "sessions": {} },
+    "12": { "iso_week": "2026-W29", "sessions": {} }
+  },
+  "schema_note": "Each session: { date, session_id, completed, exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit }], notes }"
+}

@@ -1,6 +1,6 @@
 # Primal Dad — Recomp Tracker
 
-Gamified personal fitness tracker built around a 12-week recomposition program. JSON-state, Claude Code as the coach, single mobile-friendly `dashboard.html` for daily logging.
+Gamified personal fitness tracker built around a 12-week recomposition program. JSON-state, Claude Code as the coach, single mobile-friendly `index.html` for daily logging.
 
 **Private repo. Personal use only.**
 
@@ -9,7 +9,7 @@ Gamified personal fitness tracker built around a 12-week recomposition program. 
 ```
 primal-dad/
 ├── CLAUDE.md           # Source of truth — XP rules, dimensions, check-in flow
-├── dashboard.html      # Open in browser (mobile or desktop) for daily logging
+├── index.html      # Open in browser (mobile or desktop) for daily logging
 ├── data/
 │   ├── profile.json
 │   ├── program/        # 12-week recomp program + lift log + nutrition + body measurements
@@ -27,7 +27,7 @@ primal-dad/
 - **NUT** — Nutrition (macro adherence, calorie discipline)
 
 ## Daily flow
-1. Open `dashboard.html` on phone
+1. Open `index.html` on phone
 2. Tap to log today's session, mobility, cardio, or macros
 3. Saves to localStorage
 

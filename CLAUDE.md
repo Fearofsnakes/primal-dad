@@ -6,7 +6,7 @@ A gamified fitness tracker built around a **12-week recomposition program**. Lif
 ## Architecture
 - **JSON files in `data/`** — all state, git-versioned
 - **Claude Code is the coach** — weekly check-ins are conversations, voice notes welcome (Wispr → paste)
-- **`dashboard.html`** — mobile-friendly visual character sheet (open on phone for daily logging)
+- **`index.html`** (formerly `dashboard.html`) — mobile-friendly visual character sheet, deployed on Vercel
 - **No Supabase, no backend** — local files only
 - **`ralph/`** — Sunday auto-trigger for weekly check-in
 
@@ -180,7 +180,7 @@ Auto-unlock criteria types:
 ## Daily Logging Workflow
 
 ### Mobile (preferred for in-the-moment logging)
-1. Open `dashboard.html` on phone
+1. Open the deployed Vercel URL on phone (root serves `index.html`)
 2. Tap session card → enter weight × reps for each exercise
 3. Tap quest pips to mark completion
 4. Tap mobility / nutrition quick-log buttons
@@ -234,7 +234,7 @@ Compare week's avg calories to 2,200 target:
 - `data/computed/timeline.json` (append event)
 - `data/computed/achievements.json` (any new unlocks)
 - `data/computed/active-quests.json` (carry forward or reset)
-- Update inline state in `dashboard.html` if needed
+- Update inline state in `index.html` if needed
 
 ### 6. Summary
 Verbal recap: overall level, level-ups, streak, weakest dim, biggest win, calorie call, next-week focus.

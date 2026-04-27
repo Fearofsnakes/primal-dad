@@ -1,7 +1,7 @@
 {
   "name": "Primal Dad Weekly Check-In",
   "branchName": "ralph/primal-dad-checkin",
-  "targetRepo": "C:/Users/Bujol/brain-gab",
+  "targetRepo": "C:/Users/Bujol/brain-gab/personal/primal-dad",
   "mode": "code",
   "phases": [
     {
@@ -11,20 +11,23 @@
         {
           "id": "PD-CHECKIN",
           "title": "Run weekly Primal Dad check-in",
-          "description": "Execute the Sunday weekly check-in flow for the Primal Dad gamified life-tracking system. This is a recurring task that walks Gab through all 7 dimensions (STR, VO2, FGT, FLX, MND, FAM, WRK), collects self-reported data, ingests any new Garmin watch exports, calculates XP with streak multipliers and weekly caps, updates all computed state files, and delivers a verbal summary with week-over-week comparison.",
+          "description": "Execute the Sunday weekly check-in flow for the Primal Dad recomp tracker. Walks Gab through the 4 dimensions (STR, CON, FLX, NUT), reads quest progress and lift log, ingests Garmin exports, runs the calorie adjustment loop, calculates XP with streak multipliers and weekly caps, updates all computed state files, unlocks any new achievements, and delivers a verbal summary with week-over-week comparison.",
           "acceptance": [
-            "Read data/computed/current-stats.json to load current state (levels, XP, streak)",
-            "Check data/watch-imports/ for new Garmin CSV exports and parse if present",
-            "Determine the current ISO week number for the check-in period",
-            "Walk Gab through each of the 7 dimensions conversationally (2-3 quick questions each)",
-            "Calculate XP earned per dimension, respecting weekly caps (STR:60, VO2:60, FGT:70, FLX:50, MND:55, FAM:55, WRK:55)",
-            "Apply streak multiplier based on consecutive weeks completed",
-            "Check for level-ups in any dimension",
+            "Read data/computed/current-stats.json, active-quests.json, achievements.json to load current state",
+            "Read data/program/lift-log.json and nutrition-log.json for the week's entries",
+            "Check data/watch-imports/ for new Garmin CSV exports and parse if present (sleep, RHR, Zone 2)",
+            "Determine current ISO week and program week (1-12)",
+            "Walk Gab through the 4 dimensions conversationally — quests first if active",
+            "Calculate XP earned per dimension, respecting weekly caps (STR:80, CON:70, FLX:60, NUT:70)",
+            "Run calorie adjustment loop: compare week avg to 2,200 target + weight trend, recommend +/- 100 kcal",
+            "Apply streak multiplier",
+            "Check for level-ups and achievement unlocks",
             "Write weekly history file to data/history/YYYY-WXX.json",
-            "Update data/computed/current-stats.json with new XP totals, levels, and streak",
-            "Append entry to data/computed/timeline.json",
-            "Update dashboard.html with new inline STATS object",
-            "Deliver verbal summary: overall level/title, level-ups, streak, weakest dimension callout, week-over-week delta"
+            "Update data/computed/current-stats.json, timeline.json, achievements.json, active-quests.json",
+            "Update index.html with new inline STATS object",
+            "If program_week == 6: run Week 6 milestone review (body measurements, lift trends, nutrition adherence)",
+            "If program_week == 12: run program summary + path-pick prompt",
+            "Deliver verbal summary: overall level/title, level-ups, streak, weakest dim, biggest win, calorie call, next-week focus"
           ],
           "dependsOn": [],
           "passes": false,

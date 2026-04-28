@@ -319,6 +319,7 @@
     <button onclick="openExportModal()" style="flex:1;min-height:44px;padding:10px 14px;background:rgba(255,204,0,0.1);border:1px solid rgba(255,204,0,0.3);color:var(--gold);border-radius:8px;font-weight:600;font-size:13px;">📤 Export State</button>
     <button onclick="openImportModal()" style="flex:1;min-height:44px;padding:10px 14px;background:rgba(68,136,255,0.1);border:1px solid rgba(68,136,255,0.3);color:var(--CON);border-radius:8px;font-weight:600;font-size:13px;">📥 Import State</button>
   </div>
+  <button onclick="quickPatchDay1()" style="margin-top:8px;width:100%;min-height:44px;padding:10px 14px;background:rgba(68,221,136,0.12);border:1px solid rgba(68,221,136,0.3);color:var(--good);border-radius:8px;font-weight:600;font-size:13px;">🔧 Quick Patch — Day 1 fix (no copy/paste)</button>
 
 </main>
 
@@ -1325,6 +1326,26 @@ function renderAchievements() {
       </div>
     `;
   }).join("");
+}
+
+function quickPatchDay1() {
+  // Hardcoded patch — no copy/paste, no JSON parse. Idempotent.
+  const achv = lsGet(LS_KEYS.achv, {});
+  if (!achv.first_plate_bench) achv.first_plate_bench = "2026-04-28";
+  if (!achv.day_1_done) achv.day_1_done = "2026-04-28";
+  lsSet(LS_KEYS.achv, achv);
+
+  const quests = lsGet(LS_KEYS.quests, null);
+  if (quests && quests.week === "2026-W18" && Array.isArray(quests.quests)) {
+    const ovl = quests.quests.find(q => q.id === "2026-W18_str_overload");
+    if (ovl) ovl.progress = Math.max(ovl.progress || 0, 2);
+    const lifts = quests.quests.find(q => q.id === "2026-W18_str_lifts_4");
+    if (lifts) lifts.progress = Math.max(lifts.progress || 0, 1);
+    quests.completed = quests.quests.every(q => q.progress >= q.target);
+    lsSet(LS_KEYS.quests, quests);
+  }
+  toast("Day 1 patched — reloading");
+  setTimeout(() => location.reload(), 500);
 }
 
 function openExportModal() {

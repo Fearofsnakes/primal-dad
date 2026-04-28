@@ -1356,21 +1356,46 @@ function openImportModal() {
   openModal("importModal");
 }
 
+function sanitizeJsonInput(txt) {
+  // iOS / mobile keyboards / chat renderers often substitute smart punctuation
+  // and unicode whitespace that breaks JSON.parse. Normalize to ASCII equivalents.
+  return txt
+    .replace(/[“”„‟″‶]/g, '"')   // curly double quotes -> "
+    .replace(/[‘’‚‛′‵]/g, "'")   // curly single quotes -> '
+    .replace(/[–—−]/g, "-")                       // en/em/minus dashes -> -
+    .replace(/[   ]/g, " ")                       // non-breaking spaces -> space
+    .replace(/[﻿​‌‍]/g, "")                  // BOM + zero-width chars -> strip
+    .trim();
+}
+
 function doImport() {
-  const txt = document.getElementById("importText").value.trim();
-  if (!txt) { toast("Paste JSON first", "warn"); return; }
+  const raw = document.getElementById("importText").value;
+  if (!raw.trim()) { toast("Paste JSON first", "warn"); return; }
+  const txt = sanitizeJsonInput(raw);
+  let data;
   try {
-    const data = JSON.parse(txt);
-    let count = 0;
-    for (const k of Object.values(LS_KEYS)) {
-      if (data[k] !== undefined) { localStorage.setItem(k, JSON.stringify(data[k])); count++; }
-    }
-    closeModal("importModal");
-    toast(`Imported ${count} keys`);
-    setTimeout(() => location.reload(), 600);
+    data = JSON.parse(txt);
   } catch (e) {
-    toast("Invalid JSON: " + e.message, "warn");
+    // Try to surface what character likely broke parsing
+    const m = e.message.match(/position (\d+)/);
+    let hint = "";
+    if (m) {
+      const pos = parseInt(m[1], 10);
+      const ctx = txt.slice(Math.max(0, pos - 8), pos + 8);
+      const bad = txt.charCodeAt(pos);
+      hint = ` near "${ctx}" (char code ${bad})`;
+    }
+    toast("Invalid JSON: " + e.message + hint, "warn");
+    return;
   }
+  let count = 0;
+  for (const k of Object.values(LS_KEYS)) {
+    if (data[k] !== undefined) { localStorage.setItem(k, JSON.stringify(data[k])); count++; }
+  }
+  if (!count) { toast("No matching keys found in payload", "warn"); return; }
+  closeModal("importModal");
+  toast(`Imported ${count} keys`);
+  setTimeout(() => location.reload(), 600);
 }
 
 function openModal(id) { document.getElementById(id).classList.add("open"); }

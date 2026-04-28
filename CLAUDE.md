@@ -33,15 +33,23 @@ A gamified fitness tracker built around a **12-week recomposition program**. Lif
 ### Schedule
 | Day | Session | Dim |
 |-----|---------|-----|
-| Mon | Upper A — Push | STR |
-| Tue | Lower A — Quads | STR |
+| Mon | Upper A — Chest + Shoulder Priority | STR |
+| Tue | Lower A — Quads + Abs | STR |
 | Wed | Conditioning (boxing/run/bike/rope, 30–45 min) | CON |
-| Thu | Upper B — Pull | STR |
-| Fri | Lower B — Hinge/Glutes | STR |
+| Thu | Upper B — Pull + Rear Delt + Arms | STR |
+| Fri | Lower B — Hinge/Glutes + Abs | STR |
 | Sat | Optional cardio or rest | CON |
 | Sun | Rest + check-in | — |
 
 Full program detail lives in `data/program/recomp-12wk.json`.
+
+### Session Structure (v1.1)
+- **Upper A** — A: Bench + Weighted Pull-Up · B: Incline DB + Row · C: Lateral Raise + Tricep Pushdown
+- **Lower A** — A: Squat + Leg Curl · B: Bulgarian SS + RDL · C: Goblet/Leg Ext + Calf · **D (finisher):** Hanging Knee Raise/Ab Wheel + Plank
+- **Upper B** — A: Pull-Up + DB Shoulder Press · B: Row + DB Incline · C: DB Curl alt + Face Pull/Rear Delt Fly · **D (finisher):** Hammer Curl 2×12
+- **Lower B** — A: RDL + Hip Thrust · B: Walking Lunge + Glute Bridge · C: Lying Leg Curl + Calf · **D (finisher):** Decline Sit-Up/DB Crunch + Ab Wheel/Plank
+
+Eccentric tempo: 2–4 sec on the way down, mandatory on chest/shoulder. RPE: first 2 sets = 1–2 RIR, last set close to failure.
 
 ### Progressive Overload
 - Hit top of rep range × 3 sets → +5 lbs next session (+2.5 lbs accessories)

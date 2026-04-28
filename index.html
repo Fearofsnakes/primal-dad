@@ -104,6 +104,12 @@
   .ex-log-btn { background: rgba(68,136,255,0.12); border: 1px solid rgba(68,136,255,0.3); color: var(--CON); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; min-height: 32px; }
   .ex-log-btn.logged { background: rgba(68,221,136,0.12); border-color: rgba(68,221,136,0.3); color: var(--good); }
   .ex-summary { font-size: 11px; color: var(--text); background: rgba(68,221,136,0.08); border-left: 2px solid var(--good); padding: 4px 8px; margin-top: 6px; border-radius: 0 4px 4px 0; }
+  .ex-history { margin-top: 8px; padding: 8px 10px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid var(--border); }
+  .ex-history .hh { font-size: 10px; letter-spacing: 1.5px; color: var(--text-faint); text-transform: uppercase; margin-bottom: 6px; }
+  .ex-history .hr { display: flex; gap: 10px; align-items: baseline; padding: 3px 0; font-size: 11px; }
+  .ex-history .hr .hd { color: var(--text-dim); min-width: 56px; }
+  .ex-history .hr .hs { color: var(--text); font-weight: 500; }
+  .ex-history .he { font-size: 11px; color: var(--text-faint); font-style: italic; padding: 4px 0; }
 
   .session-options { display: grid; gap: 10px; margin-top: 8px; }
   .session-options .opt { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; }
@@ -309,6 +315,11 @@
     <span>Edits made here are saved to <code>localStorage</code>. Run <strong>weekly check-in</strong> in Claude Code to sync to JSON files.</span>
   </div>
 
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+    <button onclick="openExportModal()" style="flex:1;min-height:44px;padding:10px 14px;background:rgba(255,204,0,0.1);border:1px solid rgba(255,204,0,0.3);color:var(--gold);border-radius:8px;font-weight:600;font-size:13px;">📤 Export State</button>
+    <button onclick="openImportModal()" style="flex:1;min-height:44px;padding:10px 14px;background:rgba(68,136,255,0.1);border:1px solid rgba(68,136,255,0.3);color:var(--CON);border-radius:8px;font-weight:600;font-size:13px;">📥 Import State</button>
+  </div>
+
 </main>
 
 <nav class="bottom">
@@ -381,6 +392,30 @@
   </div>
 </div>
 
+<div class="modal-bg" id="exportModal">
+  <div class="modal">
+    <h2>Export State</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Tap "Copy" then paste this into Claude Code so your phone logs sync to JSON.</div>
+    <textarea id="exportText" readonly style="width:100%;height:240px;padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.4;"></textarea>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('exportModal')">Close</button>
+      <button class="primary" onclick="copyExport()">Copy</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="importModal">
+  <div class="modal">
+    <h2>Import State</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Paste a previously exported state JSON. Replaces current localStorage.</div>
+    <textarea id="importText" placeholder='{"primal-dad-lift-log":{...}, ...}' style="width:100%;height:240px;padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.4;"></textarea>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('importModal')">Cancel</button>
+      <button class="primary" onclick="doImport()">Import</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -417,25 +452,28 @@ const PROFILE = {
 const PROGRAM = {
   schedule: { 1:"upper_a", 2:"lower_a", 3:"conditioning", 4:"upper_b", 5:"lower_b", 6:"optional", 0:"rest" },
   sessions: {
-    upper_a: { name: "Upper A — Push", dim: "STR", supersets: [
-      { id: "A", a: { ex: "Barbell Bench Press", sets: 3, low: 8, high: 10 }, b: { ex: "Face Pull (band/DB rear delt)", sets: 3, low: 8, high: 10 } },
+    upper_a: { name: "Upper A — Chest + Shoulder Priority", dim: "STR", supersets: [
+      { id: "A", a: { ex: "Barbell Bench Press", sets: 3, low: 8, high: 10 }, b: { ex: "Weighted Pull-Up", sets: 3, low: 8, high: 10 } },
       { id: "B", a: { ex: "Incline DB Press", sets: 3, low: 10, high: 12 }, b: { ex: "Barbell Row", sets: 3, low: 10, high: 12 } },
       { id: "C", a: { ex: "Lateral Raise (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Tricep Pushdown (pulley)", sets: 3, low: 12, high: 15 } }
     ]},
-    lower_a: { name: "Lower A — Quads", dim: "STR", supersets: [
+    lower_a: { name: "Lower A — Quads + Abs", dim: "STR", supersets: [
       { id: "A", a: { ex: "Back Squat (barbell)", sets: 3, low: 8, high: 10 }, b: { ex: "Leg Curl (DB or lying)", sets: 3, low: 8, high: 10 } },
       { id: "B", a: { ex: "Bulgarian Split Squat (DB)", sets: 3, low: 10, high: 10, perSide: true }, b: { ex: "Romanian Deadlift (barbell)", sets: 3, low: 10, high: 10 } },
-      { id: "C", a: { ex: "Goblet Squat / Leg Extension alt", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } }
+      { id: "C", a: { ex: "Goblet Squat / Leg Extension alt", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } },
+      { id: "D", finisher: true, a: { ex: "Hanging Knee Raise / Ab Wheel", sets: 3, low: 12, high: 15 }, b: { ex: "Plank Hold (sec)", sets: 3, low: 30, high: 45 } }
     ]},
-    upper_b: { name: "Upper B — Pull", dim: "STR", supersets: [
+    upper_b: { name: "Upper B — Pull + Rear Delt + Arms", dim: "STR", supersets: [
       { id: "A", a: { ex: "Pull-Up (weighted if needed)", sets: 3, low: 8, high: 10 }, b: { ex: "DB Shoulder Press", sets: 3, low: 8, high: 10 } },
       { id: "B", a: { ex: "Barbell Row", sets: 3, low: 10, high: 12 }, b: { ex: "DB Incline Press", sets: 3, low: 10, high: 12 } },
-      { id: "C", a: { ex: "Hammer Curl (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Overhead Tricep Extension (DB)", sets: 3, low: 12, high: 15 } }
+      { id: "C", a: { ex: "DB Bicep Curl (alternating)", sets: 3, low: 12, high: 15 }, b: { ex: "Face Pull / Rear Delt Fly", sets: 3, low: 12, high: 15 } },
+      { id: "D", finisher: true, a: { ex: "Hammer Curl (DB)", sets: 2, low: 12, high: 12 }, b: null }
     ]},
-    lower_b: { name: "Lower B — Hinge / Glutes", dim: "STR", supersets: [
+    lower_b: { name: "Lower B — Hinge / Glutes + Abs", dim: "STR", supersets: [
       { id: "A", a: { ex: "Romanian Deadlift (barbell)", sets: 3, low: 8, high: 10 }, b: { ex: "Hip Thrust (barbell/DB)", sets: 3, low: 8, high: 10 } },
-      { id: "B", a: { ex: "Hip Thrust or Glute Bridge", sets: 3, low: 10, high: 12 }, b: { ex: "Walking Lunge (DB)", sets: 3, low: 10, high: 12 } },
-      { id: "C", a: { ex: "Lying Leg Curl (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } }
+      { id: "B", a: { ex: "Walking Lunge (DB)", sets: 3, low: 10, high: 12 }, b: { ex: "Glute Bridge", sets: 3, low: 10, high: 12 } },
+      { id: "C", a: { ex: "Lying Leg Curl (DB)", sets: 3, low: 12, high: 15 }, b: { ex: "Calf Raise", sets: 3, low: 12, high: 15 } },
+      { id: "D", finisher: true, a: { ex: "Decline Sit-Up / DB Crunch", sets: 3, low: 12, high: 15 }, b: { ex: "Ab Wheel / Plank (sec)", sets: 3, low: 30, high: 45 } }
     ]},
     conditioning: { name: "Conditioning — Boxing/Run/Bike/Rope", dim: "CON", duration: "30–45 min", options: [
       { name: "Heavy bag (boxing) — 15+ min", xp: 20 },
@@ -676,17 +714,22 @@ function renderSession() {
 
   let allLogged = true;
   const ssHtml = sess.supersets.map(ss => {
-    return `<div class="superset"><span class="ss-tag">SUPERSET ${ss.id}</span>${["a","b"].map(slot => {
+    const tag = ss.finisher ? "FINISHER" : `SUPERSET ${ss.id}`;
+    const slots = ss.b ? ["a","b"] : ["a"];
+    return `<div class="superset"><span class="ss-tag">${tag}</span>${slots.map(slot => {
       const ex = ss[slot];
+      if (!ex) return "";
       const exKey = ex.ex;
       const logged = sessionLog[exKey];
-      if (!logged) allLogged = false;
+      if (!logged && !ss.finisher) allLogged = false;
+      const histToggleId = `hist_${exKey.replace(/[^a-z0-9]/gi,'_')}`;
       return `
         <div class="ex-row">
           <div class="ex-info">
-            <div class="ex-name">${ex.ex}</div>
+            <div class="ex-name" onclick="toggleHistory('${histToggleId}', ${attrJSON(exKey)})" style="cursor:pointer;">${ex.ex} <span style="color:var(--text-faint);font-size:11px;">▾</span></div>
             <div class="ex-spec">${ex.sets} × ${ex.low === ex.high ? ex.low : `${ex.low}-${ex.high}`}${ex.perSide ? " each" : ""}</div>
             ${logged ? `<div class="ex-summary">${logged.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${logged.overload ? " 🏆" : ""}</div>` : ""}
+            <div id="${histToggleId}" class="ex-history" style="display:none;"></div>
           </div>
           <button class="ex-log-btn ${logged ? "logged" : ""}" onclick="openLiftModal(${attrJSON(sid)}, ${attrJSON(exKey)}, ${ex.sets}, ${ex.low}, ${ex.high})">${logged ? "✓ Edit" : "Log"}</button>
         </div>
@@ -766,13 +809,37 @@ function saveLift() {
 
   if (allTop) {
     document.getElementById("ovldFlag").style.display = "block";
-    setTimeout(() => { closeModal("liftModal"); renderSession(); renderDimensions(); toast("Logged · 🏆 progressive overload"); }, 1100);
+    setTimeout(() => { closeModal("liftModal"); renderSession(); renderDimensions(); toast("Logged · 🏆 progressive overload"); checkAchievements(); }, 1100);
   } else {
     closeModal("liftModal");
     renderSession();
     renderDimensions();
     toast("Logged");
+    checkAchievements();
   }
+}
+
+function toggleHistory(elId, exerciseName) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (el.style.display === "block") { el.style.display = "none"; return; }
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const today = todayISO();
+  const entries = [];
+  for (const date of Object.keys(liftLog).sort().reverse()) {
+    if (date === today) continue;
+    const ex = liftLog[date][exerciseName];
+    if (ex && ex.sets) entries.push({ date, sets: ex.sets, overload: !!ex.overload });
+    if (entries.length >= 8) break;
+  }
+  if (!entries.length) {
+    el.innerHTML = `<div class="he">No prior sessions logged for ${exerciseName} yet.</div>`;
+  } else {
+    const fmtDate = d => { const dt = new Date(d); return `${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`; };
+    el.innerHTML = `<div class="hh">History · last ${entries.length}</div>` +
+      entries.map(e => `<div class="hr"><span class="hd">${fmtDate(e.date)}</span><span class="hs">${e.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${e.overload ? " 🏆" : ""}</span></div>`).join("");
+  }
+  el.style.display = "block";
 }
 
 function quickLog(type) {
@@ -796,6 +863,7 @@ function quickLog(type) {
   lsSet(LS_KEYS.weekXP, weekXP);
   toast(`+${m.xp} ${m.dim} · ${m.label}`);
   renderDimensions();
+  checkAchievements();
 }
 
 function logCardio(name, xp) {
@@ -813,6 +881,7 @@ function logCardio(name, xp) {
   toast(`+${xp} CON · ${name}`);
   renderSession();
   renderDimensions();
+  checkAchievements();
 }
 
 function openNutritionModal() {
@@ -842,6 +911,7 @@ function saveNutrition() {
   closeModal("nutModal");
   renderNutrition();
   toast("Macros logged");
+  checkAchievements();
 }
 
 function renderNutrition() {
@@ -891,6 +961,7 @@ function saveMeasurements() {
   closeModal("measModal");
   renderBody();
   toast("Measurements logged");
+  checkAchievements();
 }
 
 function renderBody() {
@@ -1072,6 +1143,157 @@ function tickQuest(id, i) {
   renderQuests();
 }
 
+// =====================================================
+// ACHIEVEMENT AUTO-UNLOCK
+// Runs after every log action + on initial load.
+// Reads localStorage logs, sets unlocked[id] = ISO date.
+// =====================================================
+function checkAchievements(silent) {
+  const unlocked = lsGet(LS_KEYS.achv, {});
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const nutLog = lsGet(LS_KEYS.nutLog, {});
+  const bodyLog = lsGet(LS_KEYS.bodyLog, []);
+  const newlyUnlocked = [];
+  const today = todayISO();
+  const pw = programWeek();
+
+  function unlock(id) {
+    if (unlocked[id]) return;
+    unlocked[id] = today;
+    newlyUnlocked.push(id);
+  }
+
+  // Helper: best set across all lift logs for an exercise
+  function bestSet(exerciseName, predicate) {
+    let best = null;
+    for (const date of Object.keys(liftLog)) {
+      const sess = liftLog[date];
+      const ex = sess[exerciseName];
+      if (!ex || !ex.sets) continue;
+      for (const s of ex.sets) {
+        if (predicate(s)) {
+          if (!best || s.weight > best.weight || (s.weight === best.weight && s.reps > best.reps)) best = s;
+        }
+      }
+    }
+    return best;
+  }
+
+  // --- Lift PRs ---
+  if (bestSet("Barbell Bench Press", s => s.weight >= 135 && s.reps >= 5)) unlock("first_plate_bench");
+  if (PROFILE.weight_lbs && bestSet("Barbell Bench Press", s => s.weight >= PROFILE.weight_lbs && s.reps >= 5)) unlock("bodyweight_bench");
+  if (bestSet("Back Squat (barbell)", s => s.weight >= 220 && s.reps >= 5)) unlock("squat_100kg");
+  if (PROFILE.weight_lbs && bestSet("Romanian Deadlift (barbell)", s => s.weight >= PROFILE.weight_lbs * 1.5 && s.reps >= 5)) unlock("rdl_1_5x_bw");
+  if (bestSet("Pull-Up (weighted if needed)", s => (s.weight === 0 || s.weight == null) && s.reps >= 8)) unlock("pullup_pro_8");
+  if (bestSet("Weighted Pull-Up", s => (s.weight === 0 || s.weight == null) && s.reps >= 8)) unlock("pullup_pro_8");
+  if (bestSet("Bulgarian Split Squat (DB)", s => s.weight >= 30 && s.reps >= 10)) unlock("first_bulgarian");
+
+  // --- Day 1 / First Week ---
+  // Day 1: any session fully logged (all primary supersets, ignore finishers)
+  for (const date of Object.keys(liftLog)) {
+    const sess = liftLog[date];
+    const sid = sess._session_id;
+    if (!sid || !PROGRAM.sessions[sid] || !PROGRAM.sessions[sid].supersets) continue;
+    const required = [];
+    for (const ss of PROGRAM.sessions[sid].supersets) {
+      if (ss.finisher) continue;
+      if (ss.a) required.push(ss.a.ex);
+      if (ss.b) required.push(ss.b.ex);
+    }
+    if (required.length && required.every(ex => sess[ex])) { unlock("day_1_done"); break; }
+  }
+
+  // First Week Logged: 4 distinct STR sessions in current week + at least 1 cardio
+  const wk = isoWeek();
+  const sessIdsThisWeek = new Set();
+  let cardioThisWeek = false;
+  for (const date of Object.keys(liftLog)) {
+    if (isoWeek(new Date(date)) !== wk) continue;
+    const sess = liftLog[date];
+    if (sess._session_id && ["upper_a","lower_a","upper_b","lower_b"].includes(sess._session_id)) sessIdsThisWeek.add(sess._session_id);
+    if (sess._cardio_logged) cardioThisWeek = true;
+    for (const k of Object.keys(sess)) if (k.startsWith("_quick_") && sess[k].dim === "CON") cardioThisWeek = true;
+  }
+  if (sessIdsThisWeek.size >= 4 && cardioThisWeek) unlock("first_week_logged");
+
+  // --- Body Comp Baseline ---
+  if (bodyLog.length > 0) {
+    const last = bodyLog[bodyLog.length - 1];
+    const fields = ["weight_lbs","waist_cm","chest_cm","hips_cm","left_arm_flexed_cm","right_arm_flexed_cm","left_thigh_mid_cm","right_thigh_mid_cm"];
+    if (fields.every(f => last[f] != null)) unlock("body_comp_baseline");
+  }
+
+  // --- Mobility streaks ---
+  function mobilityDates() {
+    const dates = new Set();
+    for (const date of Object.keys(liftLog)) {
+      const sess = liftLog[date];
+      for (const k of Object.keys(sess)) if (k.startsWith("_quick_") && sess[k].dim === "FLX") dates.add(date);
+    }
+    return Array.from(dates).sort();
+  }
+  function maxStreak(dates) {
+    if (!dates.length) return 0;
+    let max = 1, cur = 1;
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i-1]);
+      const curr = new Date(dates[i]);
+      const diff = Math.round((curr - prev) / 86400000);
+      if (diff === 1) { cur++; max = Math.max(max, cur); } else cur = 1;
+    }
+    return max;
+  }
+  const mobStreak = maxStreak(mobilityDates());
+  if (mobStreak >= 7) unlock("mobility_streak_7");
+  if (mobStreak >= 14) unlock("mobility_streak_14");
+  if (mobStreak >= 30) unlock("mobility_streak_30");
+
+  // --- Nutrition: 7 days protein hit (any rolling window in current week scope) ---
+  const protDays = Object.entries(nutLog).filter(([,v]) => (v.protein_g || 0) >= 150).map(([d]) => d).sort();
+  if (maxStreak(protDays) >= 7) unlock("macro_marksman_7");
+  if (maxStreak(protDays) >= 30) unlock("macro_marksman_30");
+
+  // --- Boxing Builder: 8 heavy bag sessions ---
+  let bagCount = 0;
+  for (const date of Object.keys(liftLog)) {
+    const sess = liftLog[date];
+    for (const k of Object.keys(sess)) {
+      const e = sess[k];
+      if (k.startsWith("_quick_") && e && e.label && /heavy bag|boxing/i.test(e.label)) bagCount++;
+      if (k.startsWith("_cardio_") && e && e.label && /heavy bag|boxing/i.test(e.label)) bagCount++;
+    }
+  }
+  if (bagCount >= 8) unlock("boxing_builder_8");
+
+  // --- Milestones ---
+  if (pw >= 6) unlock("recomp_mid_week_6");
+  if (pw >= 12) unlock("recomp_champion");
+  // BJJ Day 1: any session logged on or after 2026-06-02
+  if (today >= "2026-06-02") {
+    for (const date of Object.keys(liftLog)) {
+      if (date >= "2026-06-02") {
+        const sess = liftLog[date];
+        for (const k of Object.keys(sess)) {
+          const e = sess[k];
+          if (e && e.label && /bjj|jiu-jitsu/i.test(e.label)) { unlock("bjj_day_1"); break; }
+        }
+      }
+    }
+  }
+
+  lsSet(LS_KEYS.achv, unlocked);
+
+  if (newlyUnlocked.length && !silent) {
+    const names = newlyUnlocked.map(id => {
+      const a = ACHIEVEMENTS.find(x => x.id === id);
+      return a ? `${a.icon} ${a.name}` : id;
+    });
+    toast(`🏆 Unlocked: ${names.join(" · ")}`, "success");
+    renderAchievements();
+  }
+  return newlyUnlocked;
+}
+
 function renderAchievements() {
   const c = document.getElementById("achvContainer");
   const unlocked = lsGet(LS_KEYS.achv, {});
@@ -1099,6 +1321,52 @@ function renderAchievements() {
   }).join("");
 }
 
+function openExportModal() {
+  const out = {};
+  for (const k of Object.values(LS_KEYS)) {
+    const v = localStorage.getItem(k);
+    if (v !== null) out[k] = JSON.parse(v);
+  }
+  out._exported_at = new Date().toISOString();
+  out._program_week = programWeek();
+  document.getElementById("exportText").value = JSON.stringify(out, null, 2);
+  openModal("exportModal");
+}
+
+function copyExport() {
+  const ta = document.getElementById("exportText");
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => toast("Copied — paste to Claude"));
+  } catch {
+    document.execCommand("copy");
+    toast("Copied");
+  }
+}
+
+function openImportModal() {
+  document.getElementById("importText").value = "";
+  openModal("importModal");
+}
+
+function doImport() {
+  const txt = document.getElementById("importText").value.trim();
+  if (!txt) { toast("Paste JSON first", "warn"); return; }
+  try {
+    const data = JSON.parse(txt);
+    let count = 0;
+    for (const k of Object.values(LS_KEYS)) {
+      if (data[k] !== undefined) { localStorage.setItem(k, JSON.stringify(data[k])); count++; }
+    }
+    closeModal("importModal");
+    toast(`Imported ${count} keys`);
+    setTimeout(() => location.reload(), 600);
+  } catch (e) {
+    toast("Invalid JSON: " + e.message, "warn");
+  }
+}
+
 function openModal(id) { document.getElementById(id).classList.add("open"); }
 function closeModal(id) { document.getElementById(id).classList.remove("open"); }
 document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", e => { if (e.target === m) m.classList.remove("open"); }));
@@ -1109,6 +1377,7 @@ function render() {
   renderDimensions();
   renderSession();
   renderQuests();
+  checkAchievements(true);
   renderAchievements();
   renderBody();
   renderNutrition();

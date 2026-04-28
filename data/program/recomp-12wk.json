@@ -1,11 +1,13 @@
 {
   "name": "12-Week Recomposition",
-  "version": "1.0",
+  "version": "1.1",
   "duration_weeks": 12,
   "split": "upper_lower_4day",
-  "session_target_min": 32,
+  "session_target_min": 35,
   "rest_seconds": 70,
   "rest_range": "60-75s",
+  "eccentric_tempo": "2-4 sec on the way down (mandatory chest + shoulder)",
+  "rpe_target": "First 2 sets = 1-2 reps in tank. Last set = close to failure.",
   "progression_rule": "Hit top of rep range × 3 sets → +5 lbs next session (+2.5 lbs accessories)",
   "plateau_rule": "No progress 2+ weeks → deload 10%, rebuild",
   "schedule": {
@@ -19,13 +21,13 @@
   },
   "sessions": {
     "upper_a": {
-      "name": "Upper A — Push",
+      "name": "Upper A — Chest + Shoulder Priority",
       "dimension": "STR",
       "supersets": [
         {
           "id": "A",
           "a": { "exercise": "Barbell Bench Press", "sets": 3, "reps_low": 8, "reps_high": 10 },
-          "b": { "exercise": "Face Pull (band/DB rear delt)", "sets": 3, "reps_low": 8, "reps_high": 10 }
+          "b": { "exercise": "Weighted Pull-Up", "sets": 3, "reps_low": 8, "reps_high": 10 }
         },
         {
           "id": "B",
@@ -40,7 +42,7 @@
       ]
     },
     "lower_a": {
-      "name": "Lower A — Quads",
+      "name": "Lower A — Quads + Abs",
       "dimension": "STR",
       "supersets": [
         {
@@ -57,11 +59,17 @@
           "id": "C",
           "a": { "exercise": "Goblet Squat / Leg Extension alt", "sets": 3, "reps_low": 12, "reps_high": 15 },
           "b": { "exercise": "Calf Raise", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        },
+        {
+          "id": "D",
+          "finisher": true,
+          "a": { "exercise": "Hanging Knee Raise / Ab Wheel", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Plank Hold (sec)", "sets": 3, "reps_low": 30, "reps_high": 45 }
         }
       ]
     },
     "upper_b": {
-      "name": "Upper B — Pull",
+      "name": "Upper B — Pull + Rear Delt + Arms",
       "dimension": "STR",
       "supersets": [
         {
@@ -76,13 +84,19 @@
         },
         {
           "id": "C",
-          "a": { "exercise": "Hammer Curl (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 },
-          "b": { "exercise": "Overhead Tricep Extension (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 }
+          "a": { "exercise": "DB Bicep Curl (alternating)", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Face Pull / Rear Delt Fly", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        },
+        {
+          "id": "D",
+          "finisher": true,
+          "a": { "exercise": "Hammer Curl (DB)", "sets": 2, "reps_low": 12, "reps_high": 12 },
+          "b": null
         }
       ]
     },
     "lower_b": {
-      "name": "Lower B — Hinge / Glutes",
+      "name": "Lower B — Hinge / Glutes + Abs",
       "dimension": "STR",
       "supersets": [
         {
@@ -92,13 +106,19 @@
         },
         {
           "id": "B",
-          "a": { "exercise": "Hip Thrust or Glute Bridge", "sets": 3, "reps_low": 10, "reps_high": 12 },
-          "b": { "exercise": "Walking Lunge (DB)", "sets": 3, "reps_low": 10, "reps_high": 12 }
+          "a": { "exercise": "Walking Lunge (DB)", "sets": 3, "reps_low": 10, "reps_high": 12 },
+          "b": { "exercise": "Glute Bridge", "sets": 3, "reps_low": 10, "reps_high": 12 }
         },
         {
           "id": "C",
           "a": { "exercise": "Lying Leg Curl (DB)", "sets": 3, "reps_low": 12, "reps_high": 15 },
           "b": { "exercise": "Calf Raise", "sets": 3, "reps_low": 12, "reps_high": 15 }
+        },
+        {
+          "id": "D",
+          "finisher": true,
+          "a": { "exercise": "Decline Sit-Up / DB Crunch", "sets": 3, "reps_low": 12, "reps_high": 15 },
+          "b": { "exercise": "Ab Wheel / Plank (sec)", "sets": 3, "reps_low": 30, "reps_high": 45 }
         }
       ]
     },
@@ -107,6 +127,7 @@
       "dimension": "CON",
       "duration_min": "30-45",
       "intensity": "moderate",
+      "hr_target_bpm": "130-150 (65-75% of ~188 max)",
       "options": [
         "Heavy bag (boxing)",
         "Run / outdoor",

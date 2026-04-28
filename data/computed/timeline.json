@@ -1,3 +1,43 @@
 {
-  "events": []
+  "events": [
+    {
+      "date": "2026-04-27",
+      "type": "quests_picked",
+      "week": "2026-W18",
+      "program_week": 1,
+      "details": "Picked 5 quests across STR + FLX. Modified flx_daily target from 5 to 3 days."
+    },
+    {
+      "date": "2026-04-27",
+      "type": "session_logged",
+      "week": "2026-W18",
+      "program_week": 1,
+      "session_id": "upper_a",
+      "details": "Day 1. Bench 135x6 (PR), Face Pull 50x10x3 overload, Row 65x12x3 overload, Incline DB 45x8 top, Lateral worked up to 17.5x12, Tricep Pushdown 35x10."
+    },
+    {
+      "date": "2026-04-28",
+      "type": "achievement_unlocked",
+      "achievement_id": "first_plate_bench",
+      "name": "First Plate Bench",
+      "details": "Bench 135x6 on Day 1. Auto-detected once checkAchievements logic shipped."
+    },
+    {
+      "date": "2026-04-28",
+      "type": "achievement_unlocked",
+      "achievement_id": "day_1_done",
+      "name": "Day 1 Done",
+      "details": "Manually unlocked. Upper A was logged against v1.0 program (Face Pull pairing) before the v1.1 rename to Weighted Pull-Up."
+    },
+    {
+      "date": "2026-04-28",
+      "type": "program_update",
+      "details": "v1.0 -> v1.1: Pull-Up swapped into Upper A pair 1, Hammer Curl finisher in Upper B, abs finishers added to Lower A and Lower B."
+    },
+    {
+      "date": "2026-04-28",
+      "type": "system_fix",
+      "details": "Achievements auto-unlock logic shipped. Tap-exercise history drill-down + Export/Import State buttons added."
+    }
+  ]
 }

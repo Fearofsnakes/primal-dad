@@ -2,7 +2,80 @@
   "program_start": "2026-04-27",
   "current_week": 1,
   "weeks": {
-    "1":  { "iso_week": "2026-W18", "sessions": {} },
+    "1": {
+      "iso_week": "2026-W18",
+      "sessions": {
+        "2026-04-27": {
+          "date": "2026-04-27",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Push (v1.0 program — pre-rename to Upper A: Chest + Shoulder Priority)",
+          "completed": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                { "weight_lbs": 115, "reps": 10 },
+                { "weight_lbs": 115, "reps": 10 },
+                { "weight_lbs": 135, "reps": 6 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Topped at 135x6 - PR territory for first plate. 115 felt fine, jump to 135 was fast."
+            },
+            {
+              "name": "Face Pull (band/DB rear delt)",
+              "sets": [
+                { "weight_lbs": 50, "reps": 10 },
+                { "weight_lbs": 50, "reps": 10 },
+                { "weight_lbs": 50, "reps": 10 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Old-program pairing. New v1.1 swaps to Weighted Pull-Up here."
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                { "weight_lbs": 35, "reps": 12 },
+                { "weight_lbs": 40, "reps": 11 },
+                { "weight_lbs": 45, "reps": 8 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Worked up sets. 45s for 8 was the limit."
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                { "weight_lbs": 65, "reps": 12 },
+                { "weight_lbs": 65, "reps": 12 },
+                { "weight_lbs": 65, "reps": 12 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Bump to 70 next week."
+            },
+            {
+              "name": "Lateral Raise (DB)",
+              "sets": [
+                { "weight_lbs": 12.5, "reps": 12 },
+                { "weight_lbs": 15, "reps": 12 },
+                { "weight_lbs": 17.5, "reps": 12 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Pyramid up. 17.5 felt heavy — stay there next week and try to hit 15 reps."
+            },
+            {
+              "name": "Tricep Pushdown (pulley)",
+              "sets": [
+                { "weight_lbs": 25, "reps": 15 },
+                { "weight_lbs": 35, "reps": 10 },
+                { "weight_lbs": 35, "reps": 10 }
+              ],
+              "top_rep_hit": false,
+              "notes": "First set warmup feel. 35 stable for 10."
+            }
+          ],
+          "session_notes": "Day 1 of recomp. Logged via mobile dashboard. Achievements bug surfaced after — only first_plate_bench fired."
+        }
+      }
+    },
     "2":  { "iso_week": "2026-W19", "sessions": {} },
     "3":  { "iso_week": "2026-W20", "sessions": {} },
     "4":  { "iso_week": "2026-W21", "sessions": {} },
@@ -15,5 +88,5 @@
     "11": { "iso_week": "2026-W28", "sessions": {} },
     "12": { "iso_week": "2026-W29", "sessions": {} }
   },
-  "schema_note": "Each session: { date, session_id, completed, exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit }], notes }"
+  "schema_note": "Each session: { date, session_id, session_name, completed, exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit, notes }], session_notes }"
 }

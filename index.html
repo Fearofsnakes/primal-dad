@@ -1189,18 +1189,24 @@ function checkAchievements(silent) {
   if (bestSet("Bulgarian Split Squat (DB)", s => s.weight >= 30 && s.reps >= 10)) unlock("first_bulgarian");
 
   // --- Day 1 / First Week ---
-  // Day 1: any session fully logged (all primary supersets, ignore finishers)
+  // Day 1: any session where every main superset has at least one logged exercise.
+  // (Tolerates exercise substitutions / program version drift — Day 1 was Day 1.)
   for (const date of Object.keys(liftLog)) {
     const sess = liftLog[date];
     const sid = sess._session_id;
     if (!sid || !PROGRAM.sessions[sid] || !PROGRAM.sessions[sid].supersets) continue;
-    const required = [];
-    for (const ss of PROGRAM.sessions[sid].supersets) {
-      if (ss.finisher) continue;
-      if (ss.a) required.push(ss.a.ex);
-      if (ss.b) required.push(ss.b.ex);
+    const mainSupersets = PROGRAM.sessions[sid].supersets.filter(ss => !ss.finisher);
+    if (!mainSupersets.length) continue;
+    const supersetsWithLog = mainSupersets.filter(ss => {
+      const logged = (ex) => ex && sess[ex.ex];
+      return logged(ss.a) || logged(ss.b);
+    });
+    // All main supersets have at least one logged exercise OR fallback: 5+ exercises logged
+    const totalLogged = Object.keys(sess).filter(k => !k.startsWith("_") && sess[k] && sess[k].sets).length;
+    if (supersetsWithLog.length === mainSupersets.length || totalLogged >= 5) {
+      unlock("day_1_done");
+      break;
     }
-    if (required.length && required.every(ex => sess[ex])) { unlock("day_1_done"); break; }
   }
 
   // First Week Logged: 4 distinct STR sessions in current week + at least 1 cardio

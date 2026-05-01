@@ -13,7 +13,26 @@
     "flex_meals_per_week_max": 1,
     "cardio_day_kcal_bonus": 250
   },
-  "days": {},
+  "days": {
+    "2026-04-28": {
+      "calories": 2150,
+      "protein_g": 134,
+      "fat_g": 96,
+      "carbs_g": 187,
+      "flex_meal": false,
+      "logged_at": "2026-04-29T00:44:40.745Z",
+      "notes": "Under protein target by 32g. Fat over (96 vs 65 floor — fine, floor not ceiling)."
+    },
+    "2026-04-29": {
+      "calories": 2150,
+      "protein_g": 128,
+      "fat_g": 118,
+      "carbs_g": 168,
+      "flex_meal": false,
+      "logged_at": "2026-04-29T22:50:42.704Z",
+      "notes": "Protein 38g short of target. Fat trending high — anchor protein at every meal next week."
+    }
+  },
   "weekly_summaries": {},
   "schema_note": "days[YYYY-MM-DD] = { calories, protein_g, fat_g, carbs_g, flex_meal, notes }. weekly_summaries[YYYY-WXX] = { avg_calories, avg_protein_g, days_protein_hit, days_within_kcal_range, flex_meals, tracked_days, adjustment_recommendation }"
 }

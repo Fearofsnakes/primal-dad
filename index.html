@@ -203,6 +203,17 @@
   .sync-banner { background: rgba(255,136,0,0.08); border: 1px solid rgba(255,136,0,0.25); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--warn); margin-top: 16px; display: flex; gap: 8px; align-items: center; }
   .sync-banner .si { font-size: 16px; }
   .sync-banner code { background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+  .report-block { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  .report-block .rb-head { font-size: 11px; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .report-block .rb-sub { font-size: 10px; letter-spacing: 1px; color: var(--text-faint); text-transform: uppercase; margin: 10px 0 4px; }
+  .report-block .rb-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; font-size: 13px; gap: 10px; }
+  .report-block .rb-row + .rb-row { border-top: 1px solid rgba(255,255,255,0.04); }
+  .report-block .rb-row .v { font-weight: 600; color: var(--text); white-space: nowrap; }
+  .report-block .rb-row .v.dim { color: var(--text-dim); font-weight: 400; }
+  .report-block .rb-row.dim { color: var(--text-faint); font-style: italic; }
+  .ex-log-btn.partial { background: rgba(255,136,0,0.12); border-color: rgba(255,136,0,0.3); color: var(--warn); }
+  .ex-summary.partial { background: rgba(255,136,0,0.08); border-left-color: var(--warn); }
 </style>
 </head>
 <body>
@@ -307,6 +318,8 @@
     </div>
   </div>
 
+  <button onclick="openWeeklyReport()" style="margin-top:16px;width:100%;min-height:52px;padding:14px;background:linear-gradient(135deg,rgba(255,204,0,0.15),rgba(255,68,68,0.15));border:1px solid rgba(255,204,0,0.4);color:var(--gold);border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;">📊 Weekly Report</button>
+
   <h2 id="anchor-achv">Achievements</h2>
   <div id="achvContainer"></div>
 
@@ -339,9 +352,19 @@
     <div id="liftLastWeek" class="last-week-note" style="display:none;"></div>
     <div id="liftSets"></div>
     <div id="ovldFlag" class="ovld-flag" style="display:none;">🏆 Hit top of rep range × 3 sets — bump weight next session.</div>
+    <div style="font-size:11px;color:var(--text-faint);margin-top:8px;">Save accepts partial sets · tap outside to autosave</div>
     <div class="modal-actions">
-      <button class="secondary" onclick="closeModal('liftModal')">Cancel</button>
+      <button class="secondary" onclick="closeModal('liftModal')">Discard</button>
       <button class="primary" onclick="saveLift()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="reportModal">
+  <div class="modal">
+    <div id="reportContent"></div>
+    <div class="modal-actions">
+      <button class="primary" onclick="closeModal('reportModal')" style="flex:1;">Close</button>
     </div>
   </div>
 </div>
@@ -546,6 +569,11 @@ const TIER_LABEL = {
   milestone: "Milestones"
 };
 
+const LEVEL_THRESHOLDS = [0, 100, 250, 450, 750, 1150, 1650, 2300, 3100, 4100];
+const DIM_TITLES = ["Novice","Apprentice","Journeyman","Adept","Expert","Master","Grandmaster","Legend","Mythic","Primal"];
+const OVERALL_TITLES = ["Sleep-Deprived Recruit","Diaper Warrior","Iron Father","Tactical Dad","Primal Contender","Apex Father","Grandmaster Dad","Legendary Patriarch","Mythic Protector","The Primal Dad"];
+const DIM_CAPS = { STR: 80, CON: 70, FLX: 60, NUT: 70 };
+
 const MEASUREMENT_FIELDS = [
   { id: "weight_lbs",          label: "Weight (lbs)" },
   { id: "waist_cm",            label: "Waist (cm/in)" },
@@ -594,6 +622,59 @@ function todaysSessionId() {
   return PROGRAM.schedule[day] || "rest";
 }
 
+function levelFromXP(xp) {
+  for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= LEVEL_THRESHOLDS[i]) return i + 1;
+  }
+  return 1;
+}
+
+function levelProgress(xp) {
+  const level = levelFromXP(xp);
+  const cur = LEVEL_THRESHOLDS[level - 1];
+  const next = level < LEVEL_THRESHOLDS.length ? LEVEL_THRESHOLDS[level] : null;
+  if (next == null) return { level, title: DIM_TITLES[level - 1], xp_to_next: 0, pct_to_next: 1 };
+  return { level, title: DIM_TITLES[level - 1], xp_to_next: next - xp, pct_to_next: Math.min(1, Math.max(0, (xp - cur) / (next - cur))) };
+}
+
+function computeLiveStats() {
+  const weekXP = lsGet(LS_KEYS.weekXP, {});
+  const totals = { STR: 0, CON: 0, FLX: 0, NUT: 0 };
+  const earnedThisWeek = { STR: 0, CON: 0, FLX: 0, NUT: 0 };
+  const wkNow = isoWeek();
+  for (const wk of Object.keys(weekXP)) {
+    for (const code of ["STR","CON","FLX","NUT"]) {
+      const e = weekXP[wk][code] || 0;
+      totals[code] += e;
+      if (wk === wkNow) earnedThisWeek[code] = e;
+    }
+  }
+  const dimensions = {};
+  let levelSum = 0;
+  for (const code of ["STR","CON","FLX","NUT"]) {
+    const xp = Math.round(totals[code]);
+    const prog = levelProgress(xp);
+    dimensions[code] = {
+      ...STATS.dimensions[code],
+      total_xp: xp,
+      level: prog.level,
+      title: prog.title,
+      xp_to_next: prog.xp_to_next,
+      pct_to_next: prog.pct_to_next,
+      earned_this_week: Math.round(earnedThisWeek[code] * 10) / 10
+    };
+    levelSum += prog.level;
+  }
+  const totalXP = Math.round(Object.values(totals).reduce((a,b) => a+b, 0));
+  const overallLevel = Math.max(1, Math.floor(levelSum / 4));
+  return {
+    dimensions,
+    total_xp: totalXP,
+    overall_level: overallLevel,
+    overall_title: OVERALL_TITLES[Math.max(0, Math.min(OVERALL_TITLES.length - 1, overallLevel - 1))]
+  };
+}
+
 function toast(msg, type) {
   type = type || "success";
   const t = document.getElementById("toast");
@@ -611,9 +692,10 @@ function renderHeader() {
   document.getElementById("brandSub").textContent = `Recomp · Week ${pw} / 12`;
   document.getElementById("programBadge").textContent = `Week ${pw}`;
 
-  document.getElementById("overallLevel").textContent = STATS.overall_level;
-  document.getElementById("overallTitle").textContent = STATS.overall_title;
-  document.getElementById("statXP").textContent = STATS.total_xp.toLocaleString();
+  const live = computeLiveStats();
+  document.getElementById("overallLevel").textContent = live.overall_level;
+  document.getElementById("overallTitle").textContent = live.overall_title;
+  document.getElementById("statXP").textContent = live.total_xp.toLocaleString();
   document.getElementById("statStreak").innerHTML = STATS.streak + ' <small>wks</small>';
   document.getElementById("statMult").textContent = STATS.multiplier.toFixed(1) + "×";
 }
@@ -637,13 +719,12 @@ function renderProgramBar() {
 function renderDimensions() {
   const c = document.getElementById("dimsContainer");
   c.innerHTML = "";
-  const weekXP = lsGet(LS_KEYS.weekXP, {});
-  const currentWeekKey = isoWeek();
-  const wxp = weekXP[currentWeekKey] || {};
+  const live = computeLiveStats();
   for (const code of ["STR","CON","FLX","NUT"]) {
-    const d = STATS.dimensions[code];
-    const earned = wxp[code] || 0;
+    const d = live.dimensions[code];
+    const earned = d.earned_this_week;
     const pct = Math.round(d.pct_to_next * 100);
+    const overCap = earned > d.weekly_cap;
     const card = document.createElement("div");
     card.className = "dim";
     card.style.borderLeft = `3px solid ${d.color}`;
@@ -655,7 +736,7 @@ function renderDimensions() {
       <div class="dim-bar"><div class="dim-bar-fill" style="width:${pct}%;background:${d.color};box-shadow:0 0 8px ${d.color};"></div></div>
       <div class="dim-foot">
         <span>${d.total_xp} XP · ${d.xp_to_next} to next</span>
-        <span class="week-cap">${earned} / ${d.weekly_cap} this week</span>
+        <span class="week-cap" style="${overCap ? `color:${d.color};` : ''}">${earned} / ${d.weekly_cap} weekly${overCap ? ' ✓' : ''}</span>
       </div>
     `;
     c.appendChild(card);
@@ -722,29 +803,139 @@ function renderSession() {
       if (!ex) return "";
       const exKey = ex.ex;
       const logged = sessionLog[exKey];
-      if (!logged && !ss.finisher) allLogged = false;
+      if ((!logged || logged.partial) && !ss.finisher) allLogged = false;
       const histToggleId = `hist_${exKey.replace(/[^a-z0-9]/gi,'_')}`;
+      const partial = logged && logged.partial;
+      const summaryClass = partial ? "ex-summary partial" : "ex-summary";
+      const btnClass = !logged ? "" : (partial ? "partial" : "logged");
+      const btnLabel = !logged ? "Log" : (partial ? `+${(logged.expected_sets || ex.sets) - logged.sets.length} set` : "✓ Edit");
+      const partialBadge = partial ? ` <span style="color:var(--warn);font-weight:600;">⏳ ${logged.sets.length}/${logged.expected_sets || ex.sets}</span>` : "";
       return `
         <div class="ex-row">
           <div class="ex-info">
             <div class="ex-name" onclick="toggleHistory('${histToggleId}', ${attrJSON(exKey)})" style="cursor:pointer;">${ex.ex} <span style="color:var(--text-faint);font-size:11px;">▾</span></div>
             <div class="ex-spec">${ex.sets} × ${ex.low === ex.high ? ex.low : `${ex.low}-${ex.high}`}${ex.perSide ? " each" : ""}</div>
-            ${logged ? `<div class="ex-summary">${logged.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${logged.overload ? " 🏆" : ""}</div>` : ""}
+            ${logged ? `<div class="${summaryClass}">${logged.sets.map(s => `${s.weight}×${s.reps}`).join(" · ")}${partialBadge}${logged.overload ? " 🏆" : ""}</div>` : ""}
             <div id="${histToggleId}" class="ex-history" style="display:none;"></div>
           </div>
-          <button class="ex-log-btn ${logged ? "logged" : ""}" onclick="openLiftModal(${attrJSON(sid)}, ${attrJSON(exKey)}, ${ex.sets}, ${ex.low}, ${ex.high})">${logged ? "✓ Edit" : "Log"}</button>
+          <button class="ex-log-btn ${btnClass}" onclick="openLiftModal(${attrJSON(sid)}, ${attrJSON(exKey)}, ${ex.sets}, ${ex.low}, ${ex.high})">${btnLabel}</button>
         </div>
       `;
     }).join("")}</div>`;
   }).join("");
 
+  const submittedAt = sessionLog._submitted || null;
+  const submitBtnHtml = `
+    <button onclick="submitDay()" style="margin-top:14px;width:100%;min-height:52px;padding:14px;background:${submittedAt ? 'rgba(68,221,136,0.18)' : 'rgba(255,204,0,0.15)'};border:1px solid ${submittedAt ? 'rgba(68,221,136,0.5)' : 'rgba(255,204,0,0.4)'};color:${submittedAt ? 'var(--good)' : 'var(--gold)'};border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;">${submittedAt ? `✓ Day Submitted · ${submittedAt.slice(11,16)}` : '🏁 Submit Day'}</button>
+  `;
+
   c.innerHTML = `
     <div class="session-head">
       <div><div class="session-title">${sess.name}</div><div class="session-sub">${sess.dim} dim · 30–35 min target</div></div>
-      <div class="session-status ${allLogged ? "done" : "todo"}">${allLogged ? "DONE" : "TODO"}</div>
+      <div class="session-status ${submittedAt ? "done" : (allLogged ? "done" : "todo")}">${submittedAt ? "DONE" : (allLogged ? "READY" : "TODO")}</div>
     </div>
     ${ssHtml}
+    ${submitBtnHtml}
   `;
+}
+
+function submitDay() {
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const todayKey = todayISO();
+  const sess = liftLog[todayKey] || {};
+  const hasContent = Object.keys(sess).some(k => (!k.startsWith("_") && sess[k] && sess[k].sets) || k.startsWith("_quick_") || k.startsWith("_cardio_"));
+  if (!hasContent) {
+    if (!confirm("No exercises logged today. Submit anyway?")) return;
+  }
+  if (sess._submitted) {
+    if (!confirm("Day already submitted. Re-submit?")) return;
+  }
+  liftLog[todayKey] = sess;
+  liftLog[todayKey]._submitted = new Date().toISOString();
+  liftLog[todayKey]._session_id = liftLog[todayKey]._session_id || todaysSessionId();
+  lsSet(LS_KEYS.liftLog, liftLog);
+  recomputeQuestProgress();
+  renderSession();
+  renderHeader();
+  renderDimensions();
+  renderQuests();
+  toast("✓ Day submitted — strong work");
+}
+
+function recomputeQuestProgress() {
+  const data = lsGet(LS_KEYS.quests, null);
+  if (!data) return;
+  const wk = isoWeek();
+  if (data.week !== wk) return;
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const nutLog = lsGet(LS_KEYS.nutLog, {});
+  const wkDays = isoWeekDays();
+  let modified = false;
+  for (const q of data.quests) {
+    const tail = q.id.replace(`${wk}_`, "");
+    let derived = q.progress;
+    if (tail === "str_lifts_4") {
+      const s = new Set();
+      for (const day of wkDays) {
+        const sd = liftLog[day];
+        if (sd && sd._session_id && ["upper_a","lower_a","upper_b","lower_b"].includes(sd._session_id)) s.add(sd._session_id);
+      }
+      derived = Math.min(q.target, s.size);
+    } else if (tail === "str_overload") {
+      let n = 0;
+      for (const day of wkDays) {
+        const sd = liftLog[day]; if (!sd) continue;
+        for (const k of Object.keys(sd)) if (!k.startsWith("_") && sd[k] && sd[k].overload) n++;
+      }
+      derived = Math.min(q.target, n);
+    } else if (tail === "con_cardio_2") {
+      let n = 0;
+      for (const day of wkDays) {
+        const sd = liftLog[day]; if (!sd) continue;
+        for (const k of Object.keys(sd)) {
+          if ((k.startsWith("_quick_") || k.startsWith("_cardio_")) && sd[k] && sd[k].dim === "CON") n++;
+        }
+      }
+      derived = Math.min(q.target, n);
+    } else if (tail === "con_boxing") {
+      let n = 0;
+      for (const day of wkDays) {
+        const sd = liftLog[day]; if (!sd) continue;
+        for (const k of Object.keys(sd)) {
+          const e = sd[k];
+          if ((k.startsWith("_quick_") || k.startsWith("_cardio_")) && e && /heavy bag|boxing/i.test(e.label || "")) n++;
+        }
+      }
+      derived = Math.min(q.target, n);
+    } else if (tail === "flx_daily") {
+      const s = new Set();
+      for (const day of wkDays) {
+        const sd = liftLog[day]; if (!sd) continue;
+        for (const k of Object.keys(sd)) if (k.startsWith("_quick_") && sd[k].dim === "FLX") s.add(day);
+      }
+      derived = Math.min(q.target, s.size);
+    } else if (tail === "flx_stretch_2") {
+      let n = 0;
+      for (const day of wkDays) {
+        const sd = liftLog[day]; if (!sd) continue;
+        for (const k of Object.keys(sd)) if (k.startsWith("_quick_stretch_")) n++;
+      }
+      derived = Math.min(q.target, n);
+    } else if (tail === "nut_protein_5") {
+      let n = 0;
+      for (const day of wkDays) if (nutLog[day] && (nutLog[day].protein_g || 0) >= 150) n++;
+      derived = Math.min(q.target, n);
+    } else if (tail === "nut_track_7") {
+      let n = 0;
+      for (const day of wkDays) if (nutLog[day]) n++;
+      derived = Math.min(q.target, n);
+    }
+    if (derived > q.progress) { q.progress = derived; modified = true; }
+  }
+  if (modified) {
+    data.completed = data.quests.every(q => q.progress >= q.target);
+    lsSet(LS_KEYS.quests, data);
+  }
 }
 
 let liftCtx = null;
@@ -782,25 +973,42 @@ function openLiftModal(sessionId, exName, sets, low, high) {
   openModal("liftModal");
 }
 
-function saveLift() {
+function saveLift(opts) {
   if (!liftCtx) return;
+  opts = opts || {};
   const { sessionId, exName, sets, low, high } = liftCtx;
   const setsArr = [];
   for (let i = 0; i < sets; i++) {
-    const w = parseFloat(document.getElementById(`liftW${i}`).value);
-    const r = parseInt(document.getElementById(`liftR${i}`).value, 10);
-    if (isNaN(w) || isNaN(r)) { toast("Fill all sets", "warn"); return; }
-    setsArr.push({ weight: w, reps: r });
+    const wEl = document.getElementById(`liftW${i}`);
+    const rEl = document.getElementById(`liftR${i}`);
+    if (!wEl || !rEl) continue;
+    const w = parseFloat(wEl.value);
+    const r = parseInt(rEl.value, 10);
+    if (!isNaN(w) && !isNaN(r)) setsArr.push({ weight: w, reps: r });
   }
-  const allTop = setsArr.every(s => s.reps >= high);
+  if (setsArr.length === 0) {
+    if (opts.silent) { closeModal("liftModal"); return; }
+    toast("Fill at least one set", "warn"); return;
+  }
+  const isFull = setsArr.length >= sets;
+  const allTop = isFull && setsArr.every(s => s.reps >= high);
   const liftLog = lsGet(LS_KEYS.liftLog, {});
   const todayKey = todayISO();
   liftLog[todayKey] = liftLog[todayKey] || { _session_id: sessionId };
-  const wasLogged = !!liftLog[todayKey][exName];
-  liftLog[todayKey][exName] = { sets: setsArr, overload: allTop, logged_at: new Date().toISOString() };
+  if (sessionId && !liftLog[todayKey]._session_id) liftLog[todayKey]._session_id = sessionId;
+  const prev = liftLog[todayKey][exName];
+  const xpAlreadyAwarded = !!(prev && prev._xp_awarded);
+  liftLog[todayKey][exName] = {
+    sets: setsArr,
+    overload: allTop,
+    partial: !isFull,
+    expected_sets: sets,
+    _xp_awarded: xpAlreadyAwarded || isFull,
+    logged_at: new Date().toISOString()
+  };
   lsSet(LS_KEYS.liftLog, liftLog);
 
-  if (!wasLogged) {
+  if (!xpAlreadyAwarded && isFull) {
     const weekXP = lsGet(LS_KEYS.weekXP, {});
     const wk = isoWeek();
     weekXP[wk] = weekXP[wk] || {};
@@ -808,16 +1016,34 @@ function saveLift() {
     lsSet(LS_KEYS.weekXP, weekXP);
   }
 
+  recomputeQuestProgress();
+  const finishMsg = !isFull ? `Saved ${setsArr.length}/${sets} sets` : (allTop ? "Logged · 🏆 progressive overload" : "Logged");
   if (allTop) {
     document.getElementById("ovldFlag").style.display = "block";
-    setTimeout(() => { closeModal("liftModal"); renderSession(); renderDimensions(); toast("Logged · 🏆 progressive overload"); checkAchievements(); }, 1100);
+    setTimeout(() => { closeModal("liftModal"); renderSession(); renderHeader(); renderDimensions(); renderQuests(); if (!opts.silent) toast(finishMsg); checkAchievements(); }, 1100);
   } else {
     closeModal("liftModal");
     renderSession();
+    renderHeader();
     renderDimensions();
-    toast("Logged");
+    renderQuests();
+    if (!opts.silent) toast(finishMsg);
     checkAchievements();
   }
+}
+
+function autosaveLift() {
+  if (!liftCtx) { closeModal("liftModal"); return; }
+  const { sets } = liftCtx;
+  let any = false;
+  for (let i = 0; i < sets; i++) {
+    const wEl = document.getElementById(`liftW${i}`);
+    const rEl = document.getElementById(`liftR${i}`);
+    if (!wEl || !rEl) continue;
+    if (!isNaN(parseFloat(wEl.value)) && !isNaN(parseInt(rEl.value, 10))) { any = true; break; }
+  }
+  if (any) saveLift({ silent: true });
+  else closeModal("liftModal");
 }
 
 function toggleHistory(elId, exerciseName) {
@@ -862,8 +1088,11 @@ function quickLog(type) {
   weekXP[wk] = weekXP[wk] || {};
   weekXP[wk][m.dim] = (weekXP[wk][m.dim] || 0) + m.xp;
   lsSet(LS_KEYS.weekXP, weekXP);
+  recomputeQuestProgress();
   toast(`+${m.xp} ${m.dim} · ${m.label}`);
+  renderHeader();
   renderDimensions();
+  renderQuests();
   checkAchievements();
 }
 
@@ -879,9 +1108,12 @@ function logCardio(name, xp) {
   weekXP[wk] = weekXP[wk] || {};
   weekXP[wk].CON = (weekXP[wk].CON || 0) + xp;
   lsSet(LS_KEYS.weekXP, weekXP);
+  recomputeQuestProgress();
   toast(`+${xp} CON · ${name}`);
   renderSession();
+  renderHeader();
   renderDimensions();
+  renderQuests();
   checkAchievements();
 }
 
@@ -909,8 +1141,10 @@ function saveNutrition() {
     logged_at: new Date().toISOString()
   };
   lsSet(LS_KEYS.nutLog, log);
+  recomputeQuestProgress();
   closeModal("nutModal");
   renderNutrition();
+  renderQuests();
   toast("Macros logged");
   checkAchievements();
 }
@@ -1348,6 +1582,295 @@ function quickPatchDay1() {
   setTimeout(() => location.reload(), 500);
 }
 
+function isoWeekDays(d) {
+  d = d || new Date();
+  const today = new Date(d);
+  const dow = today.getDay() || 7;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - (dow - 1));
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const dt = new Date(monday);
+    dt.setDate(monday.getDate() + i);
+    days.push(`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`);
+  }
+  return days;
+}
+
+function openWeeklyReport() {
+  const wk = isoWeek();
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const nutLog = lsGet(LS_KEYS.nutLog, {});
+  const bodyLog = lsGet(LS_KEYS.bodyLog, []);
+  const quests = lsGet(LS_KEYS.quests, null);
+  const achv = lsGet(LS_KEYS.achv, {});
+  const live = computeLiveStats();
+  const pw = programWeek();
+  const weekDays = isoWeekDays();
+
+  const strSessIds = ["upper_a","lower_a","upper_b","lower_b"];
+  const strDone = [];
+  for (const day of weekDays) {
+    const sess = liftLog[day];
+    if (sess && sess._session_id && strSessIds.includes(sess._session_id)) {
+      strDone.push({ day, sid: sess._session_id, name: PROGRAM.sessions[sess._session_id].name });
+    }
+  }
+
+  const topSets = {};
+  for (const day of weekDays) {
+    const sess = liftLog[day];
+    if (!sess) continue;
+    for (const k of Object.keys(sess)) {
+      if (k.startsWith("_")) continue;
+      const ex = sess[k];
+      if (!ex || !ex.sets || !ex.sets.length) continue;
+      let best = null;
+      for (const s of ex.sets) {
+        if (s.weight == null || s.reps == null) continue;
+        if (best == null || s.weight > best.weight || (s.weight === best.weight && s.reps > best.reps)) best = s;
+      }
+      if (best && (!topSets[k] || best.weight > topSets[k].weight || (best.weight === topSets[k].weight && best.reps > topSets[k].reps))) {
+        topSets[k] = best;
+      }
+    }
+  }
+
+  let cardioCount = 0;
+  for (const day of weekDays) {
+    const sess = liftLog[day];
+    if (!sess) continue;
+    if (sess._cardio_logged) cardioCount++;
+    for (const k of Object.keys(sess)) {
+      if (k.startsWith("_quick_") && sess[k].dim === "CON") cardioCount++;
+    }
+  }
+
+  const mobDays = new Set();
+  for (const day of weekDays) {
+    const sess = liftLog[day];
+    if (!sess) continue;
+    for (const k of Object.keys(sess)) {
+      if (k.startsWith("_quick_") && sess[k].dim === "FLX") mobDays.add(day);
+    }
+  }
+
+  let kcalSum = 0, kcalDays = 0, protSum = 0, protDays = 0, protHit = 0, kcalHit = 0, flexCount = 0;
+  for (const day of weekDays) {
+    const n = nutLog[day];
+    if (!n) continue;
+    if (n.calories) {
+      kcalSum += n.calories; kcalDays++;
+      if (Math.abs(n.calories - 2200) <= 200) kcalHit++;
+    }
+    if (n.protein_g) { protSum += n.protein_g; protDays++; if (n.protein_g >= 150) protHit++; }
+    if (n.flex_meal) flexCount++;
+  }
+  const avgKcal = kcalDays ? Math.round(kcalSum / kcalDays) : null;
+  const avgProt = protDays ? Math.round(protSum / protDays) : null;
+
+  const lastBody = bodyLog[bodyLog.length - 1];
+  const firstBody = bodyLog[0];
+  const weightDelta = (firstBody && lastBody && firstBody.weight_lbs && lastBody.weight_lbs && firstBody !== lastBody)
+    ? (lastBody.weight_lbs - firstBody.weight_lbs)
+    : null;
+
+  const newAchv = Object.entries(achv).filter(([id, date]) => weekDays.includes(date));
+
+  const wins = [], watchOuts = [], nextSteps = [];
+  let overloadCount = 0;
+  for (const day of weekDays) {
+    const sess = liftLog[day]; if (!sess) continue;
+    for (const k of Object.keys(sess)) {
+      if (!k.startsWith("_") && sess[k] && sess[k].overload) overloadCount++;
+    }
+  }
+
+  if (strDone.length === 4) wins.push("💪 All 4 programmed lifts done. The non-negotiable: locked.");
+  else if (strDone.length === 3) {
+    const hit = new Set(strDone.map(s => s.sid));
+    const all = ["upper_a","lower_a","upper_b","lower_b"];
+    const miss = all.filter(s => !hit.has(s));
+    watchOuts.push(`💪 ${strDone.length}/4 lifts. One session left to close week ${pw}.`);
+    if (miss.length) nextSteps.push(`Schedule ${miss.map(s => PROGRAM.sessions[s].name.split(" — ")[0]).join(" + ")} this weekend.`);
+  } else {
+    watchOuts.push(`💪 ${strDone.length}/4 lifts done. Recomp wants 4 — fat loss + muscle gain both need volume.`);
+  }
+
+  if (overloadCount >= 4) wins.push(`📈 Progressive overload on ${overloadCount} lifts — engine running.`);
+  else if (overloadCount > 0) wins.push(`📈 Overload on ${overloadCount} lift${overloadCount > 1 ? "s" : ""} — keep pushing top-of-range.`);
+
+  if (topSets["Barbell Bench Press"]) {
+    const t = topSets["Barbell Bench Press"];
+    if (t.weight >= 135 && t.reps >= 5) wins.push(`🏋️ Bench ${t.weight}×${t.reps} — first plate territory.`);
+    nextSteps.push(`Next Upper A: bench top set ${t.weight + 5} lbs. Working sets climb to ${Math.max(125, t.weight - 10)}×8–10 before bumping again.`);
+  }
+  if (topSets["Back Squat (barbell)"]) {
+    const t = topSets["Back Squat (barbell)"];
+    if (t.weight < 165) nextSteps.push(`Squat ${t.weight + 10} lbs next Lower A — bar's still building, push the working sets faster.`);
+    else nextSteps.push(`Next Lower A: squat ${t.weight + 5} lbs top set, ${Math.round((t.weight - 20))} for working sets.`);
+  }
+  if (topSets["Pull-Up (weighted if needed)"] && topSets["Pull-Up (weighted if needed)"].weight === 0 && topSets["Pull-Up (weighted if needed)"].reps >= 8) {
+    wins.push(`🆙 Pull-Up Pro: ${topSets["Pull-Up (weighted if needed)"].reps} BW reps. Next: add 10 lbs band/dip belt.`);
+  }
+  if (topSets["Romanian Deadlift (barbell)"]) {
+    const t = topSets["Romanian Deadlift (barbell)"];
+    if (t.weight < 135) nextSteps.push(`RDL ${t.weight + 20} lbs next Lower B — hinges respond fast at this stage.`);
+  }
+
+  if (avgProt != null) {
+    if (avgProt >= 160) wins.push(`🥩 Avg protein ${avgProt}g — at target. Lean mass protected.`);
+    else if (avgProt >= 130) {
+      watchOuts.push(`🥩 Protein ${avgProt}g avg vs 166g target — ${166 - avgProt}g/day short.`);
+      nextSteps.push(`Add 1 scoop whey post-workout (24g) or 200g Greek yogurt PM (20g) to close the gap.`);
+    } else {
+      watchOuts.push(`🥩 Protein ${avgProt}g — way under 166. Recomp without enough protein = mostly fat loss, no muscle gain.`);
+      nextSteps.push(`Anchor protein at every meal: eggs AM (12g) + Greek yogurt snack (20g) + chicken/fish dinner (40g) = +70g easy.`);
+    }
+  } else {
+    watchOuts.push(`🥩 Nutrition not tracked. Recomp = engineering — you can't tune what you don't measure.`);
+    nextSteps.push(`Log macros for at least 3 days next week. Even ballpark beats nothing.`);
+  }
+
+  if (avgKcal != null) {
+    const diff = Math.abs(avgKcal - 2200);
+    if (diff <= 110) wins.push(`🎯 Calories ${avgKcal} avg — within ±5%. Discipline showing.`);
+    else if (avgKcal > 2310) {
+      watchOuts.push(`🍽️ ${avgKcal} kcal avg — ${avgKcal - 2200} over target.`);
+      nextSteps.push(`Trim 1 carb serving or sauce/oil daily. Recomp wants slight deficit ~-200 kcal.`);
+    } else if (avgKcal < 2090) {
+      watchOuts.push(`🍽️ ${avgKcal} kcal avg — ${2200 - avgKcal} under. Too aggressive a deficit costs muscle.`);
+      nextSteps.push(`Add a serving of carbs (rice, oats, fruit) on training + cardio days. Floor matters.`);
+    }
+  }
+
+  if (mobDays.size >= 5) wins.push(`🧘 Mobility ${mobDays.size}/7 — joints staying long.`);
+  else if (mobDays.size > 0) {
+    watchOuts.push(`🧘 ${mobDays.size}/7 mobility days. Recomp + intermediate volume needs daily 15-min minimum.`);
+    nextSteps.push(`Pick a fixed slot — hips after wakeup OR shoulders before bed. Habit > intensity.`);
+  } else {
+    watchOuts.push(`🧘 0 mobility logged. BJJ starts week 6 — every locked hip you carry in costs.`);
+    nextSteps.push(`Tonight: 10 min hip flow before bed. Tomorrow: 10 min thoracic. Build the streak.`);
+  }
+
+  if (cardioCount === 0) {
+    watchOuts.push(`💙 No conditioning. CON cap is 70 — unused leaves the level frozen.`);
+    nextSteps.push(`30-min Zone 2 bike Sat counts double once you start BJJ — engine first.`);
+  } else if (cardioCount >= 2) wins.push(`💙 ${cardioCount} conditioning sessions — heart in the program.`);
+  else wins.push(`💙 ${cardioCount} conditioning session — keep it going.`);
+
+  if (newAchv.length) {
+    wins.push(`🏆 ${newAchv.length} achievement${newAchv.length > 1 ? "s" : ""} unlocked: ${newAchv.map(([id]) => { const a = ACHIEVEMENTS.find(x => x.id === id); return a ? a.name : id; }).join(", ")}.`);
+  }
+
+  if (!firstBody) {
+    watchOuts.push(`📏 No body measurements yet. Without Week 0 baseline, the Week 6 milestone has nothing to compare against.`);
+    nextSteps.push(`Tomorrow morning fasted: weight + waist + chest + hips + arms + thighs. 5 minutes, sets the whole program's grading curve.`);
+  }
+
+  const motivation = strDone.length >= 3 && (avgProt == null || avgProt >= 130)
+    ? `"You held the floor week ${pw}. Stack another week the same way and the body listens. The program rewards repetition, not heroics."`
+    : `"First weeks are the hardest — you're building the system, not the body. Show up next week and the wins compound."`;
+
+  const fmtDay = d => { const dt = new Date(d); return dt.toLocaleDateString(undefined, { weekday: "short" }); };
+  const wkRange = `${weekDays[0].slice(5)} → ${weekDays[6].slice(5)}`;
+
+  const html = `
+    <h2 style="margin-bottom:4px;">📊 Week ${pw} Report</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">${wk} · ${wkRange}</div>
+
+    <div class="report-block">
+      <div class="rb-head">Overall</div>
+      <div class="rb-row"><span>Total XP (capped)</span><span class="v">${live.total_xp}</span></div>
+      <div class="rb-row"><span>Overall</span><span class="v">L${live.overall_level} · ${live.overall_title}</span></div>
+      ${["STR","CON","FLX","NUT"].map(c => {
+        const d = live.dimensions[c];
+        return `<div class="rb-row"><span style="color:${d.color};">${c}</span><span class="v">L${d.level} · ${d.total_xp} XP · +${d.earned_this_week} this wk</span></div>`;
+      }).join("")}
+    </div>
+
+    <div class="report-block">
+      <div class="rb-head" style="color:var(--STR);">Strength · ${strDone.length}/4</div>
+      ${strDone.length ? strDone.map(s => `<div class="rb-row"><span>${fmtDay(s.day)} ${s.day.slice(5)}</span><span class="v">${s.name.split(" — ")[0]}</span></div>`).join("") : '<div class="rb-row dim">No lift sessions logged this week.</div>'}
+      ${Object.keys(topSets).length ? `<div class="rb-sub">Top sets this week</div>${Object.entries(topSets).slice(0,10).map(([n, s]) => `<div class="rb-row"><span>${n}</span><span class="v">${s.weight} × ${s.reps}</span></div>`).join("")}` : ""}
+    </div>
+
+    <div class="report-block">
+      <div class="rb-head" style="color:var(--CON);">Conditioning</div>
+      <div class="rb-row"><span>Sessions</span><span class="v">${cardioCount}</span></div>
+      <div class="rb-row"><span>XP this week</span><span class="v">${live.dimensions.CON.earned_this_week} / ${DIM_CAPS.CON}</span></div>
+    </div>
+
+    <div class="report-block">
+      <div class="rb-head" style="color:var(--FLX);">Flexibility</div>
+      <div class="rb-row"><span>Mobility days</span><span class="v">${mobDays.size}/7</span></div>
+      <div class="rb-row"><span>XP this week</span><span class="v">${live.dimensions.FLX.earned_this_week} / ${DIM_CAPS.FLX}</span></div>
+    </div>
+
+    <div class="report-block">
+      <div class="rb-head" style="color:var(--NUT);">Nutrition</div>
+      <div class="rb-row"><span>Avg calories</span><span class="v">${avgKcal != null ? avgKcal + " / 2,200" : "—"}</span></div>
+      <div class="rb-row"><span>Avg protein</span><span class="v">${avgProt != null ? avgProt + "g / 166g" : "—"}</span></div>
+      <div class="rb-row"><span>Days tracked</span><span class="v">${kcalDays}/7</span></div>
+      <div class="rb-row"><span>Days protein hit (≥150g)</span><span class="v">${protHit}/${protDays || 0}</span></div>
+      <div class="rb-row"><span>Days within ±200 kcal</span><span class="v">${kcalHit}/${kcalDays || 0}</span></div>
+      <div class="rb-row"><span>Flex meals</span><span class="v">${flexCount}</span></div>
+    </div>
+
+    <div class="report-block">
+      <div class="rb-head">Body Comp</div>
+      <div class="rb-row"><span>Latest weight</span><span class="v">${lastBody && lastBody.weight_lbs ? lastBody.weight_lbs + " lbs" : "—"}</span></div>
+      <div class="rb-row"><span>Last measured</span><span class="v dim">${lastBody ? lastBody.date : "—"}</span></div>
+      ${weightDelta != null ? `<div class="rb-row"><span>Δ vs first measurement</span><span class="v">${weightDelta > 0 ? "+" : ""}${weightDelta.toFixed(1)} lbs</span></div>` : ""}
+    </div>
+
+    ${quests && quests.week === wk && quests.quests && quests.quests.length ? `
+    <div class="report-block">
+      <div class="rb-head">Quests</div>
+      ${quests.quests.map(q => `<div class="rb-row"><span>${q.dim} · ${q.desc}</span><span class="v">${q.progress}/${q.target}</span></div>`).join("")}
+    </div>
+    ` : ""}
+
+    ${newAchv.length ? `
+    <div class="report-block">
+      <div class="rb-head">🏆 Achievements unlocked this week</div>
+      ${newAchv.map(([id, date]) => {
+        const a = ACHIEVEMENTS.find(x => x.id === id);
+        return a ? `<div class="rb-row"><span>${a.icon} ${a.name}</span><span class="v dim">${date.slice(5)}</span></div>` : "";
+      }).join("")}
+    </div>
+    ` : ""}
+
+    ${wins.length ? `
+    <div class="report-block" style="border-color:rgba(68,221,136,0.3);">
+      <div class="rb-head" style="color:var(--good);">🎉 Wins · celebrate</div>
+      ${wins.map(w => `<div style="font-size:13px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.04);line-height:1.5;">${w}</div>`).join("")}
+    </div>
+    ` : ""}
+
+    ${watchOuts.length ? `
+    <div class="report-block" style="border-color:rgba(255,136,0,0.3);">
+      <div class="rb-head" style="color:var(--warn);">🎯 Watch-outs · improve</div>
+      ${watchOuts.map(w => `<div style="font-size:13px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.04);line-height:1.5;">${w}</div>`).join("")}
+    </div>
+    ` : ""}
+
+    ${nextSteps.length ? `
+    <div class="report-block" style="border-color:rgba(68,136,255,0.3);">
+      <div class="rb-head" style="color:var(--CON);">🚀 Coach's next steps</div>
+      ${nextSteps.map(s => `<div style="font-size:13px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.04);line-height:1.5;">${s}</div>`).join("")}
+    </div>
+    ` : ""}
+
+    <div style="font-size:13px;color:var(--gold);font-style:italic;padding:18px 4px 6px;text-align:center;line-height:1.6;">${motivation}</div>
+
+    <div style="font-size:11px;color:var(--text-faint);margin-top:8px;text-align:center;">Live preview — Sunday weekly check-in finalizes XP with streak multiplier.</div>
+  `;
+
+  document.getElementById("reportContent").innerHTML = html;
+  openModal("reportModal");
+}
+
 function openExportModal() {
   const out = {};
   for (const k of Object.values(LS_KEYS)) {
@@ -1421,7 +1944,11 @@ function doImport() {
 
 function openModal(id) { document.getElementById(id).classList.add("open"); }
 function closeModal(id) { document.getElementById(id).classList.remove("open"); }
-document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", e => { if (e.target === m) m.classList.remove("open"); }));
+document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", e => {
+  if (e.target !== m) return;
+  if (m.id === "liftModal") { autosaveLift(); return; }
+  m.classList.remove("open");
+}));
 
 function render() {
   renderHeader();

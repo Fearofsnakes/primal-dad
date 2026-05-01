@@ -38,6 +38,41 @@
       "date": "2026-04-28",
       "type": "system_fix",
       "details": "Achievements auto-unlock logic shipped. Tap-exercise history drill-down + Export/Import State buttons added."
+    },
+    {
+      "date": "2026-04-28",
+      "type": "session_logged",
+      "week": "2026-W18",
+      "program_week": 1,
+      "session_id": "lower_a",
+      "details": "Lower A. Squat 65→115→135x10 (overload), Leg Curl 17.5→20→22.5x10 (overload), Bulgarian 30x8 each (BW work), RDL 65x10x3 (overload, light bar), Goblet up to 40x10, Calf 30→35→40x15 (overload)."
+    },
+    {
+      "date": "2026-04-29",
+      "type": "conditioning_logged",
+      "week": "2026-W18",
+      "program_week": 1,
+      "details": "Outdoor run 30+ min. CON +20."
+    },
+    {
+      "date": "2026-04-30",
+      "type": "session_logged",
+      "week": "2026-W18",
+      "program_week": 1,
+      "session_id": "upper_b",
+      "details": "Upper B. Pull-Up BW 8x8x8 (Pull-Up Pro), DB Shoulder Press 25→30→35x10 (overload), Row 65x12x3 (overload), Incline DB 35→40→40x10-12, Bicep Curl 20→22.5→25x12, Face Pull 50x12x3, Hammer Curl 25x8x2 (finisher)."
+    },
+    {
+      "date": "2026-04-30",
+      "type": "achievement_unlocked",
+      "achievement_id": "pullup_pro_8",
+      "name": "Pull-Up Pro",
+      "details": "BW 8 reps × 3 sets on Upper B."
+    },
+    {
+      "date": "2026-05-01",
+      "type": "system_fix",
+      "details": "Dashboard XP recompute fix: Total XP + dim level bars now driven by computeLiveStats() reading localStorage. Cumulative XP uncapped (compounds from all sources). Lift modal accepts partial saves with autosave on backdrop tap. Weekly Report modal added with coach-style Wins / Watch-outs / Next Steps. Submit Day button added to session card. Quest progress auto-derived from logs (str_lifts_4, str_overload, con_cardio_2, flx_daily, etc)."
     }
   ]
 }

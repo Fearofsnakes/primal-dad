@@ -9,10 +9,10 @@
       "dim": "STR",
       "desc": "Hit all 4 programmed lift sessions this week",
       "target": 4,
-      "progress": 1,
+      "progress": 3,
       "xp_per": 25,
       "total_xp": 100,
-      "note": "The non-negotiable"
+      "note": "Upper A (4/27) + Lower A (4/28) + Upper B (4/30) done. Lower B left."
     },
     {
       "id": "2026-W18_str_overload",

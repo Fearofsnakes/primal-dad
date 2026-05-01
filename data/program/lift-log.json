@@ -73,6 +73,170 @@
             }
           ],
           "session_notes": "Day 1 of recomp. Logged via mobile dashboard. Achievements bug surfaced after — only first_plate_bench fired."
+        },
+        "2026-04-28": {
+          "date": "2026-04-28",
+          "session_id": "lower_a",
+          "session_name": "Lower A — Quads + Abs",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Back Squat (barbell)",
+              "sets": [
+                { "weight_lbs": 65, "reps": 10 },
+                { "weight_lbs": 115, "reps": 10 },
+                { "weight_lbs": 135, "reps": 10 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Pyramid up. 135x10 felt clean — bump to 145 next session."
+            },
+            {
+              "name": "Leg Curl (DB or lying)",
+              "sets": [
+                { "weight_lbs": 17.5, "reps": 10 },
+                { "weight_lbs": 20, "reps": 10 },
+                { "weight_lbs": 22.5, "reps": 10 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Worked up. 22.5 stable at top range."
+            },
+            {
+              "name": "Bulgarian Split Squat (DB)",
+              "sets": [
+                { "weight_lbs": 30, "reps": 8 },
+                { "weight_lbs": 30, "reps": 8 },
+                { "weight_lbs": 30, "reps": 8 }
+              ],
+              "top_rep_hit": false,
+              "notes": "30s × 8 each leg — first_bulgarian achievement is 30×10. Push reps next time."
+            },
+            {
+              "name": "Romanian Deadlift (barbell)",
+              "sets": [
+                { "weight_lbs": 65, "reps": 10 },
+                { "weight_lbs": 65, "reps": 10 },
+                { "weight_lbs": 65, "reps": 10 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Bar's light — bump to 85 next Lower A or 95 if hinge feels grooved."
+            },
+            {
+              "name": "Goblet Squat / Leg Extension alt",
+              "sets": [
+                { "weight_lbs": 30, "reps": 10 },
+                { "weight_lbs": 35, "reps": 10 },
+                { "weight_lbs": 40, "reps": 10 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Pyramid up. 40 felt OK but rep range is 12-15."
+            },
+            {
+              "name": "Calf Raise",
+              "sets": [
+                { "weight_lbs": 30, "reps": 15 },
+                { "weight_lbs": 35, "reps": 15 },
+                { "weight_lbs": 40, "reps": 15 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Top of range × 3 — bump weight next time."
+            }
+          ],
+          "session_notes": "Lower A completed. No abs finisher logged (v1.1 program added it after this session)."
+        },
+        "2026-04-29": {
+          "date": "2026-04-29",
+          "session_id": "conditioning",
+          "session_name": "Conditioning — Run / outdoor 30+ min",
+          "completed": true,
+          "_submitted": true,
+          "cardio": {
+            "type": "run_outdoor",
+            "label": "Run / outdoor — 30+ min",
+            "duration_min": 30,
+            "xp": 20,
+            "logged_at": "2026-04-29T15:01:10.755Z"
+          },
+          "session_notes": "Outdoor run, ~30 min. CON +20."
+        },
+        "2026-04-30": {
+          "date": "2026-04-30",
+          "session_id": "upper_b",
+          "session_name": "Upper B — Pull + Rear Delt + Arms",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Pull-Up (weighted if needed)",
+              "sets": [
+                { "weight_lbs": 0, "reps": 8 },
+                { "weight_lbs": 0, "reps": 8 },
+                { "weight_lbs": 0, "reps": 8 }
+              ],
+              "top_rep_hit": false,
+              "notes": "BW 8x8x8 — pullup_pro_8 unlocked. Add 10 lbs band/dip belt next time."
+            },
+            {
+              "name": "DB Shoulder Press",
+              "sets": [
+                { "weight_lbs": 25, "reps": 10 },
+                { "weight_lbs": 30, "reps": 10 },
+                { "weight_lbs": 35, "reps": 10 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Worked up. 35s stable for 10 — could try 40s next."
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                { "weight_lbs": 65, "reps": 12 },
+                { "weight_lbs": 65, "reps": 12 },
+                { "weight_lbs": 65, "reps": 12 }
+              ],
+              "top_rep_hit": true,
+              "notes": "Same as Upper A — bump to 75 next session."
+            },
+            {
+              "name": "DB Incline Press",
+              "sets": [
+                { "weight_lbs": 35, "reps": 12 },
+                { "weight_lbs": 40, "reps": 10 },
+                { "weight_lbs": 40, "reps": 10 }
+              ],
+              "top_rep_hit": false,
+              "notes": "40s for 10 stable. Try 45 top set next."
+            },
+            {
+              "name": "DB Bicep Curl (alternating)",
+              "sets": [
+                { "weight_lbs": 20, "reps": 12 },
+                { "weight_lbs": 22.5, "reps": 12 },
+                { "weight_lbs": 25, "reps": 12 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Pyramid. 25s smooth at 12 — push for 13-15 next."
+            },
+            {
+              "name": "Face Pull / Rear Delt Fly",
+              "sets": [
+                { "weight_lbs": 50, "reps": 12 },
+                { "weight_lbs": 50, "reps": 12 },
+                { "weight_lbs": 50, "reps": 12 }
+              ],
+              "top_rep_hit": false,
+              "notes": "Same band/DB as Upper A. Holding 12 reps — bump to 15."
+            },
+            {
+              "name": "Hammer Curl (DB)",
+              "sets": [
+                { "weight_lbs": 25, "reps": 8 },
+                { "weight_lbs": 25, "reps": 8 }
+              ],
+              "top_rep_hit": false,
+              "notes": "v1.1 finisher. 25s for 8 — protocol calls for 12, drop weight or get more reps."
+            }
+          ],
+          "session_notes": "Upper B done. Pull-up Pro achievement (8 BW reps × 3) unlocked."
         }
       }
     },
@@ -88,5 +252,5 @@
     "11": { "iso_week": "2026-W28", "sessions": {} },
     "12": { "iso_week": "2026-W29", "sessions": {} }
   },
-  "schema_note": "Each session: { date, session_id, session_name, completed, exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit, notes }], session_notes }"
+  "schema_note": "Each session: { date, session_id, session_name, completed, _submitted (bool, set when user taps Submit Day), exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit, notes, partial?, expected_sets? }], session_notes }. Cardio sessions: { date, session_id: 'conditioning', cardio: { type, label, duration_min, xp, logged_at }, session_notes }."
 }

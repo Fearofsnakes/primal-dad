@@ -287,7 +287,7 @@
     </div>
     <div class="week-key">
       <span>Start · 04-27</span>
-      <span style="color: var(--gold);">★ W6 · 06-01 (BJJ)</span>
+      <span style="color: var(--gold);">★ W6 · mid-program milestone</span>
       <span>End · 07-19</span>
     </div>
   </div>
@@ -498,7 +498,6 @@ const STATS = {
 
 const PROFILE = {
   weight_lbs: null,
-  bjj_start: "2026-06-02",
   program_start: "2026-04-27",
   program_end: "2026-07-19"
 };
@@ -584,7 +583,7 @@ const ACHIEVEMENTS = [
   { id: "boxing_builder_8",   name: "Boxing Builder",        desc: "Log 8 heavy bag sessions.",                                     tier: "conditioning",dim: "CON", icon: "🥊" },
   { id: "zone_2_long",        name: "Zone 2 Long",           desc: "Sustained Zone 2 60+ minutes.",                                 tier: "conditioning",dim: "CON", icon: "💙" },
   { id: "rhr_drop_5",         name: "Heart of Iron",         desc: "Resting HR drops 5+ bpm.",                                      tier: "conditioning",dim: "CON", icon: "❤️" },
-  { id: "bjj_day_1",          name: "BJJ Day 1",             desc: "First BJJ class (June 2, 2026).",                               tier: "conditioning",dim: "CON", icon: "🥋" },
+  { id: "con_engine_builder", name: "Engine Builder",        desc: "2+ conditioning sessions a week for 3 straight weeks.",          tier: "conditioning",dim: "CON", icon: "🔋" },
   { id: "recomp_mid_week_6",  name: "Recomp Mid",            desc: "Complete the first 6 weeks.",                                   tier: "milestone",   dim: "STR", icon: "🛤️" },
   { id: "recomp_champion",    name: "Recomp Champion",       desc: "Finish all 12 weeks.",                                          tier: "milestone",   dim: "STR", icon: "🏆" },
   { id: "sub_20_bf",          name: "Sub-20% BF",            desc: "InBody scan shows BF under 20%.",                               tier: "milestone",   dim: "NUT", icon: "📉" }
@@ -1678,18 +1677,7 @@ function checkAchievements(silent) {
   // --- Milestones ---
   if (pw >= 6) unlock("recomp_mid_week_6");
   if (pw >= 12) unlock("recomp_champion");
-  // BJJ Day 1: any session logged on or after 2026-06-02
-  if (today >= "2026-06-02") {
-    for (const date of Object.keys(liftLog)) {
-      if (date >= "2026-06-02") {
-        const sess = liftLog[date];
-        for (const k of Object.keys(sess)) {
-          const e = sess[k];
-          if (e && e.label && /bjj|jiu-jitsu/i.test(e.label)) { unlock("bjj_day_1"); break; }
-        }
-      }
-    }
-  }
+  // Engine Builder: 2+ conditioning sessions/week for 3 straight weeks (unlocked manually at check-in).
 
   lsSet(LS_KEYS.achv, unlocked);
 
@@ -1918,13 +1906,13 @@ function openWeeklyReport() {
     watchOuts.push(`🧘 ${mobDays.size}/7 mobility days. Recomp + intermediate volume needs daily 15-min minimum.`);
     nextSteps.push(`Pick a fixed slot — hips after wakeup OR shoulders before bed. Habit > intensity.`);
   } else {
-    watchOuts.push(`🧘 0 mobility logged. BJJ starts week 6 — every locked hip you carry in costs.`);
+    watchOuts.push(`🧘 0 mobility logged. Longevity + lift depth both ride on it — 2 short sessions/week is the floor.`);
     nextSteps.push(`Tonight: 10 min hip flow before bed. Tomorrow: 10 min thoracic. Build the streak.`);
   }
 
   if (cardioCount === 0) {
     watchOuts.push(`💙 No conditioning. CON cap is 70 — unused leaves the level frozen.`);
-    nextSteps.push(`30-min Zone 2 bike Sat counts double once you start BJJ — engine first.`);
+    nextSteps.push(`Build the engine: 2 CON sessions/week — heavy-bag rounds + a Zone 2 bike. Both at home, both short.`);
   } else if (cardioCount >= 2) wins.push(`💙 ${cardioCount} conditioning sessions — heart in the program.`);
   else wins.push(`💙 ${cardioCount} conditioning session — keep it going.`);
 

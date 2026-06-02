@@ -27,7 +27,7 @@ A gamified fitness tracker built around a **12-week recomposition program**. Lif
 
 **Start:** 2026-04-27 (Monday, ISO W18)
 **End:** 2026-07-19 (ISO W29, Week 12)
-**Mid milestone:** 2026-W23 (Week 6 — coincides with BJJ start)
+**Mid milestone:** 2026-W23 (Week 6 — mid-program review)
 **Goal:** Lose fat + gain muscle simultaneously. Intermediate trainee, ~165 lbs start.
 
 ### Schedule
@@ -74,7 +74,7 @@ Eccentric tempo: 2–4 sec on the way down, mandatory on chest/shoulder. RPE: fi
 | Code | Name | Color | Weekly Cap | What It Tracks |
 |------|------|-------|------------|----------------|
 | **STR** | Strength | `#FF4444` | 80 | Programmed lifts, progressive overload, PRs |
-| **CON** | Conditioning | `#4488FF` | 70 | Boxing, cardio, BJJ, Zone 2, sleep, RHR, recovery |
+| **CON** | Conditioning | `#4488FF` | 70 | Heavy bag, bike, run, rope, Zone 2, sleep, RHR, recovery |
 | **FLX** | Flexibility | `#44DD88` | 60 | Daily 15-min mobility, stretch, yoga |
 | **NUT** | Nutrition | `#FFCC00` | 70 | Macro adherence, calorie target, flex meal discipline |
 
@@ -94,8 +94,8 @@ Eccentric tempo: 2–4 sec on the way down, mandatory on chest/shoulder. RPE: fi
 | Heavy bag session (15+ min) | 20 |
 | Run / bike / jump rope (30+ min) | 20 |
 | Zone 2 sustained (45+ min) | 25 |
-| BJJ class (after 2026-06-02) | 25 |
-| BJJ open mat / sparring | 20 |
+| HIIT / heavy bag rounds (intervals, 20+ min) | 25 |
+| Jump rope session (15+ min) | 15 |
 | Sleep 7+ hr avg for the week (Garmin) | 15 |
 | Resting HR improved vs prior week | 10 bonus |
 | Watched instructional / studied technique | 5 |
@@ -107,7 +107,7 @@ Eccentric tempo: 2–4 sec on the way down, mandatory on chest/shoulder. RPE: fi
 | Dedicated stretch session (15+ min) | 15 |
 | Yoga or flow session | 20 |
 | Post-workout stretching (5+ min) | 5 |
-| Hip opener / BJJ-specific mobility | 10 |
+| Hip opener / deep mobility | 10 |
 
 #### NUT — cap 70
 | Action | XP |
@@ -173,7 +173,7 @@ Missing a week resets streak to 0.
 - **Strength** — First Plate, Bodyweight Bench, 100kg Squat, 1.5×BW RDL, Pull-Up Pro, First Bulgarian
 - **Consistency** — Mobility Streak 7/14/30, Consistency Block 4w
 - **Nutrition** — Macro Marksman 7/30, Calorie Compass, Disciplined Week
-- **Conditioning** — Boxing Builder, Zone 2 Long, Heart of Iron, BJJ Day 1
+- **Conditioning** — Boxing Builder, Zone 2 Long, Heart of Iron, Engine Builder
 - **Milestone** — Recomp Mid (W6), Recomp Champion (W12), Sub-20% BF
 - **Path** — unlocked when a Week 12 path is selected
 
@@ -271,7 +271,7 @@ When current ISO week == `2026-W29`:
    - **Lean Cut** (focused fat loss, 10–14 days deficit + maintain volume)
    - **Lean Bulk** (small surplus + hypertrophy block)
    - **Strength Block** (5×5, lower volume, more weight)
-   - **Maintain + Skill** (hold composition, ramp BJJ + boxing)
+   - **Maintain + Conditioning** (hold composition, ramp boxing + Zone 2)
 4. Selected path becomes next program — manual handoff in next conversation, not auto
 
 ---
@@ -289,7 +289,7 @@ Barbell + 200lb plates, squat rack, adjustable bench, pull-up bar, adjustable du
 
 ## Key Dates
 - Program start: 2026-04-27
-- BJJ start: 2026-06-02 (lines up with Week 6 milestone)
+- CON engine: home-based (heavy bag, bike, rope, run) — 2 sessions/week floor. (BJJ dropped 2026-06-02, not returning.)
 - Baby due: late March / early April 2026
 - Paternity leave: ~6 weeks from baby arrival
 

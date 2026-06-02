@@ -22,7 +22,7 @@ primal-dad/
 
 ## 4 Dimensions
 - **STR** — Strength (lifting, progressive overload)
-- **CON** — Conditioning (cardio, boxing, BJJ, recovery)
+- **CON** — Conditioning (heavy bag, bike, run, rope, Zone 2, recovery)
 - **FLX** — Flexibility (mobility, stretching)
 - **NUT** — Nutrition (macro adherence, calorie discipline)
 
@@ -37,6 +37,6 @@ primal-dad/
 
 ## Program
 - **Start:** 2026-04-27
-- **Week 6 milestone:** 2026-W23 (lines up with BJJ start June 2)
+- **Week 6 milestone:** 2026-W23 (mid-program review)
 - **End:** 2026-07-19
 - **Then:** path-pick — Lean Cut / Lean Bulk / Strength Block / Maintain

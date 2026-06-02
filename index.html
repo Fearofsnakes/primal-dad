@@ -541,7 +541,8 @@ const QUEST_TEMPLATES = {
   STR: [
     { id: "str_lifts_4", desc: "Hit all 4 programmed lift sessions this week", target: 4, xp_per: 25, note: "The non-negotiable" },
     { id: "str_overload", desc: "Hit progressive overload on at least 2 lifts", target: 2, xp_per: 10, note: "Bump weight or reps" },
-    { id: "str_pr", desc: "Set a new top-set PR on any compound", target: 1, xp_per: 25, note: "Bench / Squat / RDL / Pull-up" }
+    { id: "str_pr", desc: "Set a new top-set PR on any compound", target: 1, xp_per: 25, note: "Bench / Squat / RDL / Pull-up" },
+    { id: "str_lower_b", desc: "Complete Lower B (hinge / glutes / posterior)", target: 1, xp_per: 25, note: "The 6-week gap — never logged it yet" }
   ],
   CON: [
     { id: "con_cardio_2", desc: "2 cardio/conditioning sessions", target: 2, xp_per: 20, note: "Mix bike, rope, run, bag" },
@@ -1049,6 +1050,10 @@ function recomputeQuestProgress() {
         if (sd && sd._session_id && ["upper_a","lower_a","upper_b","lower_b"].includes(sd._session_id)) s.add(sd._session_id);
       }
       derived = Math.min(q.target, s.size);
+    } else if (tail === "str_lower_b") {
+      let n = 0;
+      for (const day of wkDays) { const sd = liftLog[day]; if (sd && sd._session_id === "lower_b") n++; }
+      derived = Math.min(q.target, n);
     } else if (tail === "str_overload") {
       let n = 0;
       for (const day of wkDays) {

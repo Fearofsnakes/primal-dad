@@ -1,58 +1,59 @@
 {
-  "week": "2026-W18",
-  "program_week": 1,
-  "picked_at": "2026-04-27T21:24:21.019Z",
-  "focused_dimensions": ["STR", "FLX"],
+  "week": "2026-W23",
+  "program_week": 6,
+  "picked_at": "2026-06-02T20:00:00.000Z",
+  "focused_dimensions": ["STR", "CON", "FLX", "NUT"],
+  "note": "Post-midpoint reset. Floors, not ceilings — built to fix the 4 gaps the Week 6 report surfaced: no Lower B, dead conditioning, zero mobility, untracked protein. Covers the back half of week 6 and sets the rhythm into week 7.",
   "quests": [
     {
-      "id": "2026-W18_str_lifts_4",
+      "id": "2026-W23_str_lower_b",
       "dim": "STR",
-      "desc": "Hit all 4 programmed lift sessions this week",
-      "target": 4,
-      "progress": 3,
+      "desc": "Complete Lower B (hinge / glutes / posterior)",
+      "target": 1,
+      "progress": 0,
       "xp_per": 25,
-      "total_xp": 100,
-      "note": "Upper A (4/27) + Lower A (4/28) + Upper B (4/30) done. Lower B left."
+      "total_xp": 25,
+      "note": "Your 6-week gap. RDL + hip thrust + lunges. Just do it once."
     },
     {
-      "id": "2026-W18_str_overload",
+      "id": "2026-W23_str_overload",
       "dim": "STR",
       "desc": "Hit progressive overload on at least 2 lifts",
       "target": 2,
-      "progress": 2,
-      "xp_per": 10,
-      "total_xp": 20,
-      "note": "Bump weight or reps. Day 1: Face Pull + Barbell Row both hit top range × 3."
-    },
-    {
-      "id": "2026-W18_flx_daily",
-      "dim": "FLX",
-      "desc": "15-min mobility, 5+ days",
-      "target": 3,
       "progress": 0,
       "xp_per": 10,
-      "total_xp": 30,
-      "note": "Pick the tightest area"
+      "total_xp": 20,
+      "note": "Bump weight or reps vs last week"
     },
     {
-      "id": "2026-W18_flx_stretch_2",
+      "id": "2026-W23_con_cardio_2",
+      "dim": "CON",
+      "desc": "2 conditioning sessions (the new engine)",
+      "target": 2,
+      "progress": 0,
+      "xp_per": 20,
+      "total_xp": 40,
+      "note": "Heavy-bag rounds + Zone 2 bike. Both home, both short."
+    },
+    {
+      "id": "2026-W23_flx_stretch_2",
       "dim": "FLX",
-      "desc": "Dedicated 15+ min stretch sessions",
+      "desc": "2 dedicated 15-min mobility sessions",
       "target": 2,
       "progress": 0,
       "xp_per": 15,
       "total_xp": 30,
-      "note": "Hips and shoulders"
+      "note": "Hips + shoulders. FLX has been at 0 for 6 weeks — break the zero."
     },
     {
-      "id": "2026-W18_flx_yoga",
-      "dim": "FLX",
-      "desc": "1 yoga / flow session",
-      "target": 1,
+      "id": "2026-W23_nut_protein_5",
+      "dim": "NUT",
+      "desc": "Hit protein target on 3 logged days",
+      "target": 3,
       "progress": 0,
-      "xp_per": 20,
-      "total_xp": 20,
-      "note": "20-30 min is plenty"
+      "xp_per": 5,
+      "total_xp": 15,
+      "note": "166g. A realistic floor — 3 days tracked beats 0 days perfect."
     }
   ],
   "completed": false

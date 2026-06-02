@@ -1,6 +1,6 @@
 {
   "program_start": "2026-04-27",
-  "current_week": 1,
+  "current_week": 6,
   "weeks": {
     "1": {
       "iso_week": "2026-W18",
@@ -14,9 +14,18 @@
             {
               "name": "Barbell Bench Press",
               "sets": [
-                { "weight_lbs": 115, "reps": 10 },
-                { "weight_lbs": 115, "reps": 10 },
-                { "weight_lbs": 135, "reps": 6 }
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 6
+                }
               ],
               "top_rep_hit": false,
               "notes": "Topped at 135x6 - PR territory for first plate. 115 felt fine, jump to 135 was fast."
@@ -24,9 +33,18 @@
             {
               "name": "Face Pull (band/DB rear delt)",
               "sets": [
-                { "weight_lbs": 50, "reps": 10 },
-                { "weight_lbs": 50, "reps": 10 },
-                { "weight_lbs": 50, "reps": 10 }
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": true,
               "notes": "Old-program pairing. New v1.1 swaps to Weighted Pull-Up here."
@@ -34,9 +52,18 @@
             {
               "name": "Incline DB Press",
               "sets": [
-                { "weight_lbs": 35, "reps": 12 },
-                { "weight_lbs": 40, "reps": 11 },
-                { "weight_lbs": 45, "reps": 8 }
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 11
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 8
+                }
               ],
               "top_rep_hit": false,
               "notes": "Worked up sets. 45s for 8 was the limit."
@@ -44,9 +71,18 @@
             {
               "name": "Barbell Row",
               "sets": [
-                { "weight_lbs": 65, "reps": 12 },
-                { "weight_lbs": 65, "reps": 12 },
-                { "weight_lbs": 65, "reps": 12 }
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                }
               ],
               "top_rep_hit": true,
               "notes": "Bump to 70 next week."
@@ -54,9 +90,18 @@
             {
               "name": "Lateral Raise (DB)",
               "sets": [
-                { "weight_lbs": 12.5, "reps": 12 },
-                { "weight_lbs": 15, "reps": 12 },
-                { "weight_lbs": 17.5, "reps": 12 }
+                {
+                  "weight_lbs": 12.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 15,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 12
+                }
               ],
               "top_rep_hit": false,
               "notes": "Pyramid up. 17.5 felt heavy — stay there next week and try to hit 15 reps."
@@ -64,9 +109,18 @@
             {
               "name": "Tricep Pushdown (pulley)",
               "sets": [
-                { "weight_lbs": 25, "reps": 15 },
-                { "weight_lbs": 35, "reps": 10 },
-                { "weight_lbs": 35, "reps": 10 }
+                {
+                  "weight_lbs": 25,
+                  "reps": 15
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": false,
               "notes": "First set warmup feel. 35 stable for 10."
@@ -84,9 +138,18 @@
             {
               "name": "Back Squat (barbell)",
               "sets": [
-                { "weight_lbs": 65, "reps": 10 },
-                { "weight_lbs": 115, "reps": 10 },
-                { "weight_lbs": 135, "reps": 10 }
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": true,
               "notes": "Pyramid up. 135x10 felt clean — bump to 145 next session."
@@ -94,9 +157,18 @@
             {
               "name": "Leg Curl (DB or lying)",
               "sets": [
-                { "weight_lbs": 17.5, "reps": 10 },
-                { "weight_lbs": 20, "reps": 10 },
-                { "weight_lbs": 22.5, "reps": 10 }
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": true,
               "notes": "Worked up. 22.5 stable at top range."
@@ -104,9 +176,18 @@
             {
               "name": "Bulgarian Split Squat (DB)",
               "sets": [
-                { "weight_lbs": 30, "reps": 8 },
-                { "weight_lbs": 30, "reps": 8 },
-                { "weight_lbs": 30, "reps": 8 }
+                {
+                  "weight_lbs": 30,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 8
+                }
               ],
               "top_rep_hit": false,
               "notes": "30s × 8 each leg — first_bulgarian achievement is 30×10. Push reps next time."
@@ -114,9 +195,18 @@
             {
               "name": "Romanian Deadlift (barbell)",
               "sets": [
-                { "weight_lbs": 65, "reps": 10 },
-                { "weight_lbs": 65, "reps": 10 },
-                { "weight_lbs": 65, "reps": 10 }
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": true,
               "notes": "Bar's light — bump to 85 next Lower A or 95 if hinge feels grooved."
@@ -124,9 +214,18 @@
             {
               "name": "Goblet Squat / Leg Extension alt",
               "sets": [
-                { "weight_lbs": 30, "reps": 10 },
-                { "weight_lbs": 35, "reps": 10 },
-                { "weight_lbs": 40, "reps": 10 }
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": false,
               "notes": "Pyramid up. 40 felt OK but rep range is 12-15."
@@ -134,9 +233,18 @@
             {
               "name": "Calf Raise",
               "sets": [
-                { "weight_lbs": 30, "reps": 15 },
-                { "weight_lbs": 35, "reps": 15 },
-                { "weight_lbs": 40, "reps": 15 }
+                {
+                  "weight_lbs": 30,
+                  "reps": 15
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 15
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 15
+                }
               ],
               "top_rep_hit": true,
               "notes": "Top of range × 3 — bump weight next time."
@@ -169,9 +277,18 @@
             {
               "name": "Pull-Up (weighted if needed)",
               "sets": [
-                { "weight_lbs": 0, "reps": 8 },
-                { "weight_lbs": 0, "reps": 8 },
-                { "weight_lbs": 0, "reps": 8 }
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
               ],
               "top_rep_hit": false,
               "notes": "BW 8x8x8 — pullup_pro_8 unlocked. Add 10 lbs band/dip belt next time."
@@ -179,9 +296,18 @@
             {
               "name": "DB Shoulder Press",
               "sets": [
-                { "weight_lbs": 25, "reps": 10 },
-                { "weight_lbs": 30, "reps": 10 },
-                { "weight_lbs": 35, "reps": 10 }
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": true,
               "notes": "Worked up. 35s stable for 10 — could try 40s next."
@@ -189,9 +315,18 @@
             {
               "name": "Barbell Row",
               "sets": [
-                { "weight_lbs": 65, "reps": 12 },
-                { "weight_lbs": 65, "reps": 12 },
-                { "weight_lbs": 65, "reps": 12 }
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 12
+                }
               ],
               "top_rep_hit": true,
               "notes": "Same as Upper A — bump to 75 next session."
@@ -199,9 +334,18 @@
             {
               "name": "DB Incline Press",
               "sets": [
-                { "weight_lbs": 35, "reps": 12 },
-                { "weight_lbs": 40, "reps": 10 },
-                { "weight_lbs": 40, "reps": 10 }
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 10
+                }
               ],
               "top_rep_hit": false,
               "notes": "40s for 10 stable. Try 45 top set next."
@@ -209,9 +353,18 @@
             {
               "name": "DB Bicep Curl (alternating)",
               "sets": [
-                { "weight_lbs": 20, "reps": 12 },
-                { "weight_lbs": 22.5, "reps": 12 },
-                { "weight_lbs": 25, "reps": 12 }
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                }
               ],
               "top_rep_hit": false,
               "notes": "Pyramid. 25s smooth at 12 — push for 13-15 next."
@@ -219,9 +372,18 @@
             {
               "name": "Face Pull / Rear Delt Fly",
               "sets": [
-                { "weight_lbs": 50, "reps": 12 },
-                { "weight_lbs": 50, "reps": 12 },
-                { "weight_lbs": 50, "reps": 12 }
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                }
               ],
               "top_rep_hit": false,
               "notes": "Same band/DB as Upper A. Holding 12 reps — bump to 15."
@@ -229,8 +391,14 @@
             {
               "name": "Hammer Curl (DB)",
               "sets": [
-                { "weight_lbs": 25, "reps": 8 },
-                { "weight_lbs": 25, "reps": 8 }
+                {
+                  "weight_lbs": 25,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 8
+                }
               ],
               "top_rep_hit": false,
               "notes": "v1.1 finisher. 25s for 8 — protocol calls for 12, drop weight or get more reps."
@@ -240,17 +408,1295 @@
         }
       }
     },
-    "2":  { "iso_week": "2026-W19", "sessions": {} },
-    "3":  { "iso_week": "2026-W20", "sessions": {} },
-    "4":  { "iso_week": "2026-W21", "sessions": {} },
-    "5":  { "iso_week": "2026-W22", "sessions": {} },
-    "6":  { "iso_week": "2026-W23", "sessions": {} },
-    "7":  { "iso_week": "2026-W24", "sessions": {} },
-    "8":  { "iso_week": "2026-W25", "sessions": {} },
-    "9":  { "iso_week": "2026-W26", "sessions": {} },
-    "10": { "iso_week": "2026-W27", "sessions": {} },
-    "11": { "iso_week": "2026-W28", "sessions": {} },
-    "12": { "iso_week": "2026-W29", "sessions": {} }
+    "2": {
+      "iso_week": "2026-W19",
+      "sessions": {
+        "2026-05-04": {
+          "date": "2026-05-04",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Chest + Shoulder Priority",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Weighted Pull-Up",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 6
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Lateral Raise (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Tricep Pushdown (pulley)",
+              "sets": [
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 15
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-06": {
+          "date": "2026-05-06",
+          "session_id": "lower_a",
+          "session_name": "Lower A — Quads + Abs",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Back Squat (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Leg Curl (DB or lying)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Bulgarian Split Squat (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 16
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 16
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 16
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Romanian Deadlift (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 65,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Goblet Squat / Leg Extension alt",
+              "sets": [
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Calf Raise",
+              "sets": [
+                {
+                  "weight_lbs": 45,
+                  "reps": 20
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 20
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 20
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Hanging Knee Raise / Ab Wheel",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-07": {
+          "date": "2026-05-07",
+          "session_id": "upper_b",
+          "session_name": "Upper B — Pull + Rear Delt + Arms",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Pull-Up (weighted if needed)",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Shoulder Press",
+              "sets": [
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Incline Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Bicep Curl (alternating)",
+              "sets": [
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Face Pull / Rear Delt Fly",
+              "sets": [
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Hammer Curl (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                }
+              ],
+              "overload": true,
+              "expected_sets": 2
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        }
+      }
+    },
+    "3": {
+      "iso_week": "2026-W20",
+      "sessions": {
+        "2026-05-12": {
+          "date": "2026-05-12",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Chest + Shoulder Priority",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Weighted Pull-Up",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Lateral Raise (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Tricep Pushdown (pulley)",
+              "sets": [
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-13": {
+          "date": "2026-05-13",
+          "session_id": "lower_a",
+          "session_name": "Lower A — Quads + Abs",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Back Squat (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 155,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Leg Curl (DB or lying)",
+              "sets": [
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 30,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Bulgarian Split Squat (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Romanian Deadlift (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-15": {
+          "date": "2026-05-15",
+          "session_id": "upper_b",
+          "session_name": "Upper B — Pull + Rear Delt + Arms",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Pull-Up (weighted if needed)",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Shoulder Press",
+              "sets": [
+                {
+                  "weight_lbs": 30,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Incline Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        }
+      }
+    },
+    "4": {
+      "iso_week": "2026-W21",
+      "sessions": {
+        "2026-05-18": {
+          "date": "2026-05-18",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Chest + Shoulder Priority",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 155,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Weighted Pull-Up",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 52.5,
+                  "reps": 7
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-23": {
+          "date": "2026-05-23",
+          "session_id": "upper_b",
+          "session_name": "Upper B — Pull + Rear Delt + Arms",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Pull-Up (weighted if needed)",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 6
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Shoulder Press",
+              "sets": [
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 40,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Incline Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "DB Bicep Curl (alternating)",
+              "sets": [
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Face Pull / Rear Delt Fly",
+              "sets": [
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Hammer Curl (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 25,
+                  "reps": 12
+                }
+              ],
+              "overload": true,
+              "expected_sets": 2
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        }
+      }
+    },
+    "5": {
+      "iso_week": "2026-W22",
+      "sessions": {
+        "2026-05-25": {
+          "date": "2026-05-25",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Chest + Shoulder Priority",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 155,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Weighted Pull-Up",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 52.5,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Lateral Raise (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            },
+            {
+              "name": "Tricep Pushdown (pulley)",
+              "sets": [
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "partial": true,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        },
+        "2026-05-27": {
+          "date": "2026-05-27",
+          "session_id": "lower_a",
+          "session_name": "Lower A — Quads + Abs",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Back Squat (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 155,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Leg Curl (DB or lying)",
+              "sets": [
+                {
+                  "weight_lbs": 15,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 15,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 6
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Bulgarian Split Squat (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 20,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 8
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Romanian Deadlift (barbell)",
+              "sets": [
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 95,
+                  "reps": 10
+                }
+              ],
+              "overload": true,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        }
+      }
+    },
+    "6": {
+      "iso_week": "2026-W23",
+      "sessions": {
+        "2026-06-01": {
+          "date": "2026-06-01",
+          "session_id": "upper_a",
+          "session_name": "Upper A — Chest + Shoulder Priority",
+          "completed": true,
+          "_submitted": true,
+          "exercises": [
+            {
+              "name": "Barbell Bench Press",
+              "sets": [
+                {
+                  "weight_lbs": 115,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 135,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 155,
+                  "reps": 7
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Weighted Pull-Up",
+              "sets": [
+                {
+                  "weight_lbs": 0,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 9
+                },
+                {
+                  "weight_lbs": 0,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Incline DB Press",
+              "sets": [
+                {
+                  "weight_lbs": 40,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 11
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 8
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Barbell Row",
+              "sets": [
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 45,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 50,
+                  "reps": 10
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Lateral Raise (DB)",
+              "sets": [
+                {
+                  "weight_lbs": 17.5,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 20,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 22.5,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            },
+            {
+              "name": "Tricep Pushdown (pulley)",
+              "sets": [
+                {
+                  "weight_lbs": 35,
+                  "reps": 10
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                },
+                {
+                  "weight_lbs": 35,
+                  "reps": 12
+                }
+              ],
+              "overload": false,
+              "expected_sets": 3
+            }
+          ],
+          "session_notes": "Synced from phone export 2026-06-02."
+        }
+      }
+    },
+    "7": {
+      "iso_week": "2026-W24",
+      "sessions": {}
+    },
+    "8": {
+      "iso_week": "2026-W25",
+      "sessions": {}
+    },
+    "9": {
+      "iso_week": "2026-W26",
+      "sessions": {}
+    },
+    "10": {
+      "iso_week": "2026-W27",
+      "sessions": {}
+    },
+    "11": {
+      "iso_week": "2026-W28",
+      "sessions": {}
+    },
+    "12": {
+      "iso_week": "2026-W29",
+      "sessions": {}
+    }
   },
   "schema_note": "Each session: { date, session_id, session_name, completed, _submitted (bool, set when user taps Submit Day), exercises: [{ name, sets: [{reps, weight_lbs}], top_rep_hit, notes, partial?, expected_sets? }], session_notes }. Cardio sessions: { date, session_id: 'conditioning', cardio: { type, label, duration_min, xp, logged_at }, session_notes }."
 }

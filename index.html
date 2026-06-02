@@ -214,6 +214,31 @@
   .report-block .rb-row.dim { color: var(--text-faint); font-style: italic; }
   .ex-log-btn.partial { background: rgba(255,136,0,0.12); border-color: rgba(255,136,0,0.3); color: var(--warn); }
   .ex-summary.partial { background: rgba(255,136,0,0.08); border-left-color: var(--warn); }
+
+  .tab-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 0 0 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 4px; }
+  .tab-toggle .tab { padding: 10px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-dim); min-height: 40px; }
+  .tab-toggle .tab.active { background: var(--bg-3); color: var(--text); box-shadow: 0 0 0 1px var(--border) inset; }
+
+  .week-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s, transform 0.1s; text-align: left; width: 100%; display: block; }
+  .week-card:hover { border-color: rgba(255,255,255,0.15); }
+  .week-card:active { transform: scale(0.99); }
+  .week-card.is-today { border-color: rgba(68,136,255,0.4); box-shadow: 0 0 0 1px rgba(68,136,255,0.2) inset; }
+  .wc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .wc-title { font-size: 15px; font-weight: 700; line-height: 1.25; }
+  .wc-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .wc-status { font-size: 10px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; letter-spacing: 0.5px; font-weight: 600; }
+  .wc-status.done { background: rgba(68,221,136,0.12); color: var(--good); border-color: rgba(68,221,136,0.3); }
+  .wc-status.partial { background: rgba(255,136,0,0.12); color: var(--warn); border-color: rgba(255,136,0,0.3); }
+  .wc-status.todo { background: rgba(255,204,0,0.12); color: var(--gold); border-color: rgba(255,204,0,0.3); }
+  .wc-status.empty { color: var(--text-faint); }
+  .wc-foot { font-size: 11px; color: var(--text-dim); margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); }
+
+  .session-detail-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .back-to-week { padding: 8px 12px; background: rgba(68,136,255,0.1); border: 1px solid rgba(68,136,255,0.3); color: var(--CON); border-radius: 8px; font-size: 12px; font-weight: 600; min-height: 36px; }
+  .session-date-input { display: flex; gap: 8px; align-items: center; padding: 6px 10px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; flex: 1; min-width: 200px; }
+  .session-date-input label { color: var(--text-dim); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .session-date-input input { background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 6px 8px; font-size: 13px; font-family: inherit; flex: 1; min-width: 120px; }
+  .session-date-input input:focus { outline: none; border-color: var(--CON); }
 </style>
 </head>
 <body>
@@ -270,8 +295,13 @@
   <h2 id="anchor-dims">Dimensions</h2>
   <div class="dims" id="dimsContainer"></div>
 
-  <h2 id="anchor-session">Today</h2>
+  <h2 id="anchor-session">Workouts</h2>
+  <div class="tab-toggle" role="tablist">
+    <button id="tabToday" class="tab active" onclick="setViewMode('today')">Today</button>
+    <button id="tabWeek" class="tab" onclick="setViewMode('week-list')">This Week</button>
+  </div>
   <div class="session-card" id="sessionContainer"></div>
+  <div id="weekContainer" style="display:none;"></div>
 
   <h2>Quick Log</h2>
   <div class="quick-grid">
@@ -339,7 +369,7 @@
 <nav class="bottom">
   <div class="nav-row">
     <button class="nav-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><div class="nav-icon">⚡</div><div class="nav-label">Stats</div></button>
-    <button class="nav-btn" onclick="document.getElementById('anchor-session').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">🏋️</div><div class="nav-label">Today</div></button>
+    <button class="nav-btn" onclick="setViewMode('today');document.getElementById('anchor-session').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">🏋️</div><div class="nav-label">Today</div></button>
     <button class="nav-btn" onclick="document.getElementById('anchor-quests').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">⚔️</div><div class="nav-label">Quests</div></button>
     <button class="nav-btn" onclick="document.getElementById('anchor-achv').scrollIntoView({behavior:'smooth'})"><div class="nav-icon">🏆</div><div class="nav-label">Achv</div></button>
     <button class="nav-btn" onclick="openQuestPicker()"><div class="nav-icon">＋</div><div class="nav-label">Pick</div></button>
@@ -622,6 +652,24 @@ function todaysSessionId() {
   return PROGRAM.schedule[day] || "rest";
 }
 
+let viewMode = "today";
+let activeSessionCtx = null;
+
+function getActiveDate() {
+  return activeSessionCtx ? activeSessionCtx.date : todayISO();
+}
+function getActiveSessionId() {
+  return activeSessionCtx ? activeSessionCtx.sessionId : todaysSessionId();
+}
+
+function scheduledDateForSession(sessionId, weekDays) {
+  const entry = Object.entries(PROGRAM.schedule).find(([, v]) => v === sessionId);
+  if (!entry) return null;
+  const dow = parseInt(entry[0], 10);
+  const idx = dow === 0 ? 6 : dow - 1;
+  return weekDays[idx];
+}
+
 function levelFromXP(xp) {
   for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
     if (xp >= LEVEL_THRESHOLDS[i]) return i + 1;
@@ -650,7 +698,6 @@ function computeLiveStats() {
     }
   }
   const dimensions = {};
-  let levelSum = 0;
   for (const code of ["STR","CON","FLX","NUT"]) {
     const xp = Math.round(totals[code]);
     const prog = levelProgress(xp);
@@ -663,10 +710,11 @@ function computeLiveStats() {
       pct_to_next: prog.pct_to_next,
       earned_this_week: Math.round(earnedThisWeek[code] * 10) / 10
     };
-    levelSum += prog.level;
   }
   const totalXP = Math.round(Object.values(totals).reduce((a,b) => a+b, 0));
-  const overallLevel = Math.max(1, Math.floor(levelSum / 4));
+  // Overall level = total XP across all dims on the level curve (monotonic, never dragged
+  // down by untracked dimensions). Replaced the old avg-of-4-dim-levels formula 2026-06-02.
+  const overallLevel = levelFromXP(totalXP);
   return {
     dimensions,
     total_xp: totalXP,
@@ -745,13 +793,23 @@ function renderDimensions() {
 
 function renderSession() {
   const c = document.getElementById("sessionContainer");
-  const sid = todaysSessionId();
+  const sid = getActiveSessionId();
+  const dateKey = getActiveDate();
   const liftLog = lsGet(LS_KEYS.liftLog, {});
-  const todayKey = todayISO();
-  const sessionLog = liftLog[todayKey] || {};
+  const sessionLog = liftLog[dateKey] || {};
+  const isWeekDetail = (viewMode === "week-detail");
+  const detailBar = isWeekDetail ? `
+    <div class="session-detail-bar">
+      <button class="back-to-week" onclick="backToWeek()">← Back to Week</button>
+      <div class="session-date-input">
+        <label>Logged on</label>
+        <input type="date" value="${dateKey}" onchange="setActiveDate(this.value)">
+      </div>
+    </div>
+  ` : "";
 
   if (sid === "rest") {
-    c.innerHTML = `
+    c.innerHTML = detailBar + `
       <div class="session-head">
         <div><div class="session-title">Rest Day</div><div class="session-sub">Sunday — recovery + check-in</div></div>
         <div class="session-status rest">REST</div>
@@ -762,7 +820,7 @@ function renderSession() {
   }
 
   if (sid === "optional") {
-    c.innerHTML = `
+    c.innerHTML = detailBar + `
       <div class="session-head">
         <div><div class="session-title">Optional Day</div><div class="session-sub">Saturday — boxing, run, or rest</div></div>
         <div class="session-status todo">PICK</div>
@@ -777,10 +835,10 @@ function renderSession() {
   }
 
   const sess = PROGRAM.sessions[sid];
-  if (!sess) { c.innerHTML = `<div>No session.</div>`; return; }
+  if (!sess) { c.innerHTML = detailBar + `<div>No session.</div>`; return; }
 
   if (sid === "conditioning") {
-    c.innerHTML = `
+    c.innerHTML = detailBar + `
       <div class="session-head">
         <div><div class="session-title">${sess.name}</div><div class="session-sub">${sess.duration} · CON dim</div></div>
         <div class="session-status ${sessionLog._cardio_logged ? "done" : "todo"}">${sessionLog._cardio_logged ? "DONE" : "TODO"}</div>
@@ -829,7 +887,7 @@ function renderSession() {
     <button onclick="submitDay()" style="margin-top:14px;width:100%;min-height:52px;padding:14px;background:${submittedAt ? 'rgba(68,221,136,0.18)' : 'rgba(255,204,0,0.15)'};border:1px solid ${submittedAt ? 'rgba(68,221,136,0.5)' : 'rgba(255,204,0,0.4)'};color:${submittedAt ? 'var(--good)' : 'var(--gold)'};border-radius:10px;font-weight:700;font-size:14px;letter-spacing:0.5px;">${submittedAt ? `✓ Day Submitted · ${submittedAt.slice(11,16)}` : '🏁 Submit Day'}</button>
   `;
 
-  c.innerHTML = `
+  c.innerHTML = detailBar + `
     <div class="session-head">
       <div><div class="session-title">${sess.name}</div><div class="session-sub">${sess.dim} dim · 30–35 min target</div></div>
       <div class="session-status ${submittedAt ? "done" : (allLogged ? "done" : "todo")}">${submittedAt ? "DONE" : (allLogged ? "READY" : "TODO")}</div>
@@ -841,18 +899,19 @@ function renderSession() {
 
 function submitDay() {
   const liftLog = lsGet(LS_KEYS.liftLog, {});
-  const todayKey = todayISO();
-  const sess = liftLog[todayKey] || {};
+  const dateKey = getActiveDate();
+  const sid = getActiveSessionId();
+  const sess = liftLog[dateKey] || {};
   const hasContent = Object.keys(sess).some(k => (!k.startsWith("_") && sess[k] && sess[k].sets) || k.startsWith("_quick_") || k.startsWith("_cardio_"));
   if (!hasContent) {
-    if (!confirm("No exercises logged today. Submit anyway?")) return;
+    if (!confirm("No exercises logged. Submit anyway?")) return;
   }
   if (sess._submitted) {
     if (!confirm("Day already submitted. Re-submit?")) return;
   }
-  liftLog[todayKey] = sess;
-  liftLog[todayKey]._submitted = new Date().toISOString();
-  liftLog[todayKey]._session_id = liftLog[todayKey]._session_id || todaysSessionId();
+  liftLog[dateKey] = sess;
+  liftLog[dateKey]._submitted = new Date().toISOString();
+  liftLog[dateKey]._session_id = liftLog[dateKey]._session_id || sid;
   lsSet(LS_KEYS.liftLog, liftLog);
   recomputeQuestProgress();
   renderSession();
@@ -860,6 +919,116 @@ function submitDay() {
   renderDimensions();
   renderQuests();
   toast("✓ Day submitted — strong work");
+}
+
+function setViewMode(mode) {
+  viewMode = mode;
+  const sc = document.getElementById("sessionContainer");
+  const wc = document.getElementById("weekContainer");
+  const tToday = document.getElementById("tabToday");
+  const tWeek = document.getElementById("tabWeek");
+  if (mode === "today") {
+    activeSessionCtx = null;
+    sc.style.display = "block";
+    wc.style.display = "none";
+    tToday.classList.add("active");
+    tWeek.classList.remove("active");
+    renderSession();
+  } else if (mode === "week-list") {
+    activeSessionCtx = null;
+    sc.style.display = "none";
+    wc.style.display = "block";
+    tToday.classList.remove("active");
+    tWeek.classList.add("active");
+    renderWeekList();
+  } else if (mode === "week-detail") {
+    sc.style.display = "block";
+    wc.style.display = "none";
+    tToday.classList.remove("active");
+    tWeek.classList.add("active");
+    renderSession();
+  }
+}
+
+function openWeekSession(sessionId) {
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const wkDays = isoWeekDays();
+  let foundDate = null;
+  for (const day of wkDays) {
+    if (liftLog[day] && liftLog[day]._session_id === sessionId) { foundDate = day; break; }
+  }
+  const today = todayISO();
+  const scheduled = scheduledDateForSession(sessionId, wkDays);
+  let date;
+  if (foundDate) date = foundDate;
+  else if (wkDays.includes(today)) date = today;
+  else date = scheduled || today;
+  activeSessionCtx = { date, sessionId };
+  setViewMode("week-detail");
+  document.getElementById("anchor-session").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function backToWeek() {
+  setViewMode("week-list");
+  document.getElementById("anchor-session").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function setActiveDate(newDate) {
+  if (!activeSessionCtx) return;
+  if (!newDate) return;
+  activeSessionCtx.date = newDate;
+  renderSession();
+}
+
+function renderWeekList() {
+  const c = document.getElementById("weekContainer");
+  const liftLog = lsGet(LS_KEYS.liftLog, {});
+  const wkDays = isoWeekDays();
+  const today = todayISO();
+  const lifts = ["upper_a", "lower_a", "upper_b", "lower_b"];
+  const dayLabel = { upper_a: "Mon", lower_a: "Tue", upper_b: "Thu", lower_b: "Fri" };
+  const fmtDate = d => { const dt = new Date(d + "T12:00:00"); return dt.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }); };
+
+  const cards = lifts.map(sid => {
+    const sess = PROGRAM.sessions[sid];
+    const scheduled = scheduledDateForSession(sid, wkDays);
+    let entry = null, entryDate = null;
+    for (const day of wkDays) {
+      if (liftLog[day] && liftLog[day]._session_id === sid) { entry = liftLog[day]; entryDate = day; break; }
+    }
+
+    let status = "EMPTY", statusClass = "empty";
+    if (entry && entry._submitted) { status = "✓ SUBMITTED"; statusClass = "done"; }
+    else if (entry) {
+      const exCount = Object.keys(entry).filter(k => !k.startsWith("_") && entry[k] && entry[k].sets).length;
+      status = `IN PROGRESS · ${exCount} ex`;
+      statusClass = "partial";
+    } else if (scheduled && scheduled < today) {
+      status = "MISSED";
+      statusClass = "todo";
+    }
+
+    let footText;
+    if (entryDate && entryDate !== scheduled) footText = `Scheduled ${dayLabel[sid]} (${fmtDate(scheduled)}) · logged ${fmtDate(entryDate)}`;
+    else if (entryDate) footText = `Logged ${fmtDate(entryDate)}`;
+    else footText = `Scheduled ${dayLabel[sid]} · ${fmtDate(scheduled)}`;
+
+    const isToday = (entryDate === today) || (!entryDate && scheduled === today);
+    return `
+      <button class="week-card${isToday ? ' is-today' : ''}" onclick="openWeekSession('${sid}')">
+        <div class="wc-head">
+          <div>
+            <div class="wc-title">${sess.name}</div>
+            <div class="wc-sub">${sess.dim} dim</div>
+          </div>
+          <div class="wc-status ${statusClass}">${status}</div>
+        </div>
+        <div class="wc-foot">${footText}</div>
+      </button>
+    `;
+  }).join("");
+
+  c.innerHTML = cards;
 }
 
 function recomputeQuestProgress() {
@@ -940,12 +1109,13 @@ function recomputeQuestProgress() {
 
 let liftCtx = null;
 function openLiftModal(sessionId, exName, sets, low, high) {
-  liftCtx = { sessionId, exName, sets, low, high };
+  const dateKey = getActiveDate();
+  liftCtx = { sessionId, exName, sets, low, high, dateKey };
   document.getElementById("liftModalTitle").textContent = exName;
   const liftLog = lsGet(LS_KEYS.liftLog, {});
   let lastEntry = null, lastDate = null;
   for (const date of Object.keys(liftLog).sort().reverse()) {
-    if (date === todayISO()) continue;
+    if (date === dateKey) continue;
     if (liftLog[date][exName]) { lastEntry = liftLog[date][exName]; lastDate = date; break; }
   }
   const note = document.getElementById("liftLastWeek");
@@ -955,8 +1125,7 @@ function openLiftModal(sessionId, exName, sets, low, high) {
   } else {
     note.style.display = "none";
   }
-  const todayKey = todayISO();
-  const existing = (liftLog[todayKey] || {})[exName];
+  const existing = (liftLog[dateKey] || {})[exName];
   const setsHtml = [];
   for (let i = 0; i < sets; i++) {
     const ex = (existing && existing.sets && existing.sets[i]) || { weight: "", reps: "" };
@@ -976,7 +1145,7 @@ function openLiftModal(sessionId, exName, sets, low, high) {
 function saveLift(opts) {
   if (!liftCtx) return;
   opts = opts || {};
-  const { sessionId, exName, sets, low, high } = liftCtx;
+  const { sessionId, exName, sets, low, high, dateKey } = liftCtx;
   const setsArr = [];
   for (let i = 0; i < sets; i++) {
     const wEl = document.getElementById(`liftW${i}`);
@@ -993,12 +1162,12 @@ function saveLift(opts) {
   const isFull = setsArr.length >= sets;
   const allTop = isFull && setsArr.every(s => s.reps >= high);
   const liftLog = lsGet(LS_KEYS.liftLog, {});
-  const todayKey = todayISO();
-  liftLog[todayKey] = liftLog[todayKey] || { _session_id: sessionId };
-  if (sessionId && !liftLog[todayKey]._session_id) liftLog[todayKey]._session_id = sessionId;
-  const prev = liftLog[todayKey][exName];
+  const targetKey = dateKey || todayISO();
+  liftLog[targetKey] = liftLog[targetKey] || { _session_id: sessionId };
+  if (sessionId && !liftLog[targetKey]._session_id) liftLog[targetKey]._session_id = sessionId;
+  const prev = liftLog[targetKey][exName];
   const xpAlreadyAwarded = !!(prev && prev._xp_awarded);
-  liftLog[todayKey][exName] = {
+  liftLog[targetKey][exName] = {
     sets: setsArr,
     overload: allTop,
     partial: !isFull,
@@ -1010,7 +1179,7 @@ function saveLift(opts) {
 
   if (!xpAlreadyAwarded && isFull) {
     const weekXP = lsGet(LS_KEYS.weekXP, {});
-    const wk = isoWeek();
+    const wk = isoWeek(new Date(targetKey + "T12:00:00"));
     weekXP[wk] = weekXP[wk] || {};
     weekXP[wk].STR = (weekXP[wk].STR || 0) + (allTop ? 35 : 25) / 6;
     lsSet(LS_KEYS.weekXP, weekXP);

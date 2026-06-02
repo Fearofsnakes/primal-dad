@@ -73,6 +73,30 @@
       "date": "2026-05-01",
       "type": "system_fix",
       "details": "Dashboard XP recompute fix: Total XP + dim level bars now driven by computeLiveStats() reading localStorage. Cumulative XP uncapped (compounds from all sources). Lift modal accepts partial saves with autosave on backdrop tap. Weekly Report modal added with coach-style Wins / Watch-outs / Next Steps. Submit Day button added to session card. Quest progress auto-derived from logs (str_lifts_4, str_overload, con_cardio_2, flx_daily, etc)."
+    },
+    {
+      "date": "2026-06-02",
+      "type": "sync",
+      "details": "Phone localStorage export (W18–W23) synced to canonical JSON files. Gap: stats had been frozen at Week 1 (STR 93) since May 1 because the phone never wrote back to disk. Added 11 lift sessions (W2–W6), 1 body measurement, nutrition unchanged. STR 336 / CON 20 / FLX 0 / NUT 0; total 356. Raw backup at data/imports/2026-06-02-export.json."
+    },
+    {
+      "date": "2026-06-02",
+      "type": "achievement_unlocked",
+      "achievement_id": "body_comp_baseline",
+      "name": "Body Comp Baseline",
+      "details": "Measurement logged 2026-05-12 (wk3). Not a true Week 0 baseline — no pre-Day-1 numbers exist."
+    },
+    {
+      "date": "2026-06-02",
+      "type": "achievement_unlocked",
+      "achievement_id": "recomp_mid_week_6",
+      "name": "Recomp Mid",
+      "details": "Reached program week 6 (2026-06-01). Milestone auto-unlocked."
+    },
+    {
+      "date": "2026-06-02",
+      "type": "system_fix",
+      "details": "Overall-level formula changed from average-of-4-dim-levels to total-XP-on-the-level-curve (index.html computeLiveStats). Old formula floored Gab at Overall L1 'Sleep-Deprived Recruit' despite STR L3, because empty FLX/NUT/CON dragged the average down. Now 356 total XP = Overall L3 'Iron Father'. Monotonic — untracked dims no longer penalize."
     }
   ]
 }

@@ -1,0 +1,179 @@
+{
+  "_note": "Full localStorage export from phone, captured 2026-06-02. Durable backup + re-import artifact. Source of truth for the Week 6 sync.",
+  "primal-dad-quests": {
+    "week": "2026-W19",
+    "program_week": 2,
+    "picked_at": "2026-05-04T21:05:37.582Z",
+    "focused_dimensions": ["STR", "CON"],
+    "quests": [
+      { "id": "2026-W19_str_lifts_4", "dim": "STR", "desc": "Hit all 4 programmed lift sessions this week", "target": 4, "progress": 3, "xp_per": 25, "total_xp": 100, "note": "The non-negotiable" },
+      { "id": "2026-W19_str_overload", "dim": "STR", "desc": "Hit progressive overload on at least 2 lifts", "target": 2, "progress": 2, "xp_per": 10, "total_xp": 20, "note": "Bump weight or reps" },
+      { "id": "2026-W19_con_cardio_2", "dim": "CON", "desc": "2 cardio/conditioning sessions", "target": 2, "progress": 0, "xp_per": 20, "total_xp": 40, "note": "Mix bike, rope, run, bag" },
+      { "id": "2026-W19_con_sleep", "dim": "CON", "desc": "Sleep 7+ hr avg (Garmin)", "target": 1, "progress": 1, "xp_per": 15, "total_xp": 15, "note": "Newborn caveat" }
+    ],
+    "completed": false
+  },
+  "primal-dad-lift-log": {
+    "2026-04-27": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 115, "reps": 10 }, { "weight": 115, "reps": 10 }, { "weight": 135, "reps": 6 }], "overload": false, "logged_at": "2026-04-27T21:31:24.576Z" },
+      "Face Pull (band/DB rear delt)": { "sets": [{ "weight": 50, "reps": 10 }, { "weight": 50, "reps": 10 }, { "weight": 50, "reps": 10 }], "overload": true, "logged_at": "2026-04-27T21:23:23.990Z" },
+      "Incline DB Press": { "sets": [{ "weight": 35, "reps": 12 }, { "weight": 40, "reps": 11 }, { "weight": 45, "reps": 8 }], "overload": false, "logged_at": "2026-04-27T21:43:24.426Z" },
+      "Barbell Row": { "sets": [{ "weight": 65, "reps": 12 }, { "weight": 65, "reps": 12 }, { "weight": 65, "reps": 12 }], "overload": true, "logged_at": "2026-04-27T21:36:37.095Z" },
+      "Lateral Raise (DB)": { "sets": [{ "weight": 12.5, "reps": 12 }, { "weight": 15, "reps": 12 }, { "weight": 17.5, "reps": 12 }], "overload": false, "logged_at": "2026-04-27T21:47:13.878Z" },
+      "Tricep Pushdown (pulley)": { "sets": [{ "weight": 25, "reps": 15 }, { "weight": 35, "reps": 10 }, { "weight": 35, "reps": 10 }], "overload": false, "logged_at": "2026-04-27T21:50:31.035Z" }
+    },
+    "2026-04-28": {
+      "_session_id": "lower_a",
+      "Back Squat (barbell)": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 115, "reps": 10 }, { "weight": 135, "reps": 10 }], "overload": true, "logged_at": "2026-04-28T22:48:46.852Z" },
+      "Leg Curl (DB or lying)": { "sets": [{ "weight": 17.5, "reps": 10 }, { "weight": 20, "reps": 10 }, { "weight": 22.5, "reps": 10 }], "overload": true, "logged_at": "2026-04-28T23:00:28.157Z" },
+      "Bulgarian Split Squat (DB)": { "sets": [{ "weight": 30, "reps": 8 }, { "weight": 30, "reps": 8 }, { "weight": 30, "reps": 8 }], "overload": false, "logged_at": "2026-04-28T23:06:01.512Z" },
+      "Romanian Deadlift (barbell)": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 65, "reps": 10 }, { "weight": 65, "reps": 10 }], "overload": true, "logged_at": "2026-04-28T23:06:11.959Z" },
+      "Goblet Squat / Leg Extension alt": { "sets": [{ "weight": 30, "reps": 10 }, { "weight": 35, "reps": 10 }, { "weight": 40, "reps": 10 }], "overload": false, "logged_at": "2026-04-28T23:13:33.815Z" },
+      "Calf Raise": { "sets": [{ "weight": 30, "reps": 15 }, { "weight": 35, "reps": 15 }, { "weight": 40, "reps": 15 }], "overload": true, "logged_at": "2026-04-28T23:18:42.490Z" }
+    },
+    "2026-04-29": {
+      "_cardio_1777474870755": { "dim": "CON", "xp": 20, "label": "Run / outdoor — 30+ min", "logged_at": "2026-04-29T15:01:10.755Z" },
+      "_cardio_logged": true
+    },
+    "2026-04-30": {
+      "_session_id": "upper_b",
+      "Pull-Up (weighted if needed)": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }], "overload": false, "logged_at": "2026-05-01T00:24:00.127Z" },
+      "DB Shoulder Press": { "sets": [{ "weight": 25, "reps": 10 }, { "weight": 30, "reps": 10 }, { "weight": 35, "reps": 10 }], "overload": true, "logged_at": "2026-05-01T00:24:13.582Z" },
+      "Barbell Row": { "sets": [{ "weight": 65, "reps": 12 }, { "weight": 65, "reps": 12 }, { "weight": 65, "reps": 12 }], "overload": true, "logged_at": "2026-05-01T00:29:47.958Z" },
+      "DB Incline Press": { "sets": [{ "weight": 35, "reps": 12 }, { "weight": 40, "reps": 10 }, { "weight": 40, "reps": 10 }], "overload": false, "logged_at": "2026-05-01T00:32:33.204Z" },
+      "DB Bicep Curl (alternating)": { "sets": [{ "weight": 20, "reps": 12 }, { "weight": 22.5, "reps": 12 }, { "weight": 25, "reps": 12 }], "overload": false, "logged_at": "2026-05-01T00:40:05.295Z" },
+      "Face Pull / Rear Delt Fly": { "sets": [{ "weight": 50, "reps": 12 }, { "weight": 50, "reps": 12 }, { "weight": 50, "reps": 12 }], "overload": false, "logged_at": "2026-05-01T00:47:41.451Z" },
+      "Hammer Curl (DB)": { "sets": [{ "weight": 25, "reps": 8 }, { "weight": 25, "reps": 8 }], "overload": false, "logged_at": "2026-05-01T00:47:58.035Z" }
+    },
+    "2026-05-04": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 115, "reps": 10 }, { "weight": 115, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:17:47.705Z" },
+      "Weighted Pull-Up": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 6 }, { "weight": 0, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:17:53.950Z" },
+      "Incline DB Press": { "sets": [{ "weight": 25, "reps": 10 }, { "weight": 30, "reps": 10 }, { "weight": 35, "reps": 10 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:23:07.114Z" },
+      "Barbell Row": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 65, "reps": 10 }, { "weight": 65, "reps": 10 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:28:03.818Z" },
+      "Lateral Raise (DB)": { "sets": [{ "weight": 17.5, "reps": 12 }, { "weight": 20, "reps": 12 }, { "weight": 22.5, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:35:13.024Z" },
+      "Tricep Pushdown (pulley)": { "sets": [{ "weight": 25, "reps": 12 }, { "weight": 25, "reps": 12 }, { "weight": 25, "reps": 15 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-04T23:35:18.531Z" },
+      "_submitted": "2026-05-04T23:35:19.855Z"
+    },
+    "2026-05-06": {
+      "_session_id": "lower_a",
+      "Back Squat (barbell)": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 115, "reps": 9 }, { "weight": 135, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:08:53.071Z" },
+      "Leg Curl (DB or lying)": { "sets": [{ "weight": 20, "reps": 10 }, { "weight": 25, "reps": 10 }, { "weight": 30, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:09:37.073Z" },
+      "Bulgarian Split Squat (DB)": { "sets": [{ "weight": 20, "reps": 16 }, { "weight": 20, "reps": 16 }, { "weight": 25, "reps": 16 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:11:31.136Z" },
+      "Romanian Deadlift (barbell)": { "sets": [{ "weight": 65, "reps": 10 }, { "weight": 65, "reps": 10 }, { "weight": 95, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:11:54.147Z" },
+      "Goblet Squat / Leg Extension alt": { "sets": [{ "weight": 25, "reps": 10 }, { "weight": 25, "reps": 10 }, { "weight": 30, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:12:25.233Z" },
+      "Calf Raise": { "sets": [{ "weight": 45, "reps": 20 }, { "weight": 45, "reps": 20 }, { "weight": 45, "reps": 20 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T20:12:54.754Z" },
+      "Hanging Knee Raise / Ab Wheel": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-07T20:13:04.802Z" },
+      "_submitted": "2026-05-07T20:13:21.498Z"
+    },
+    "2026-05-07": {
+      "_session_id": "upper_b",
+      "Pull-Up (weighted if needed)": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:19:06.363Z" },
+      "DB Shoulder Press": { "sets": [{ "weight": 25, "reps": 12 }, { "weight": 35, "reps": 10 }, { "weight": 40, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:28:16.203Z" },
+      "Barbell Row": { "sets": [{ "weight": 95, "reps": 8 }, { "weight": 95, "reps": 10 }, { "weight": 95, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:40:21.611Z" },
+      "DB Incline Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 10 }, { "weight": 50, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:42:30.470Z" },
+      "DB Bicep Curl (alternating)": { "sets": [{ "weight": 22.5, "reps": 12 }, { "weight": 25, "reps": 12 }, { "weight": 30, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:50:00.747Z" },
+      "Face Pull / Rear Delt Fly": { "sets": [{ "weight": 50, "reps": 12 }, { "weight": 50, "reps": 12 }, { "weight": 50, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-07T21:50:05.345Z" },
+      "Hammer Curl (DB)": { "sets": [{ "weight": 20, "reps": 12 }, { "weight": 20, "reps": 12 }], "overload": true, "partial": false, "expected_sets": 2, "_xp_awarded": true, "logged_at": "2026-05-07T21:50:58.091Z" },
+      "_submitted": "2026-05-07T21:52:36.755Z"
+    },
+    "2026-05-12": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 115, "reps": 10 }, { "weight": 135, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:09:37.739Z" },
+      "Weighted Pull-Up": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }, { "weight": 0, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:11:16.129Z" },
+      "Incline DB Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 10 }, { "weight": 50, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:25:45.904Z" },
+      "Barbell Row": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }, { "weight": 115, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:26:33.963Z" },
+      "Lateral Raise (DB)": { "sets": [{ "weight": 17.5, "reps": 12 }, { "weight": 20, "reps": 12 }, { "weight": 22.5, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:33:46.882Z" },
+      "Tricep Pushdown (pulley)": { "sets": [{ "weight": 35, "reps": 12 }, { "weight": 35, "reps": 12 }, { "weight": 35, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-12T20:33:52.930Z" },
+      "_submitted": "2026-05-12T20:47:44.983Z"
+    },
+    "2026-05-13": {
+      "_session_id": "lower_a",
+      "Back Squat (barbell)": { "sets": [{ "weight": 115, "reps": 12 }, { "weight": 135, "reps": 10 }, { "weight": 155, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-13T19:26:46.458Z" },
+      "Leg Curl (DB or lying)": { "sets": [{ "weight": 30, "reps": 10 }, { "weight": 30, "reps": 10 }, { "weight": 30, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-13T19:31:41.135Z" },
+      "Bulgarian Split Squat (DB)": { "sets": [{ "weight": 20, "reps": 10 }, { "weight": 22.5, "reps": 10 }, { "weight": 25, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-13T19:46:47.311Z" },
+      "Romanian Deadlift (barbell)": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-13T19:46:56.157Z" },
+      "_submitted": "2026-05-13T19:47:00.182Z"
+    },
+    "2026-05-15": {
+      "_session_id": "upper_b",
+      "Pull-Up (weighted if needed)": { "sets": [{ "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-15T22:07:17.257Z" },
+      "DB Shoulder Press": { "sets": [{ "weight": 30, "reps": 12 }, { "weight": 35, "reps": 10 }, { "weight": 40, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-15T22:08:45.085Z" },
+      "Barbell Row": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-15T22:23:13.157Z" },
+      "DB Incline Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 10 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-15T22:25:56.233Z" },
+      "_submitted": "2026-05-15T22:25:57.748Z"
+    },
+    "2026-05-18": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 115, "reps": 10 }, { "weight": 135, "reps": 10 }, { "weight": 155, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-18T22:18:09.932Z" },
+      "Weighted Pull-Up": { "sets": [{ "weight": 0, "reps": 10 }, { "weight": 0, "reps": 9 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-18T22:19:38.943Z" },
+      "Incline DB Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 12 }, { "weight": 52.5, "reps": 7 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-18T22:34:04.704Z" },
+      "Barbell Row": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }, { "weight": 115, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-18T22:35:13.579Z" },
+      "_submitted": "2026-05-18T22:39:17.468Z"
+    },
+    "2026-05-23": {
+      "_session_id": "upper_b",
+      "Pull-Up (weighted if needed)": { "sets": [{ "weight": 0, "reps": 6 }, { "weight": 0, "reps": 8 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-24T01:24:40.400Z" },
+      "DB Shoulder Press": { "sets": [{ "weight": 35, "reps": 10 }, { "weight": 40, "reps": 9 }, { "weight": 45, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-24T01:27:43.955Z" },
+      "Barbell Row": { "sets": [{ "weight": 115, "reps": 8 }, { "weight": 115, "reps": 9 }, { "weight": 115, "reps": 10 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-24T01:38:06.948Z" },
+      "DB Incline Press": { "sets": [{ "weight": 40, "reps": 10 }, { "weight": 45, "reps": 9 }, { "weight": 45, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-24T01:40:09.505Z" },
+      "DB Bicep Curl (alternating)": { "sets": [{ "weight": 22.5, "reps": 12 }, { "weight": 25, "reps": 12 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-24T01:46:09.482Z" },
+      "Face Pull / Rear Delt Fly": { "sets": [{ "weight": 50, "reps": 10 }, { "weight": 50, "reps": 10 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-24T01:46:14.063Z" },
+      "Hammer Curl (DB)": { "sets": [{ "weight": 22.5, "reps": 12 }, { "weight": 25, "reps": 12 }], "overload": true, "partial": false, "expected_sets": 2, "_xp_awarded": true, "logged_at": "2026-05-24T01:47:04.355Z" },
+      "_submitted": "2026-05-24T01:47:15.476Z"
+    },
+    "2026-05-25": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 115, "reps": 10 }, { "weight": 135, "reps": 8 }, { "weight": 155, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-25T17:51:26.762Z" },
+      "Weighted Pull-Up": { "sets": [{ "weight": 0, "reps": 10 }, { "weight": 0, "reps": 9 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-25T17:54:06.131Z" },
+      "Incline DB Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 10 }, { "weight": 52.5, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-25T18:08:05.654Z" },
+      "Barbell Row": { "sets": [{ "weight": 115, "reps": 10 }, { "weight": 115, "reps": 10 }, { "weight": 115, "reps": 10 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-25T18:08:09.859Z" },
+      "Lateral Raise (DB)": { "sets": [{ "weight": 20, "reps": 10 }, { "weight": 22.5, "reps": 10 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-25T18:13:41.012Z" },
+      "Tricep Pushdown (pulley)": { "sets": [{ "weight": 35, "reps": 10 }, { "weight": 35, "reps": 10 }], "overload": false, "partial": true, "expected_sets": 3, "_xp_awarded": false, "logged_at": "2026-05-25T18:14:21.007Z" },
+      "_submitted": "2026-05-25T18:14:25.227Z"
+    },
+    "2026-05-27": {
+      "_session_id": "lower_a",
+      "Back Squat (barbell)": { "sets": [{ "weight": 115, "reps": 12 }, { "weight": 135, "reps": 10 }, { "weight": 155, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-27T17:19:32.490Z" },
+      "Leg Curl (DB or lying)": { "sets": [{ "weight": 15, "reps": 8 }, { "weight": 15, "reps": 8 }, { "weight": 17.5, "reps": 6 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-27T17:19:36.961Z" },
+      "Bulgarian Split Squat (DB)": { "sets": [{ "weight": 20, "reps": 8 }, { "weight": 20, "reps": 8 }, { "weight": 20, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-27T17:35:23.591Z" },
+      "Romanian Deadlift (barbell)": { "sets": [{ "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }, { "weight": 95, "reps": 10 }], "overload": true, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-05-27T17:36:51.705Z" },
+      "_submitted": "2026-05-27T17:36:54.386Z"
+    },
+    "2026-06-01": {
+      "_session_id": "upper_a",
+      "Barbell Bench Press": { "sets": [{ "weight": 115, "reps": 10 }, { "weight": 135, "reps": 9 }, { "weight": 155, "reps": 7 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T00:29:51.863Z" },
+      "Weighted Pull-Up": { "sets": [{ "weight": 0, "reps": 10 }, { "weight": 0, "reps": 9 }, { "weight": 0, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T00:31:17.328Z" },
+      "Incline DB Press": { "sets": [{ "weight": 40, "reps": 12 }, { "weight": 45, "reps": 11 }, { "weight": 50, "reps": 8 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T00:45:30.616Z" },
+      "Barbell Row": { "sets": [{ "weight": 45, "reps": 10 }, { "weight": 45, "reps": 10 }, { "weight": 50, "reps": 10 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T00:47:15.488Z" },
+      "Lateral Raise (DB)": { "sets": [{ "weight": 17.5, "reps": 10 }, { "weight": 20, "reps": 12 }, { "weight": 22.5, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T00:56:18.691Z" },
+      "Tricep Pushdown (pulley)": { "sets": [{ "weight": 35, "reps": 10 }, { "weight": 35, "reps": 12 }, { "weight": 35, "reps": 12 }], "overload": false, "partial": false, "expected_sets": 3, "_xp_awarded": true, "logged_at": "2026-06-02T01:03:42.041Z" },
+      "_submitted": "2026-06-02T01:03:43.380Z"
+    }
+  },
+  "primal-dad-nut-log": {
+    "2026-04-28": { "calories": 2150, "protein_g": 134, "fat_g": 96, "carbs_g": 187, "flex_meal": false, "logged_at": "2026-04-29T00:44:40.745Z" },
+    "2026-04-29": { "calories": 2150, "protein_g": 128, "fat_g": 118, "carbs_g": 168, "flex_meal": false, "logged_at": "2026-04-29T22:50:42.704Z" }
+  },
+  "primal-dad-body-log": [
+    { "date": "2026-05-12", "iso_week": "2026-W20", "program_week": 3, "weight_lbs": 167, "waist_cm": 36.5, "chest_cm": 39, "hips_cm": 41, "left_arm_flexed_cm": 14, "right_arm_flexed_cm": 14, "left_thigh_mid_cm": 21, "right_thigh_mid_cm": 21 }
+  ],
+  "primal-dad-achievements": {
+    "first_plate_bench": "2026-04-28",
+    "day_1_done": "2026-04-28",
+    "pullup_pro_8": "2026-04-30",
+    "body_comp_baseline": "2026-05-12",
+    "recomp_mid_week_6": "2026-06-01"
+  },
+  "primal-dad-week-xp": {
+    "2026-W18": { "STR": 92.50000000000001, "CON": 20 },
+    "2026-W19": { "STR": 87.50000000000001 },
+    "2026-W20": { "STR": 56.66666666666667 },
+    "2026-W21": { "STR": 39.16666666666667 },
+    "2026-W22": { "STR": 35.00000000000001 },
+    "2026-W23": { "STR": 25.000000000000004 }
+  },
+  "_exported_at": "2026-06-02T19:25:17.918Z",
+  "_program_week": 6
+}

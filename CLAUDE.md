@@ -1,5 +1,7 @@
 # Primal Dad — Recomp Tracker
 
+> ⏭️ **Open `NEXT-SESSION.md` first.** Session ended 2026-06-02 mid-work with a staged handoff: (1) import the quest blob to the phone, (2) switch program 4→3 days/week (video to adapt + draft inside), (3) scope the GitHub back-sync backend.
+
 ## What This Is
 A gamified fitness tracker built around a **12-week recomposition program**. Lift, condition, stretch, eat — log it, level up, hit milestones. Goal: be a strong, lean, mobile, well-fed dad. Longevity over peak.
 

@@ -16,6 +16,7 @@ A gamified fitness tracker built around a **12-week recomposition program**. Lif
 - **"weekly check-in"** or **"primal dad"** → run the Sunday flow
 - **"log session"** → log today's programmed workout (weight × reps per exercise)
 - **"log nutrition"** → log today's macros
+- **"log nutrition screenshot"** → paste a Foodvisor daily-summary screenshot; Claude reads the macros and writes the day (any date — supports backfill)
 - **"log mobility"** → log a flexibility session
 - **"pick quests"** → weekly quest pickup for the 4 dimensions
 - **"show stats"** → verbal summary of current state
@@ -200,6 +201,25 @@ Auto-unlock criteria types:
 - Drop a voice note transcript into Claude Code
 - Claude parses and writes to the right JSON files
 - Example: *"Logged Monday Upper A — bench 135 for 8 8 7, incline 50s for 10 10 10, lateral 20s for 12 12 12, face pulls bands all 3 sets of 10"*
+
+### Screenshot (Foodvisor daily summary → Claude Code)
+Foodvisor has no personal-data API (only an enterprise image-recognition API), so the bridge is a screenshot.
+1. In Foodvisor, open the **day's summary** showing total calories + protein/fat/carbs.
+2. Screenshot it and paste into Claude Code. Say the date if it isn't today (e.g. *"this is May 19"*).
+3. Claude reads the four numbers and writes the day to `data/program/nutrition-log.json`.
+
+**Parsing rules:**
+- Map Foodvisor's totals → `calories`, `protein_g`, `fat_g`, `carbs_g` (round to whole numbers).
+- Set `flex_meal` from context (default `false`; ask/flag if the day looks like a blowout).
+- `notes`: one line flagging protein vs 166g target and calories vs 2,200 ± 200.
+- `logged_at`: current timestamp (ISO). Note in `notes` if it's a backfill.
+- Don't overwrite an existing day without confirming.
+
+**Backfill (the ~30-day history):**
+- Paste screenshots in batches; each gets keyed under its own `YYYY-MM-DD`.
+- Several days at once is fine — confirm the date on each before writing.
+- After a batch, recompute any affected `weekly_summaries` so the check-in math stays correct.
+- Backfilled days still count toward NUT XP/streaks for the week they fall in.
 
 ### Desktop (deep update)
 - Run "weekly check-in" in Claude Code on Sunday

@@ -401,13 +401,14 @@
 
 <div class="modal-bg" id="nutModal">
   <div class="modal">
-    <h2>Log Today's Macros</h2>
+    <h2>Log Macros</h2>
     <div style="display:grid;gap:12px;">
+      <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Date</label><input type="date" id="nutInputDate" onchange="loadNutritionForDate()" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
       <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Calories (target 2,200)</label><input type="number" id="nutInputKcal" placeholder="2200" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
       <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Protein (target 166g)</label><input type="number" id="nutInputProt" placeholder="166" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
       <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Fat (g, floor 65)</label><input type="number" id="nutInputFat" placeholder="65" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
       <div><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Carbs (g, target 230)</label><input type="number" id="nutInputCarbs" placeholder="230" style="width:100%;padding:12px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;margin-top:4px;"></div>
-      <label style="display:flex;gap:8px;align-items:center;font-size:13px;"><input type="checkbox" id="nutFlex"> Flex meal today</label>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px;"><input type="checkbox" id="nutFlex"> Flex meal this day</label>
     </div>
     <div class="modal-actions">
       <button class="secondary" onclick="closeModal('nutModal')">Cancel</button>
@@ -1291,20 +1292,28 @@ function logCardio(name, xp) {
 }
 
 function openNutritionModal() {
+  const dateInput = document.getElementById("nutInputDate");
+  dateInput.max = todayISO();
+  dateInput.value = todayISO();
+  loadNutritionForDate();
+  openModal("nutModal");
+}
+
+// Populate the macro fields from whatever date is currently selected (enables backfill).
+function loadNutritionForDate() {
   const log = lsGet(LS_KEYS.nutLog, {});
-  const todayKey = todayISO();
-  const t = log[todayKey] || {};
+  const key = document.getElementById("nutInputDate").value || todayISO();
+  const t = log[key] || {};
   document.getElementById("nutInputKcal").value = t.calories || "";
   document.getElementById("nutInputProt").value = t.protein_g || "";
   document.getElementById("nutInputFat").value = t.fat_g || "";
   document.getElementById("nutInputCarbs").value = t.carbs_g || "";
   document.getElementById("nutFlex").checked = !!t.flex_meal;
-  openModal("nutModal");
 }
 
 function saveNutrition() {
   const log = lsGet(LS_KEYS.nutLog, {});
-  const todayKey = todayISO();
+  const todayKey = document.getElementById("nutInputDate").value || todayISO();
   log[todayKey] = {
     calories: parseFloat(document.getElementById("nutInputKcal").value) || null,
     protein_g: parseFloat(document.getElementById("nutInputProt").value) || null,
@@ -1318,7 +1327,7 @@ function saveNutrition() {
   closeModal("nutModal");
   renderNutrition();
   renderQuests();
-  toast("Macros logged");
+  toast(todayKey === todayISO() ? "Macros logged" : `Macros logged for ${todayKey}`);
   checkAchievements();
 }
 

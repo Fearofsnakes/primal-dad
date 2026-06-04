@@ -328,6 +328,7 @@
   </div>
 
   <h2 id="anchor-quests">Weekly Quests</h2>
+  <div style="margin:-6px 0 10px;"><button class="secondary" style="font-size:12px;padding:8px 12px;" onclick="pullQuestsFromServer()">🔄 Sync quests from server</button></div>
   <div id="questsContainer"></div>
 
   <h2>Tracking</h2>
@@ -2129,6 +2130,32 @@ function doImport() {
   closeModal("importModal");
   toast(`Imported: ${replaced.join(", ")}. Previous state backed up — tap Import → Undo to restore.`);
   setTimeout(() => location.reload(), 1200);
+}
+
+// Pull the canonical quest board straight from the git-versioned file served on this
+// same Vercel deployment — no copy/paste. Only touches the quests key; backs up first.
+async function pullQuestsFromServer() {
+  toast("Fetching quests…");
+  let q;
+  try {
+    const res = await fetch("data/computed/active-quests.json?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) { toast(`Server returned ${res.status} — can't reach quests file`, "warn"); return; }
+    q = await res.json();
+  } catch (e) {
+    toast("Couldn't fetch quests (offline?): " + e.message, "warn");
+    return;
+  }
+  if (!q || !Array.isArray(q.quests) || !q.quests.length) { toast("Quests file looks empty", "warn"); return; }
+  // Safety net: back up current state before overwriting (undoable via Import → Undo).
+  const backup = { _backed_up_at: new Date().toISOString() };
+  for (const k of Object.values(LS_KEYS)) {
+    const v = localStorage.getItem(k);
+    if (v !== null) backup[k] = JSON.parse(v);
+  }
+  localStorage.setItem(LS_BACKUP_KEY, JSON.stringify(backup));
+  localStorage.setItem(LS_KEYS.quests, JSON.stringify(q));
+  toast(`Synced ${q.quests.length} quests for ${q.week}`);
+  setTimeout(() => location.reload(), 900);
 }
 
 // Restore the pre-import snapshot. Lets any import be reversed with one tap.

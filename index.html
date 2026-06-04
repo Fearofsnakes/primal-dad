@@ -466,6 +466,7 @@
     <textarea id="importText" placeholder='{"primal-dad-lift-log":{...}, ...}' style="width:100%;height:240px;padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.4;"></textarea>
     <div class="modal-actions">
       <button class="secondary" onclick="closeModal('importModal')">Cancel</button>
+      <button class="secondary" onclick="undoImport()">Undo last import</button>
       <button class="primary" onclick="doImport()">Import</button>
     </div>
   </div>
@@ -624,6 +625,9 @@ const LS_KEYS = {
   achv: "primal-dad-achievements",
   weekXP: "primal-dad-week-xp"
 };
+
+// Separate from LS_KEYS so it is never itself exported or overwritten by an import.
+const LS_BACKUP_KEY = "primal-dad-import-backup";
 
 function lsGet(k, d) {
   try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; }
@@ -2091,7 +2095,13 @@ function doImport() {
   try {
     data = JSON.parse(txt);
   } catch (e) {
-    // Try to surface what character likely broke parsing
+    // Most common mobile failure: the long single-line blob got copied only partway.
+    // A complete payload always ends with a closing brace.
+    if (!txt.endsWith("}")) {
+      toast("Paste looks cut off (doesn't end with \"}\"). Re-copy the WHOLE blob — Select All, then Copy.", "warn");
+      return;
+    }
+    // Otherwise surface the character that likely broke parsing.
     const m = e.message.match(/position (\d+)/);
     let hint = "";
     if (m) {
@@ -2103,14 +2113,34 @@ function doImport() {
     toast("Invalid JSON: " + e.message + hint, "warn");
     return;
   }
-  let count = 0;
+  // Safety net: snapshot current state BEFORE overwriting, so an import can never lose data.
+  const backup = { _backed_up_at: new Date().toISOString() };
   for (const k of Object.values(LS_KEYS)) {
-    if (data[k] !== undefined) { localStorage.setItem(k, JSON.stringify(data[k])); count++; }
+    const v = localStorage.getItem(k);
+    if (v !== null) backup[k] = JSON.parse(v);
+  }
+  let count = 0;
+  const replaced = [];
+  for (const k of Object.values(LS_KEYS)) {
+    if (data[k] !== undefined) { localStorage.setItem(k, JSON.stringify(data[k])); count++; replaced.push(k.replace("primal-dad-", "")); }
   }
   if (!count) { toast("No matching keys found in payload", "warn"); return; }
+  localStorage.setItem(LS_BACKUP_KEY, JSON.stringify(backup));
   closeModal("importModal");
-  toast(`Imported ${count} keys`);
-  setTimeout(() => location.reload(), 600);
+  toast(`Imported: ${replaced.join(", ")}. Previous state backed up — tap Import → Undo to restore.`);
+  setTimeout(() => location.reload(), 1200);
+}
+
+// Restore the pre-import snapshot. Lets any import be reversed with one tap.
+function undoImport() {
+  const raw = localStorage.getItem(LS_BACKUP_KEY);
+  if (!raw) { toast("No import backup to restore", "warn"); return; }
+  const backup = JSON.parse(raw);
+  for (const k of Object.values(LS_KEYS)) {
+    if (backup[k] !== undefined) localStorage.setItem(k, JSON.stringify(backup[k]));
+  }
+  toast(`Restored state from ${backup._backed_up_at ? backup._backed_up_at.slice(0,10) : "backup"}`);
+  setTimeout(() => location.reload(), 800);
 }
 
 function openModal(id) { document.getElementById(id).classList.add("open"); }
